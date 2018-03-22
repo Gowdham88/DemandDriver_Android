@@ -16,9 +16,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.czsm.Demand_Driver.PreferencesHelper;
 import com.czsm.Demand_Driver.R;
 import com.czsm.Demand_Driver.Utils;
+import com.czsm.Demand_Driver.model.Users;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
@@ -28,7 +32,11 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 
@@ -48,6 +56,7 @@ TextView mResendotpTxt,mPhonenumbetEdt,mResendtxt;
     String mVerificationId;
     PhoneAuthCredential credential;
     boolean string;
+    String uid,uidvalue;
     private android.support.v7.app.AlertDialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,23 +78,23 @@ TextView mResendotpTxt,mPhonenumbetEdt,mResendtxt;
         Intent intent = this.getIntent();
         bundle = intent.getExtras();
         mAuth = FirebaseAuth.getInstance();
-        value = bundle.getString("value", "empty");
-     if(value.equals("dashboard")){
+//        value = bundle.getString("value", "empty");
+//     if(value.equals("dashboard")){
          if (bundle != null) {
              phonrnum = bundle.getString("phonenumber");
              mVerificationId=bundle.getString("vericode");
 //            mResendToken= (PhoneAuthProvider.ForceResendingToken) bundle.get("mtoken");
 //            Toast.makeText(this, mVerificationId, Toast.LENGTH_SHORT).show();
-         }
+//         }
      }
-     else {
-
-             phonrnum = bundle.getString("phonenumber1");
-             mVerificationId=bundle.getString("vericode1");
-//            mResendToken= (PhoneAuthProvider.ForceResendingToken) bundle.get("mtoken");
-//            Toast.makeText(this, mVerificationId, Toast.LENGTH_SHORT).show();
-
-     }
+//     else {
+//
+//             phonrnum = bundle.getString("phonenumber1");
+//             mVerificationId=bundle.getString("vericode1");
+////            mResendToken= (PhoneAuthProvider.ForceResendingToken) bundle.get("mtoken");
+////            Toast.makeText(this, mVerificationId, Toast.LENGTH_SHORT).show();
+//
+//     }
 //     else{
 //
 //     }
@@ -141,22 +150,15 @@ TextView mResendotpTxt,mPhonenumbetEdt,mResendtxt;
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            //Log.d(TAG, "signInWithCredential:success");
-//                            Toast.makeText(ValidateActivity.this,"Verification done",Toast.LENGTH_LONG).show();
+
                             FirebaseUser user = task.getResult().getUser();
-                            if(value.equals("dashboard")){
-                                Intent intent=new Intent(ValidateActivity.this,ServiceProviderActivity.class);
-                                startActivity(intent);
-                                finish();
-                            }else{
-                                Intent intent=new Intent(ValidateActivity.this,DashBoardActivity.class);
-                                startActivity(intent);
-                                finish();
-                            }
+                            String uid = user.getUid();
+                            PreferencesHelper.setPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_FIREBASE_UUID,uid);
+                            uidvalue = PreferencesHelper.getPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_FIREBASE_UUID);
+                            Toast.makeText(ValidateActivity.this, uid, Toast.LENGTH_SHORT).show();
 
-
-                            // ...
+                            AddDatabase(phonrnum,uid);
+////
                         } else {
                             // Sign in failed, display a message and update the UI
                             //Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -168,6 +170,38 @@ TextView mResendotpTxt,mPhonenumbetEdt,mResendtxt;
                     }
                 });
     }
+
+    private void AddDatabase(String phoneNumber, final String uid){
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Map<String, Object> data = new HashMap<>();
+        data.put("phoneNumber",phoneNumber);
+        data.put("UID", uid);
+//
+//        Toast.makeText(ValidateActivity.this, uid, Toast.LENGTH_SHORT).show();
+//        Users users1 = new Users(phoneNumber,uid);
+
+
+        db.collection("Users").document(uid).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.e("uid",uid);
+                Intent intent=new Intent(ValidateActivity.this,DashBoardActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("Error", "Error adding document", e);
+                Toast.makeText(getApplicationContext(),"Post Failed",Toast.LENGTH_SHORT).show();
+
+            }
+
+        });
+
+
+    }
+
     public void showProgressDialog() {
 
 

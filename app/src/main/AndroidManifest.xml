@@ -18,8 +18,6 @@
     <!-- GCM requires a Google account. -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <!-- This app has permission to register and receive dataf message. -->
     <application
@@ -91,12 +89,16 @@
         <activity
             android:name=".activities.OngoingAppointmentActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".activities.DashBoardActivity"
-            android:screenOrientation="portrait" />
+         <activity
+         android:name=".activities.DashBoardActivity"
+         android:screenOrientation="portrait" />
         <activity
             android:name=".activities.BookmapActivity"
             android:screenOrientation="portrait" />
+
+
+        <activity android:name=".activities.MapActivity"
+             android:screenOrientation="portrait"/>
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -171,8 +173,6 @@
         <!-- <action android:name="com.google.firebase.INSTANCE_ID_EVENT" /> -->
         <!-- </intent-filter> -->
         <!-- </service> -->
-
-        <activity android:name=".activities.TariffActivity"></activity>
     </application>
 
 </manifest>
