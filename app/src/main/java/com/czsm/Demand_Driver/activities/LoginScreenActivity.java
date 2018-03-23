@@ -170,29 +170,7 @@ RelativeLayout parentLayout;
                 startActivity(intent);
 //                    isProvider.setChecked(false);
                 PhoneEdt.setText("");
-//                AddDatabase(phoneNumber, uid);
-//                if (isProvider.isChecked()){
-//                    Intent intent=new Intent(LoginScreenActivity.this,ValidateActivity.class);
-//                    intent.putExtra("value","dashboard");
-//                    intent.putExtra("string",true);
-//                    intent.putExtra("phonenumber",PhoneEdt.getText().toString());
-//                    intent.putExtra("vericode",mVerificationId.toString());
-//
-////                    intent.putExtra("mtoken",mResendToken);
-//                    startActivity(intent);
-//                isProvider.setChecked(false);
-//                PhoneEdt.setText("");
-//                }
-//                else{
-//                    Intent intent=new Intent(LoginScreenActivity.this,ValidateActivity.class);
-////                    intent.putExtra("value","service");
-//                    intent.putExtra("phonenumber1",PhoneEdt.getText().toString());
-//                    intent.putExtra("vericode1",mVerificationId.toString());
-//                    startActivity(intent);
-//                    PhoneEdt.setText("");
-//                    isProvider.setChecked(false);
-////                    finish();
-//                }
+
 
             }
         };

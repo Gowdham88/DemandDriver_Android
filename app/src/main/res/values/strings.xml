@@ -130,7 +130,6 @@
 
 
     <string-array name="car_type_array">
-        <item>Select car type</item>
         <item>A- STAR</item>
         <item>A- STAR AUTOMATIC</item>
         <item>ACCENT</item>

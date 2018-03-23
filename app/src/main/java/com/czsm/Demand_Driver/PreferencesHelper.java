@@ -22,6 +22,8 @@ public class PreferencesHelper {
     public static final String PREFERENCE_GENDER ="gender";
     public static final String PREFERENCE_FIREBASE_TOKEN ="firebase_token";
     public static final String PREFERENCE_FIREBASE_UUID ="firebase_uuid";
+    public static final String PREFERENCE_PHONENUMBER ="phonenumber";
+    public static final String PREFERENCE_TOKEN ="tokenvalue";
     public static final String PREFERENCE_USER_DESCRIPTION ="user_desc";
     public static final String PREFERENCE_TAGS ="tags";
     public static final String PREFERENCE_TAG_IDS ="tag_ids";
@@ -72,7 +74,7 @@ public class PreferencesHelper {
         return preferences.getBoolean(name, false);
     }
 
-    public static void setPreferenceInt(Context context, String preference_name, int details) {
+    public static void setPreferenceInt(Context context, String preference_name,int details) {
         SharedPreferences.Editor editor = getEditor(context);
         editor.putInt(preference_name, details);
         editor.apply();
