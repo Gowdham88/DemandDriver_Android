@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.czsm.Demand_Driver">
 
     <uses-permission android:name="android.permission.CAMERA" />
@@ -18,6 +19,7 @@
     <!-- GCM requires a Google account. -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <!-- This app has permission to register and receive dataf message. -->
     <application
@@ -39,6 +41,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
         <activity
             android:name=".activities.LoginScreenActivity"
             android:screenOrientation="portrait" />
@@ -91,7 +95,8 @@
             android:screenOrientation="portrait" />
          <activity
          android:name=".activities.DashBoardActivity"
-         android:screenOrientation="portrait" />
+         android:screenOrientation="portrait"
+             android:noHistory="true"/>
         <activity
             android:name=".activities.BookmapActivity"
             android:screenOrientation="portrait" />
@@ -99,6 +104,19 @@
 
         <activity android:name=".activities.MapActivity"
              android:screenOrientation="portrait"/>
+
+        <service android:name=".MyFirebaseMessagingService"
+          >
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -119,6 +137,8 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDJYIzy_nsoG6vklpRathGgBz1bxXNWfC8" />
 
+        <!--<meta-data android:name="firebase_messaging_auto_init_enabled"-->
+            <!--android:value="false" />-->
         <!-- <activity -->
         <!-- android:name="com.czsm.driverin.activities.BookServiceMapActivity" -->
         <!-- android:label="@string/title_activity_service_details_map" -->
@@ -127,52 +147,23 @@
             android:name=".activities.TariffPlanActivity"
             android:screenOrientation="portrait" />
 
-        <receiver
-            android:name=".receiver.NotificationBroadcastReceiver"
-            android:enabled="true">
-            <intent-filter>
-                <action android:name="allinallapp.NOTIFICATION_RECEIVED" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name=".gcm.GCMBroadcastReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND">
-            <intent-filter>
+        <!--<receiver-->
+            <!--android:name=".receiver.NotificationBroadcastReceiver"-->
+            <!--android:enabled="true">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="allinallapp.NOTIFICATION_RECEIVED" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
 
-                <!-- Receives the actual messages. -->
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <!-- Receives the registration id. -->
-                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+        <!--<service android:name=".gcm.GCMIntentService" />-->
+        <!--<service-->
+            <!--android:name=".Service.CapPhoto"-->
+            <!--android:enabled="true" />-->
 
-                <category android:name="com.czsm.driverin" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name="com.pushbots.push.DefaultPushHandler"
-            android:process=":pushProcess" />
-        <receiver
-            android:name=".receiver.PushNotificationReceiver"
-            android:process=":pushProcess" />
-
-        <service android:name=".gcm.GCMIntentService" />
-        <service
-            android:name=".Service.CapPhoto"
-            android:enabled="true" />
-
-        <receiver android:name=".Service.MyBroadcastReceiver" />
-
-        <!-- <service android:name="com.czsm.driverin.receiver.MyFirebaseMessagingService"> -->
-        <!-- <intent-filter> -->
-        <!-- <action android:name="com.google.firebase.MESSAGING_EVENT" /> -->
-        <!-- </intent-filter> -->
-        <!-- </service> -->
+        <!--<receiver android:name=".Service.MyBroadcastReceiver" />-->
 
 
-        <!-- <service android:name="com.czsm.driverin.receiver.MyFirebaseInstanceIDService"> -->
-        <!-- <intent-filter> -->
-        <!-- <action android:name="com.google.firebase.INSTANCE_ID_EVENT" /> -->
-        <!-- </intent-filter> -->
-        <!-- </service> -->
+
     </application>
 
 </manifest>

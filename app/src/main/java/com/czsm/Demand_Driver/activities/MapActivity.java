@@ -481,6 +481,24 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                                 }
                             });
+                            documentReference=db.collection("BookingRequest").document(UIAVALUE);
+                            HashMap<String,Object> updates1=new HashMap<>();
+                            updates1.put("lat", latvalue);
+                            updates1.put("long",longitude);
+                            documentReference.update(updates1).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+//
+//                                    Log.e("lat",latvalue);
+//                                    Log.e("long",longitude);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+
+
+                                }
+                            });
 
 
                             //                         Eaddress.setText(addresses.get(0).getFeatureName() + ", " + addresses.get(0).getLocality() +", " + addresses.get(0).getAdminArea() + ", " + addresses.get(0).getCountryName());
@@ -588,7 +606,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 //set message, title, and icon
                 .setTitle("Booking")
                 .setMessage("Do you want to book service at " + Util.getDateTime(bookDate, bookTime) + " ?"+ "\n" + time)
-                .setIcon(R.drawable.ic_launcher)
+                .setIcon(R.drawable.logo01)
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
@@ -596,7 +614,35 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         /******************Adding appointments**********************/
 
                         addappointment(0);
+                        documentReference=db.collection("BookingRequest").document(UIAVALUE);
+                        Map<String, Object> updateval1 = new HashMap<>();
+                        updateval1.put("date",bookDate);
+                        updateval1.put("time", bookTime);
+                        updateval1.put("UID",UIAVALUE);
+                        updateval1.put("phoneNumber",PHNO);
+                        updateval1.put("Pickuplat",latvalue);
+                        updateval1.put("Pickuplong",longitude);
+                        updateval1.put("Currentlat",lattitud);
+                        updateval1.put("Currentlong",longtude);
+                        updateval1.put("address",address);
+                        updateval1.put("city",city);
+                        updateval1.put("state",state);
+                        updateval1.put("country",country);
+                        updateval1.put("Status",true);
 
+
+                        documentReference.set(updateval1).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Toast.makeText(MapActivity.this, "successfull", Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+
+                            }
+                        });
                         documentReference=db.collection("Users").document(UIAVALUE).collection("CurrentBookings").document(UIAVALUE);
                         Map<String, Object> updateval = new HashMap<>();
                         updateval.put("date",bookDate);
@@ -624,6 +670,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                             }
                         });
+
+
 //                        Query myTopPostsQuery = db.child("AppointmentList").orderByChild("timems").equalTo(timems);
 //                        myTopPostsQuery.addValueEventListener(new ValueEventListener() {
 //                            @Override

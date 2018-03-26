@@ -225,6 +225,7 @@ TextView mResendotpTxt,mPhonenumbetEdt,mResendtxt;
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                                 // The verification code entered was invalid
                                 Toast.makeText(ValidateActivity.this,"Verification failed code invalid",Toast.LENGTH_LONG).show();
+                                hideProgressDialog();
                             }
                         }
                     }
@@ -258,6 +259,24 @@ TextView mResendotpTxt,mPhonenumbetEdt,mResendtxt;
             }
 
         });
+        db.collection("BookingRequest").document(uid).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.e("uid",uid);
+                Intent intent=new Intent(ValidateActivity.this,DashBoardActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("Error", "Error adding document", e);
+                Toast.makeText(getApplicationContext(),"Post Failed",Toast.LENGTH_SHORT).show();
+
+            }
+
+        });
+
 
 
     }

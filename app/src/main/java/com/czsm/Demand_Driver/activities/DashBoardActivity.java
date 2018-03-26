@@ -1,5 +1,6 @@
 package com.czsm.Demand_Driver.activities;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,12 +12,16 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.czsm.Demand_Driver.R;
 import com.czsm.Demand_Driver.helper.RESTClient;
 import com.czsm.Demand_Driver.receiver.NotificationBroadcastReceiver;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 /**
  * Created by macbook on 02/08/16.
@@ -25,7 +30,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
 
     ImageView Img_map,Img_support,Img_ongoing,Img_history;
-
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
     SharedPreferences sharedPreferences;
     private NotificationBroadcastReceiver mReceiver;
     private static final int MY_PERMISSIONS_REQUEST_READ_FINE_LOCATION = 100;
@@ -34,12 +39,37 @@ public class DashBoardActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-
         sharedPreferences = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         Bundle extras     = getIntent().getExtras();
         String fromPush   = null;
         String message    = null;
 
+//        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//
+//                // checking for type intent filter
+//                if (intent.getAction().equals(Config.REGISTRATION_COMPLETE)) {
+//                    // gcm successfully registered
+//                    // now subscribe to `global` topic to receive app wide notifications
+//                    FirebaseMessaging.getInstance().subscribeToTopic(Config.TOPIC_GLOBAL);
+//
+//                    displayFirebaseRegId();
+//
+//                } else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+//                    // new push notification is received
+//
+//                    String message = intent.getStringExtra("message");
+//
+//                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
+//
+////                    txtMessage.setText(message);
+//                }
+//            }
+//        };
+//
+//        displayFirebaseRegId();
+        
         if (extras != null) {
 
             fromPush = extras.getString("FROM_PUSH");
@@ -149,6 +179,21 @@ public class DashBoardActivity extends AppCompatActivity {
 
     }
 
+//    private void displayFirebaseRegId() {
+//        SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
+//        String regId = pref.getString("regId", null);
+//
+//        Log.e("Str", "Firebase reg id: " + regId);
+//
+//        if (!TextUtils.isEmpty(regId)){
+//
+//        }
+////            txtRegId.setText("Firebase Reg Id: " + regId);
+//        else{
+//
+//        }
+////            txtRegId.setText("Firebase Reg Id is not received yet!");
+//    }
 
     private void showRejectDialog(String userMessage) {
         new android.support.v7.app.AlertDialog.Builder(this)
@@ -173,6 +218,11 @@ public class DashBoardActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         super.onDestroy();
+    }
+    @Override
+    public void onBackPressed() {
+        finish();
+
     }
 
 
