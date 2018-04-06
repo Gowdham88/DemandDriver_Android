@@ -19,7 +19,7 @@
     <!-- GCM requires a Google account. -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <!-- This app has permission to register and receive dataf message. -->
     <application
@@ -31,7 +31,7 @@
         android:supportsRtl="true"
         android:theme="@style/AllinAllMaterialTheme">
         <activity
-            android:name=".activities.SplashActivity"
+            android:name=".activities.MapActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AllinAllMaterialTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan|adjustResize">
@@ -41,8 +41,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
         <activity
             android:name=".activities.LoginScreenActivity"
             android:screenOrientation="portrait" />
@@ -93,28 +91,25 @@
         <activity
             android:name=".activities.OngoingAppointmentActivity"
             android:screenOrientation="portrait" />
-         <activity
-         android:name=".activities.DashBoardActivity"
-         android:screenOrientation="portrait"
-             android:noHistory="true"/>
+        <activity
+            android:name=".activities.DashBoardActivity"
+            android:noHistory="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.BookmapActivity"
             android:screenOrientation="portrait" />
+        <!--<activity-->
+            <!--android:name=".activities.MapActivity"-->
+            <!--android:screenOrientation="portrait" />-->
 
-
-        <activity android:name=".activities.MapActivity"
-             android:screenOrientation="portrait"/>
-
-        <service android:name=".MyFirebaseMessagingService"
-          >
+        <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service
-            android:name=".MyFirebaseInstanceIDService">
+        <service android:name=".MyFirebaseInstanceIDService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 
@@ -137,8 +132,8 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDJYIzy_nsoG6vklpRathGgBz1bxXNWfC8" />
 
-        <!--<meta-data android:name="firebase_messaging_auto_init_enabled"-->
-            <!--android:value="false" />-->
+        <!-- <meta-data android:name="firebase_messaging_auto_init_enabled" -->
+        <!-- android:value="false" /> -->
         <!-- <activity -->
         <!-- android:name="com.czsm.driverin.activities.BookServiceMapActivity" -->
         <!-- android:label="@string/title_activity_service_details_map" -->
@@ -147,23 +142,24 @@
             android:name=".activities.TariffPlanActivity"
             android:screenOrientation="portrait" />
 
-        <!--<receiver-->
-            <!--android:name=".receiver.NotificationBroadcastReceiver"-->
-            <!--android:enabled="true">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="allinallapp.NOTIFICATION_RECEIVED" />-->
-            <!--</intent-filter>-->
-        <!--</receiver>-->
-
-        <!--<service android:name=".gcm.GCMIntentService" />-->
-        <!--<service-->
-            <!--android:name=".Service.CapPhoto"-->
-            <!--android:enabled="true" />-->
-
-        <!--<receiver android:name=".Service.MyBroadcastReceiver" />-->
+        <!-- <receiver -->
+        <!-- android:name=".receiver.NotificationBroadcastReceiver" -->
+        <!-- android:enabled="true"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="allinallapp.NOTIFICATION_RECEIVED" /> -->
+        <!-- </intent-filter> -->
+        <!-- </receiver> -->
 
 
+        <!-- <service android:name=".gcm.GCMIntentService" /> -->
+        <!-- <service -->
+        <!-- android:name=".Service.CapPhoto" -->
+        <!-- android:enabled="true" /> -->
 
+
+        <!-- <receiver android:name=".Service.MyBroadcastReceiver" /> -->
+
+        <activity android:name=".activities.MapscrActivity"></activity>
     </application>
 
 </manifest>

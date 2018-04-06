@@ -11,11 +11,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 
+import com.czsm.Demand_Driver.PreferencesHelper;
 import com.czsm.Demand_Driver.R;
 import com.czsm.Demand_Driver.Service.CapPhoto;
 import com.czsm.Demand_Driver.controller.AllinAllController;
 import com.czsm.Demand_Driver.helper.RESTClient;
 import com.google.firebase.auth.FirebaseAuth;
+
+import static java.security.AccessController.getContext;
 
 /**
  * Created by macbook on 02/08/16.
@@ -25,12 +28,13 @@ public class UserSupportActivity extends AppCompatActivity  implements RESTClien
     private Button signoutButton;
     private SharedPreferences allinallSharedPref;
     private AllinAllController allinAllController;
+    private FirebaseAuth mAuth;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_user_support);
-
+        mAuth = FirebaseAuth.getInstance();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Support");
         setSupportActionBar(toolbar);
@@ -74,7 +78,9 @@ public class UserSupportActivity extends AppCompatActivity  implements RESTClien
                         editor.apply();
                         Intent service = new Intent(getApplicationContext(), CapPhoto.class);
                         stopService(service);
-                        FirebaseAuth.getInstance().signOut();
+//                        FirebaseAuth.getInstance().signOut();
+                        PreferencesHelper.signOut(UserSupportActivity.this);
+                        mAuth.signOut();
                         RESTClient.ID = null;
                         Intent loginIntent = new Intent(getApplicationContext(), LoginScreenActivity.class);
                         loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

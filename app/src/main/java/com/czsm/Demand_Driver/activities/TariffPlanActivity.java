@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.czsm.Demand_Driver.R;
 
@@ -101,6 +102,12 @@ public class TariffPlanActivity extends AppCompatActivity {
                         Context.LAYOUT_INFLATER_SERVICE);
                 convertView = viewInflater.inflate(resource, parent, false);
             }
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(context, "clickable", Toast.LENGTH_SHORT).show();
+                }
+            });
 //            ImageView tariffImage = (ImageView) convertView.findViewById(R.id.list_item_tariff_imageview);
 //            tariffImage.setImageResource(Integer.parseInt(list.get(position)));
             textView = (TextView) convertView.findViewById(R.id.textview1);

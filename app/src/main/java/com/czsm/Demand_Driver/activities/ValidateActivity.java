@@ -32,8 +32,11 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -58,6 +61,7 @@ TextView mResendotpTxt,mPhonenumbetEdt,mResendtxt;
     boolean string;
     String uid,uidvalue;
     private android.support.v7.app.AlertDialog dialog;
+    String refer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -214,6 +218,8 @@ TextView mResendotpTxt,mPhonenumbetEdt,mResendtxt;
                             PreferencesHelper.setPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_FIREBASE_UUID,uid);
                             PreferencesHelper.setPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_PHONENUMBER,Phno);
                             uidvalue = PreferencesHelper.getPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_FIREBASE_UUID);
+//                            DatabaseReference refe= FirebaseDatabase.getInstance().getReference("userNotifications");
+//                            refe.child("token").setValue(FirebaseInstanceId.getInstance().getToken());
 //                            Toast.makeText(ValidateActivity.this, uid, Toast.LENGTH_SHORT).show();
 
                             AddDatabase(phonrnum,uid);
@@ -234,18 +240,24 @@ TextView mResendotpTxt,mPhonenumbetEdt,mResendtxt;
 
     private void AddDatabase(String phoneNumber, final String uid){
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        refer=FirebaseInstanceId.getInstance().getToken();
+////                            Toast.makeText(ValidateActivity.this, refer, Toast.LENGTH_SHORT).show();
+//        Log.e("Tok",refer);
         Map<String, Object> data = new HashMap<>();
         data.put("phoneNumber",phoneNumber);
-        data.put("UID", uid);
+        data.put("UsersUID", uid);
+        data.put("token", refer);
+
 //
 //        Toast.makeText(ValidateActivity.this, uid, Toast.LENGTH_SHORT).show();
 //        Users users1 = new Users(phoneNumber,uid);
 
 
-        db.collection("Users").document(uid).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+        db.collection("UsersCurrentBookings").document(uid).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Log.e("uid",uid);
+
                 Intent intent=new Intent(ValidateActivity.this,DashBoardActivity.class);
                 startActivity(intent);
                 finish();
@@ -259,10 +271,13 @@ TextView mResendotpTxt,mPhonenumbetEdt,mResendtxt;
             }
 
         });
-        db.collection("BookingRequest").document(uid).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+
+
+        db.collection("Userdetails").document(uid).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Log.e("uid",uid);
+
                 Intent intent=new Intent(ValidateActivity.this,DashBoardActivity.class);
                 startActivity(intent);
                 finish();
@@ -276,6 +291,23 @@ TextView mResendotpTxt,mPhonenumbetEdt,mResendtxt;
             }
 
         });
+//        db.collection("UsersCurrentBookings").document(uid).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+//            @Override
+//            public void onSuccess(Void aVoid) {
+//                Log.e("uid",uid);
+//                Intent intent=new Intent(ValidateActivity.this,DashBoardActivity.class);
+//                startActivity(intent);
+//                finish();
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                Log.w("Error", "Error adding document", e);
+//                Toast.makeText(getApplicationContext(),"Post Failed",Toast.LENGTH_SHORT).show();
+//
+//            }
+//
+//        });
 
 
 

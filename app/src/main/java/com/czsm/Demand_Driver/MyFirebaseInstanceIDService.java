@@ -6,6 +6,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+import com.google.firebase.storage.FirebaseStorage;
 
 /**
  * Created by czsm4 on 26/03/18.
@@ -24,8 +25,8 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     public void onTokenRefresh() {
         // Get updated InstanceID token.
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        DatabaseReference refe= FirebaseDatabase.getInstance().getReference("userNotifications");
-        refe.child("token").setValue(refreshedToken);
+//        DatabaseReference refe=  FirebaseDatabase.getInstance().getReference("userNotifications");
+//        refe.child("token").setValue(refreshedToken);
         //for now we are displaying the token in the log
         //copy it as this method is called only when the new token is generated
         //and usually new token is only generated when the app is reinstalled or the data is cleared

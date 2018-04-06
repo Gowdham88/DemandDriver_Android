@@ -50,7 +50,6 @@ public class PreferencesHelper {
         editor.remove(PREFERENCE_FIREBASE_UUID);
         editor.remove(PREFERENCE_PROFILE_PIC);
         editor.remove(PREFERENCE_LOGGED_IN);
-        editor.remove(PREFERENCE_PHONENUMBER);
         editor.apply();
     }
     public static void setPreference(Context context, String preference_name, String details) {

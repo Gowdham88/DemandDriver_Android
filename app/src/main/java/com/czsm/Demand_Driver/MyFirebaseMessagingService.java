@@ -39,24 +39,24 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void sendNotification(String notificationTitle, String notificationBody) {
-        Intent intent = new Intent(this, DashBoardActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
-                PendingIntent.FLAG_ONE_SHOT);
+//        Intent intent = new Intent(this, DashBoardActivity.class);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
+//                PendingIntent.FLAG_ONE_SHOT);
 
-        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                .setAutoCancel(true)   //Automatically delete the notification
-                .setSmallIcon(R.drawable.logo01) //Notification icon
-                .setContentIntent(pendingIntent)
-                .setContentTitle(notificationTitle)
-                .setContentText(notificationBody)
-                .setSound(defaultSoundUri);
-
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        notificationManager.notify(0, notificationBuilder.build());
+//        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//        NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
+//                .setAutoCancel(true)   //Automatically delete the notification
+//                .setSmallIcon(R.drawable.logo01) //Notification icon
+//                .setContentIntent(pendingIntent)
+//                .setContentTitle(notificationTitle)
+//                .setContentText(notificationBody)
+//                .setSound(defaultSoundUri);
+//
+//
+//        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//
+//        notificationManager.notify(0, notificationBuilder.build());
     }
 }
 

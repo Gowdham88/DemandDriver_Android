@@ -6,22 +6,18 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Typeface;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.Handler;
-import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -33,15 +29,14 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.czsm.Demand_Driver.Firebasemodel.AppointmentList;
-import com.czsm.Demand_Driver.Manifest;
 import com.czsm.Demand_Driver.PreferencesHelper;
 import com.czsm.Demand_Driver.R;
 import com.czsm.Demand_Driver.Retrofit.DistanceApi;
 import com.czsm.Demand_Driver.Utils;
 import com.czsm.Demand_Driver.helper.Util;
+import com.czsm.Demand_Driver.model.Data;
 import com.czsm.Demand_Driver.model.TimeModelClass;
 import com.czsm.Demand_Driver.view.CustomDateTimePicker;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -50,23 +45,29 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -82,7 +83,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.czsm.Demand_Driver.activities.BookServiceMapActivity.BaseUrl;
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback,LocationListener {
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback,LocationListener{
     Context context;
     private TrackGPS gps;
     double lat;
@@ -127,13 +128,24 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     String distance,time;
     List<Address> addresses;
     String lattitude,longitude,address,city,state,country,postalCode,knownName;
-
+    private LatLng latlon1;
     int i = 1, maxproviders = 0;
     long timems;
      FirebaseFirestore db;
     DocumentReference documentReference;
-    String  Strlat,Strlong,latvalue,longitude1,lattitude1,lattitud,longtude;
+    String  Strlat,Strlong,latvalue,longitude1,lattitude1,lattitud,longtude,refer;
+    LatLng northbounds,southbounds;
+    CharSequence text;
+    Circle myCircle;
+    String cartypeStr;
+    Marker marker;
 
+    double laat=12.9010;
+    double longg=80.2279;
+    static double latarray[]={12.9010,12.9229,12.9760,13.0405,13.0102};
+    double longgarray[]={80.2279,80.1275,80.2212,80.2337,80.2157};
+    List<Data> datalist = new ArrayList<Data>();
+    ArrayList<LatLng> list=new ArrayList();
 
 
     @Override
@@ -151,6 +163,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         bookLaterTextview = (TextView) findViewById(R.id.service_details_book_later_textview);
         bookButton = (Button) findViewById(R.id.service_details_book_button);
         LocTxt=(TextView)findViewById(R.id.location_txt);
+        refer= FirebaseInstanceId.getInstance().getToken();
          UIAVALUE= PreferencesHelper.getPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_FIREBASE_UUID);
         PHNO= PreferencesHelper.getPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_PHONENUMBER);
           db= FirebaseFirestore.getInstance();
@@ -165,7 +178,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 onBackPressed();
             }
         });
-
+//        addmap();
         setMarkerIcon(serviceId);
         if (!serviceId.equalsIgnoreCase("1")) {
             driverLayout.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
@@ -182,7 +195,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 (this, android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.car_type_array));
         carTypeSpinner.setThreshold(1);
         carTypeSpinner.setAdapter(adapter);
-        String cartypeStr=carTypeSpinner.getText().toString().trim();
+//        final String[] cartypeStr = {carTypeSpinner.getText().toString().trim()};
 //        Toast.makeText(MapActivity.this, cartypeStr, Toast.LENGTH_SHORT).show();
 
         carTypeSpinner.setOnClickListener(new View.OnClickListener() {
@@ -203,27 +216,158 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             }
         });
+
+        com.google.firebase.firestore.Query driverfirst = db.collection("Driverone");
+
+        driverfirst.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                          @Override
+                                          public void onSuccess(QuerySnapshot documentSnapshots) {
+
+                                              if (documentSnapshots.getDocuments().size() < 1) {
+
+                                                  return;
+
+                                              }
+
+                                              for (DocumentSnapshot document : documentSnapshots.getDocuments()) {
+
+                                                  Data data = document.toObject(Data.class);
+                                                  datalist.add(data);
+//                                                  String latt= String.valueOf(datalist.get(0).getLat());
+//                                                  Toast.makeText(MapActivity.this, latt, Toast.LENGTH_SHORT).show();
+//                                                  Log.e("datalist",datalist.get(0).getLat());
+//                                hideProgressDialog();
+
+                                              }
+//                            hideProgressDialog();
+
+
+                                          }
+                                      });
+
+        com.google.firebase.firestore.Query driversecond = db.collection("Drivertwo");
+
+        driversecond.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot documentSnapshots) {
+
+                        if (documentSnapshots.getDocuments().size() < 1) {
+
+                            return;
+
+                        }
+
+                        for (DocumentSnapshot document : documentSnapshots.getDocuments()) {
+
+                            Data data1 = document.toObject(Data.class);
+                            datalist.add(data1);
+//                            String latt= String.valueOf(datalist.get(0).getLat());
+//                            Toast.makeText(MapActivity.this, latt, Toast.LENGTH_SHORT).show();
+//                                                  Log.e("datalist",datalist.get(0).getLat());
+//                                hideProgressDialog();
+
+                        }
+//                            hideProgressDialog();
+
+
+                    }
+                });
+
+        com.google.firebase.firestore.Query driverthird = db.collection("Driverthree");
+
+        driverthird.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot documentSnapshots) {
+
+                        if (documentSnapshots.getDocuments().size() < 1) {
+
+                            return;
+
+                        }
+
+                        for (DocumentSnapshot document : documentSnapshots.getDocuments()) {
+
+                            Data data2 = document.toObject(Data.class);
+                            datalist.add(data2);
+//                            String latt= String.valueOf(datalist.get(2).getLat());
+//                            Toast.makeText(MapActivity.this, latt, Toast.LENGTH_SHORT).show();
+//                                                  Log.e("datalist",datalist.get(0).getLat());
+//                                hideProgressDialog();
+
+                        }
+//                            hideProgressDialog();
+
+
+                    }
+                });
+        com.google.firebase.firestore.Query driverfour = db.collection("Driverfour");
+
+        driverfour.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot documentSnapshots) {
+
+                        if (documentSnapshots.getDocuments().size() < 1) {
+
+                            return;
+
+                        }
+
+                        for (DocumentSnapshot document : documentSnapshots.getDocuments()) {
+
+                            Data data3 = document.toObject(Data.class);
+                            datalist.add(data3);
+//                            String latt= String.valueOf(datalist.get(2).getLat());
+//                            Toast.makeText(MapActivity.this, latt, Toast.LENGTH_SHORT).show();
+//                                                  Log.e("datalist",datalist.get(0).getLat());
+//                                hideProgressDialog();
+
+                        }
+//                            hideProgressDialog();
+
+
+                    }
+                });
+
+        Collections.sort(datalist, new Comparator<Data>() {
+            @Override
+            public int compare(Data lhs, Data rhs) {
+                return String.valueOf(lhs.getLat()).compareTo(String.valueOf(rhs.getLat()));
+            }
+        });
+//        Collections.sort(datalist, new Comparator<Data>() {
+//            @Override
+//            public int compare(Data lhs, Data rhs) {
+//                return String.valueOf(lhs.getLongitude()).compareTo(String.valueOf(rhs.getLongitude()));
+//            }
+//        });
+
         bookNowTextview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                if (filterserviceproviders.size() > 0) {
-                    if (!serviceId.equalsIgnoreCase("1") || !carTypeSpinner.getText().toString().isEmpty()) {
+                if (!serviceId.equalsIgnoreCase("1") || !carTypeSpinner.getText().toString().isEmpty()) {
 
-                        Log.e("cartype",carTypeSpinner.getText().toString());
-                        Date now = new Date();
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                        SimpleDateFormat stf = new SimpleDateFormat("HH:mm:ss");
+                    Log.e("cartype",carTypeSpinner.getText().toString());
+                    cartypeStr=carTypeSpinner.getText().toString().trim();
+                    Date now = new Date();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    SimpleDateFormat stf = new SimpleDateFormat("HH:mm:ss");
 
-                        sdf.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
-                        stf.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
+                    sdf.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
+                    stf.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
 
-                        bookDate = sdf.format(now);
-                        bookTime = stf.format(now);
-                        bookNow = "1";
-                        showConfirmDialog();
+                    bookDate = sdf.format(now);
+                    bookTime = stf.format(now);
+                    bookNow = "1";
+                    Distance();
+//                    showConfirmDialog();
 
-                    } else
-                        Toast.makeText(getApplicationContext(), "Must select car type and options", Toast.LENGTH_LONG).show();
+                } else
+                    Toast.makeText(getApplicationContext(), "Must select car type and options", Toast.LENGTH_LONG).show();
 //                }
 //                else
 //                    Toast.makeText(getApplicationContext(), "We are sorry, there is no service providers for this service at your region.", Toast.LENGTH_LONG).show();
@@ -314,7 +458,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             bookDate = sdf.format(calendarSelected.getTime());
                             bookTime = stf.format(calendarSelected.getTime());
                             bookNow = "0";
-                            showConfirmDialog();
+                            Distance();
                         } else
                             Toast.makeText(MapActivity.this, "Must select car type and options", Toast.LENGTH_LONG).show();
                     }
@@ -339,6 +483,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
     @Override
     public void onLocationChanged(Location location) {
+//        addmap();
         mLocation = location;
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         Mmap.clear();
@@ -350,11 +495,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         Mmap.animateCamera(CameraUpdateFactory.zoomTo(12.5f), 2000, null);
         Mmap.setMaxZoomPreference(14.5f);
         Mmap.setMinZoomPreference(6.5f);
+        Circle circle = Mmap.addCircle(new CircleOptions().center(laln).radius(5000).strokeColor(Color.BLUE).strokeWidth(2.0f));
     }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Mmap=googleMap;
+
+//        addmap();
         Mmap.clear();
         Double lat = gps.getLatitude();
         Double lng = gps.getLongitude();
@@ -362,7 +511,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
           longtude= String.valueOf(lng);
         Log.e("lattitude", lattitud);
         Log.e("longtude",longtude);
-
+//        Circle circle = Mmap.addCircle(new CircleOptions().center(laln).radius(5000).strokeColor(Color.BLUE).strokeWidth(2.0f));
 
         LatLng locateme = new LatLng(lat, lng);
 //        MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(this, R.raw.style_json);
@@ -371,6 +520,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             return;
         }
+        for (int i = 0; i < datalist.size(); i++) {
+
+            marker = Mmap.addMarker(new MarkerOptions().position(new LatLng(datalist.get(i).getLat(), datalist.get(i).getLongitude()))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.bitmapfordriver))
+                    .flat(true));
+
+        }
+
         Mmap.setMyLocationEnabled(true);
         //   Mmap.addMarker(new MarkerOptions().position(locateme).icon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin2)));
         Mmap.moveCamera(CameraUpdateFactory.newLatLngZoom(locateme,6.5f));
@@ -389,6 +546,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     LatLng locateme = new LatLng(lat, lng);
                       lattitude1= String.valueOf(lat);
                     longitude1= String.valueOf(lng);
+                    for (int i = 0; i < datalist.size(); i++) {
+
+                        marker = Mmap.addMarker(new MarkerOptions().position(new LatLng(datalist.get(i).getLat(), datalist.get(i).getLongitude()))
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.bitmapfordriver))
+                                .flat(true));
+
+                    }
 ////
 //                    Log.e("locateme",lattitude1);
 //
@@ -409,35 +573,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 laln = cameraPosition.target;
                 Mmap.clear();
 
+
                 try {
                     Location mLocation = new Location("");
                     mLocation.setLatitude(laln.latitude);
                     mLocation.setLongitude(laln.longitude);
 
 
-
-
-
-//                    DocumentReference washingtonRef = db.collection("Users").document(UIAVALUE);
-//                    HashMap<String, Object> city1 = new HashMap<>();
-//                    city1.put("lat", Strlat);
-//                    city1.put("long",Strlong);
-//
-//// Set the "isCapital" field of the city 'DC'
-//                    washingtonRef
-//                            .update(city1)
-//                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                @Override
-//                                public void onSuccess(Void aVoid) {
-////                                    Log.d(TAG, "DocumentSnapshot successfully updated!");
-//                                }
-//                            })
-//                            .addOnFailureListener(new OnFailureListener() {
-//                                @Override
-//                                public void onFailure(@NonNull Exception e) {
-////                                    Log.w(TAG, "Error updating document", e);
-//                                }
-//                            });
 
 
 
@@ -453,6 +595,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             latvalue=latti;
 
                              longitude= String.valueOf(addresses.get(0).getLongitude());
+                             double lat= Double.parseDouble(String.valueOf(addresses.get(0).getLatitude()));
+                             double logs=Double.parseDouble(String.valueOf(addresses.get(0).getLongitude()));
                              address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
                              city = addresses.get(0).getLocality();
                             state = addresses.get(0).getAdminArea();
@@ -460,31 +604,59 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                              postalCode = addresses.get(0).getPostalCode();
                              knownName = addresses.get(0).getFeatureName();
                             address1=(latvalue+","+longitude+","+address + "," + city + "," + state + "," + country + "," + postalCode);
+                            Circle circle = Mmap.addCircle(new CircleOptions()
+                                    .center(new LatLng(lat,logs))
+                                    .radius(10000)
+                                    .strokeColor(Color.BLUE)
+                                    .fillColor(getResources().getColor(R.color.transporent_clr)).strokeWidth(2.0f));
+                            for (int i = 0; i < datalist.size(); i++) {
 
+                                marker = Mmap.addMarker(new MarkerOptions().position(new LatLng(datalist.get(i).getLat(), datalist.get(i).getLongitude()))
+                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.bitmapfordriver))
+                                        .flat(true));
+
+                            }
+//                            Circle circle = Mmap.addCircle(new CircleOptions().center(laln).radius(10000).strokeColor(Color.BLUE).strokeWidth(2.0f));
+//                            LatLngBounds bounds = Mmap.getProjection().getVisibleRegion().latLngBounds;
+//                            LatLng northeast = bounds.northeast;
+//                            LatLng southwest = bounds.southwest;
+//
+//                            northbounds=bounds.northeast;
+//                            southbounds= bounds.southwest;
+//
+//                            Context context = getApplicationContext();
+//                             text = "ne:"+northeast+" sw:"+southwest;
+//                            int duration = Toast.LENGTH_SHORT;
+//
+//                            Toast toast = Toast.makeText(context, text, duration);
+//                            toast.show();
 //                            Log.e("Strlat", latvalue);
 //                            Log.e("Strlong",longitude);
-                             documentReference=db.collection("Users").document(UIAVALUE);
-                            HashMap<String,Object> updates=new HashMap<>();
-                            updates.put("lat", latvalue);
-                            updates.put("long",longitude);
-                            documentReference.update(updates).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
+//                             documentReference=db.collection("Users").document(UIAVALUE);
+//                            HashMap<String,Object> updates=new HashMap<>();
+//                            updates.put("lat", latvalue);
+//                            updates.put("long",longitude);
 //
-//                                    Log.e("lat",latvalue);
-//                                    Log.e("long",longitude);
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-
-
-                                }
-                            });
-                            documentReference=db.collection("BookingRequest").document(UIAVALUE);
+//                            documentReference.update(updates).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                @Override
+//                                public void onComplete(@NonNull Task<Void> task) {
+////
+////                                    Log.e("lat",latvalue);
+////                                    Log.e("long",longitude);
+//                                }
+//                            }).addOnFailureListener(new OnFailureListener() {
+//                                @Override
+//                                public void onFailure(@NonNull Exception e) {
+//
+//
+//                                }
+//                            });
+                            documentReference=db.collection("Userdetails").document(UIAVALUE);
                             HashMap<String,Object> updates1=new HashMap<>();
                             updates1.put("lat", latvalue);
                             updates1.put("long",longitude);
+//                            updates1.put("token",refer);
+//                            updates1.put("radius",text);
                             documentReference.update(updates1).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
@@ -502,7 +674,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
                             //                         Eaddress.setText(addresses.get(0).getFeatureName() + ", " + addresses.get(0).getLocality() +", " + addresses.get(0).getAdminArea() + ", " + addresses.get(0).getCountryName());
-                            //Toast.makeText(getApplicationContext(), "Address:- " + addresses.get(0).getFeatureName() + addresses.get(0).getAdminArea() + addresses.get(0).getLocality(), Toast.LENGTH_LONG).show();
+//                            Toast.makeText(getApplicationContext(), "Address:- " + addresses.get(0).getFeatureName() + addresses.get(0).getAdminArea() + addresses.get(0).getLocality(), Toast.LENGTH_LONG).show();
                         }
                     }
                     Toast.makeText(MapActivity.this, address1, Toast.LENGTH_SHORT).show();
@@ -515,9 +687,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         });
     }
 
+//    private void addmap() {
+//
+//
+//
+//        //set zoom to level to current so that you won't be able to zoom out viz. move outside bounds
+////        Mmap.setMinZoomPreference(mMap.getCameraPosition().zoom);
+//    }
+
     public void handlenewlocation(final LatLng laln)
     {
         Mmap.clear();
+//        addmap();
 //        MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(SosMap.this, R.raw.style_json);
 //        Mmap.setMapStyle(style);
         //  Mmap.addMarker(new MarkerOptions().position(laln).icon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin2)));
@@ -528,6 +709,33 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 new LatLng(laln.latitude,laln.longitude), 13));
         latitu=laln.latitude;
         longitu=laln.longitude;
+//        Circle circle = Mmap.addCircle(new CircleOptions().center(laln).radius(5000).strokeColor(Color.BLUE).strokeWidth(2.0f));
+//        MarkerOptions markerOptions = new MarkerOptions();
+//        LatLng position = new LatLng(50, 50);
+//        markerOptions.position(position);
+//        Marker marker = Mmap.addMarker(markerOptions);
+        Circle circle = Mmap.addCircle(new CircleOptions()
+                .center(new LatLng(latitu, longitu))
+                .radius(10000)
+                .strokeColor(Color.RED)
+                .fillColor(Color.TRANSPARENT).strokeWidth(2.0f));
+
+
+
+        for (int i = 0; i < datalist.size(); i++) {
+
+            marker = Mmap.addMarker(new MarkerOptions().position(new LatLng(datalist.get(0).getLat(), datalist.get(0).getLongitude()))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.circledd))
+                    .flat(true));
+
+        }
+//        Circle circle = Mmap.addCircle(
+//                new CircleOptions()
+//                        .center(position)
+//                        .radius(1000)
+//                        .strokeWidth(2.0f)
+//                        .fillColor(getApplicationContext().getResources().getColor(R.color.textmain_clr ))
+//        );
 
 //        Log.e("newlat", String.valueOf(latitu));
 //        Log.e("newlong", String.valueOf(longitu));
@@ -538,7 +746,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         final ProgressDialog dialog = ProgressDialog.show(this,"Fetching data","Please wait...",false,false);
         StringBuilder googlePlacesUrl = new StringBuilder("api/distancematrix/json?");
-        googlePlacesUrl.append("origins=" + longitude1 + "," + lattitude1);
+        googlePlacesUrl.append("origins=" + datalist.get(i).getLat() + "," +datalist.get(i).getLongitude());
         googlePlacesUrl.append("&destinations=" +latvalue + "," +longitude);
         googlePlacesUrl.append("&key=" + "AIzaSyDv2rBW15Rnox8k13gIrgr5ksSerLqf2T0");
 
@@ -571,9 +779,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     try {
 
                         Log.e("Dsdsds", response.body().getRows().get(0).getElements().get(0).getDistance().getText());
+                        Log.e("latl", String.valueOf(datalist.get(i).getLat()));
+                        Log.e("latl", String.valueOf(datalist.get(i).getLongitude()));
 
                         distance = "Distance :" + response.body().getRows().get(0).getElements().get(0).getDistance().getText();
                         time = "Expected time :" + response.body().getRows().get(0).getElements().get(0).getDuration().getText();
+                        Log.e("distance",distance);
                         dialog.dismiss();
                         showConfirmDialog();
 
@@ -605,7 +816,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         new AlertDialog.Builder(MapActivity.this)
                 //set message, title, and icon
                 .setTitle("Booking")
-                .setMessage("Do you want to book service at " + Util.getDateTime(bookDate, bookTime) + " ?"+ "\n" + time)
+                .setMessage("Do you want to book service at " + Util.getDateTime(bookDate, bookTime)+ "?")
                 .setIcon(R.drawable.logo01)
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -614,11 +825,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         /******************Adding appointments**********************/
 
                         addappointment(0);
-                        documentReference=db.collection("BookingRequest").document(UIAVALUE);
+                        documentReference=db.collection("UsersBookingRequest").document(UIAVALUE);
                         Map<String, Object> updateval1 = new HashMap<>();
                         updateval1.put("date",bookDate);
                         updateval1.put("time", bookTime);
-                        updateval1.put("UID",UIAVALUE);
+                        updateval1.put("UsersUID",UIAVALUE);
                         updateval1.put("phoneNumber",PHNO);
                         updateval1.put("Pickuplat",latvalue);
                         updateval1.put("Pickuplong",longitude);
@@ -629,6 +840,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         updateval1.put("state",state);
                         updateval1.put("country",country);
                         updateval1.put("Status",true);
+                        updateval1.put("token",refer);
+                        updateval1.put("cartype",cartypeStr);
+//                        updateval1.put("radius",text);
 
 
                         documentReference.set(updateval1).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -643,33 +857,33 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                             }
                         });
-                        documentReference=db.collection("Users").document(UIAVALUE).collection("CurrentBookings").document(UIAVALUE);
-                        Map<String, Object> updateval = new HashMap<>();
-                        updateval.put("date",bookDate);
-                        updateval.put("time", bookTime);
-                        updateval.put("UID",UIAVALUE);
-                        updateval.put("phoneNumber",PHNO);
-                        updateval.put("Pickuplat",latvalue);
-                        updateval.put("Pickuplong",longitude);
-                        updateval.put("Currentlat",lattitud);
-                        updateval.put("Currentlong",longtude);
-                        updateval.put("address",address);
-                        updateval.put("city",city);
-                        updateval.put("state",state);
-                        updateval.put("country",country);
-
-                        documentReference.set(updateval).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                Toast.makeText(MapActivity.this, "success", Toast.LENGTH_SHORT).show();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-
-
-                            }
-                        });
+//                        documentReference=db.collection("UsersCurrentBookings").document(UIAVALUE);
+//                        Map<String, Object> updateval = new HashMap<>();
+//                        updateval.put("date",bookDate);
+//                        updateval.put("time", bookTime);
+//                        updateval.put("UID",UIAVALUE);
+//                        updateval.put("phoneNumber",PHNO);
+//                        updateval.put("Pickuplat",latvalue);
+//                        updateval.put("Pickuplong",longitude);
+//                        updateval.put("Currentlat",lattitud);
+//                        updateval.put("Currentlong",longtude);
+//                        updateval.put("address",address);
+//                        updateval.put("city",city);
+//                        updateval.put("state",state);
+//                        updateval.put("country",country);
+//
+//                        documentReference.update(updateval).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<Void> task) {
+//                                Toast.makeText(MapActivity.this, "success", Toast.LENGTH_SHORT).show();
+//                            }
+//                        }).addOnFailureListener(new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception e) {
+//
+//
+//                            }
+//                        });
 
 
 //                        Query myTopPostsQuery = db.child("AppointmentList").orderByChild("timems").equalTo(timems);
@@ -800,7 +1014,37 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
-
-
-
+//    @Override
+//    public void onMapClick(LatLng point) {
+//        CircleOptions circleOptions = new CircleOptions()
+//                .center(point)   //set center
+//                .radius(500)   //set radius in meters
+//                .fillColor(Color.TRANSPARENT)  //default
+//                .strokeColor(Color.BLUE)
+//                .strokeWidth(5);
+//
+//        myCircle = Mmap.addCircle(circleOptions);
+//    }
+//    @Override
+//    public void onMapLongClick(LatLng latLng) {
+//        CircleOptions circleOptions = new CircleOptions()
+//                .center(point)   //set center
+//                .radius(500)   //set radius in meters
+//                .fillColor(0x40ff0000)  //semi-transparent
+//                .strokeColor(Color.BLUE)
+//                .strokeWidth(5);
+//
+//        myCircle = Mmap.addCircle(circleOptions);
+//    }
+//} @Override
+//    public void onMapLongClick(LatLng latLng) {
+//        CircleOptions circleOptions = new CircleOptions()
+//                .center(point)   //set center
+//                .radius(500)   //set radius in meters
+//                .fillColor(0x40ff0000)  //semi-transparent
+//                .strokeColor(Color.BLUE)
+//                .strokeWidth(5);
+//
+//        myCircle = Mmap.addCircle(circleOptions);
+//    }
 }
