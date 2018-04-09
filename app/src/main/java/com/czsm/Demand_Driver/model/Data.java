@@ -9,6 +9,15 @@ public class Data {
     private double lat;
     private double longitude;
     private double distance;
+    private String phonenumber;
+
+    public String getPhonenumber() {
+        return phonenumber;
+    }
+
+    public void setPhonenumber(String phonenumber) {
+        this.phonenumber = phonenumber;
+    }
 
     public Data(double lat, double longitude, double distance) {
 

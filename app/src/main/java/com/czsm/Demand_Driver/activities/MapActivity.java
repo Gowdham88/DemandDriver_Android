@@ -11,6 +11,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
@@ -83,7 +84,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.czsm.Demand_Driver.activities.BookServiceMapActivity.BaseUrl;
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback,LocationListener{
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback,LocationListener,GoogleMap.OnMarkerClickListener {
     Context context;
     private TrackGPS gps;
     double lat;
@@ -140,12 +141,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     String cartypeStr;
     Marker marker;
 
-    double laat=12.9010;
-    double longg=80.2279;
-    static double latarray[]={12.9010,12.9229,12.9760,13.0405,13.0102};
-    double longgarray[]={80.2279,80.1275,80.2212,80.2337,80.2157};
+//    double laat=12.9010;
+//    double longg=80.2279;
+    static double latarray[]={12.9010,12.9229,12.9760,13.0405};
+    double longgarray[]={80.2279,80.1275,80.2212,80.2337};
     List<Data> datalist = new ArrayList<Data>();
+    List<Data> datalist2 = new ArrayList<Data>();
+    List<Data> datalist3 = new ArrayList<Data>();
+    List<Data> datalist1 = new ArrayList<Data>();
     ArrayList<LatLng> list=new ArrayList();
+    private Handler mHandler;
 
 
     @Override
@@ -178,8 +183,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 onBackPressed();
             }
         });
+//        this.mHandler = new Handler();
+//
+//        this.mHandler.postDelayed(m_Runnable,5000);
+
 //        addmap();
-        setMarkerIcon(serviceId);
+//        setMarkerIcon(serviceId);
         if (!serviceId.equalsIgnoreCase("1")) {
             driverLayout.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
             driverLayout.setVisibility(View.INVISIBLE);
@@ -234,8 +243,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                                                   Data data = document.toObject(Data.class);
                                                   datalist.add(data);
+                                                  String driverphonenumber= String.valueOf(datalist.get(0).getPhonenumber());
 //                                                  String latt= String.valueOf(datalist.get(0).getLat());
-//                                                  Toast.makeText(MapActivity.this, latt, Toast.LENGTH_SHORT).show();
+                                                  Toast.makeText(MapActivity.this, driverphonenumber, Toast.LENGTH_SHORT).show();
+
 //                                                  Log.e("datalist",datalist.get(0).getLat());
 //                                hideProgressDialog();
 
@@ -245,35 +256,35 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                                           }
                                       });
-
-        com.google.firebase.firestore.Query driversecond = db.collection("Drivertwo");
-
-        driversecond.get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot documentSnapshots) {
-
-                        if (documentSnapshots.getDocuments().size() < 1) {
-
-                            return;
-
-                        }
-
-                        for (DocumentSnapshot document : documentSnapshots.getDocuments()) {
-
-                            Data data1 = document.toObject(Data.class);
-                            datalist.add(data1);
-//                            String latt= String.valueOf(datalist.get(0).getLat());
-//                            Toast.makeText(MapActivity.this, latt, Toast.LENGTH_SHORT).show();
-//                                                  Log.e("datalist",datalist.get(0).getLat());
-//                                hideProgressDialog();
-
-                        }
-//                            hideProgressDialog();
-
-
-                    }
-                });
+//
+//        com.google.firebase.firestore.Query driversecond = db.collection("Drivertwo");
+//
+//        driversecond.get()
+//                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onSuccess(QuerySnapshot documentSnapshots) {
+//
+//                        if (documentSnapshots.getDocuments().size() < 1) {
+//
+//                            return;
+//
+//                        }
+//
+//                        for (DocumentSnapshot document : documentSnapshots.getDocuments()) {
+//
+//                            Data data1 = document.toObject(Data.class);
+//                            datalist.add(data1);
+////                            String latt= String.valueOf(datalist.get(0).getLat());
+////                            Toast.makeText(MapActivity.this, latt, Toast.LENGTH_SHORT).show();
+////                                                  Log.e("datalist",datalist.get(0).getLat());
+////                                hideProgressDialog();
+//
+//                        }
+////                            hideProgressDialog();
+//
+//
+//                    }
+//                });
 
         com.google.firebase.firestore.Query driverthird = db.collection("Driverthree");
 
@@ -334,14 +345,21 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         Collections.sort(datalist, new Comparator<Data>() {
             @Override
-            public int compare(Data lhs, Data rhs) {
-                return String.valueOf(lhs.getLat()).compareTo(String.valueOf(rhs.getLat()));
+            public int compare(Data ltd, Data ltds) {
+                return String.valueOf(ltd.getLat()).compareTo(String.valueOf(ltds.getLat()));
             }
+
         });
+//       Log.e("arrayval", String.valueOf(datalist.get(0).getLat()));
+
+//        Log.e("arrayval1", );
+//        Log.e("arrayval2", );
+//        Log.e("arrayval3", String.valueOf(datalist.get(3).getLat()));
+//        ArrayList<Data> tempElements = (ArrayList<Data>) datalist;
 //        Collections.sort(datalist, new Comparator<Data>() {
 //            @Override
-//            public int compare(Data lhs, Data rhs) {
-//                return String.valueOf(lhs.getLongitude()).compareTo(String.valueOf(rhs.getLongitude()));
+//            public int compare(Data ltd, Data ltds) {
+//                return String.valueOf(ltd.getLongitude()).compareTo(String.valueOf(ltds.getLongitude()));
 //            }
 //        });
 
@@ -357,8 +375,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                     SimpleDateFormat stf = new SimpleDateFormat("HH:mm:ss");
 
-                    sdf.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
-                    stf.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
+//                    sdf.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
+//                    stf.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
 
                     bookDate = sdf.format(now);
                     bookTime = stf.format(now);
@@ -396,11 +414,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         gps = new TrackGPS(MapActivity.this);
         try {
             if(gps.canGetLocation()){
+//                for (int i = 0; i < datalist.size(); i++) {
+//
+//                    marker = Mmap.addMarker(new MarkerOptions().position(new LatLng(datalist.get(i).getLat(), datalist.get(i).getLongitude()))
+//                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.bitmapfordriver))
+//                            .flat(true));
+//
+//                }
                 Double lat =gps .getLatitude();
                 Double lng =  gps.getLongitude();
                  Strlat= String.valueOf(laln.latitude);
                  Strlong= String.valueOf(laln.longitude);
                 List<Address> addresses = null;
+
                 try {
                     Geocoder geo = new Geocoder(MapActivity.this, Locale.getDefault());
                     addresses = geo.getFromLocation(lat, lng, 1);
@@ -415,6 +441,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             String postalCode = addresses.get(0).getPostalCode();
                             String knownName = addresses.get(0).getFeatureName();
                             address1=(address + "," + city + "," + state + "," + country + "," + postalCode);
+//                            for (int i = 0; i < datalist.size(); i++) {
+//
+//                                marker = Mmap.addMarker(new MarkerOptions().position(new LatLng(datalist.get(i).getLat(), datalist.get(i).getLongitude()))
+//                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.bitmapfordriver))
+//                                        .flat(true));
+//
+//                            }
 
                             //                         Eaddress.setText(addresses.get(0).getFeatureName() + ", " + addresses.get(0).getLocality() +", " + addresses.get(0).getAdminArea() + ", " + addresses.get(0).getCountryName());
                             //Toast.makeText(getApplicationContext(), "Address:- " + addresses.get(0).getFeatureName() + addresses.get(0).getAdminArea() + addresses.get(0).getLocality(), Toast.LENGTH_LONG).show();
@@ -434,6 +467,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
+//    private final Runnable m_Runnable = new Runnable()
+//    {
+//        public void run()
+//
+//        {
+////            Toast.makeText(MapActivity.this,"in runnable",Toast.LENGTH_SHORT).show();
+//
+//            MapActivity.this.mHandler.postDelayed(m_Runnable, 5000);
+//        }
+//
+//    };
     private CustomDateTimePicker getCustomDateTimePicker(final TextView textView) {
         CustomDateTimePicker custom = new CustomDateTimePicker(MapActivity.this, new CustomDateTimePicker.ICustomDateTimeListener() {
 
@@ -476,15 +520,22 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
 
-    private void setMarkerIcon(String serviceId) {
-
-        markerIcon = R.drawable.lmdriver;
-
-    }
+//    private void setMarkerIcon(String serviceId) {
+//
+//        markerIcon = R.drawable.lmdriver;
+//
+//    }
     @Override
     public void onLocationChanged(Location location) {
 //        addmap();
         mLocation = location;
+//        for (int i = 0; i < datalist.size(); i++) {
+//
+//            marker = Mmap.addMarker(new MarkerOptions().position(new LatLng(datalist.get(i).getLat(), datalist.get(i).getLongitude()))
+//                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.bitmapfordriver))
+//                    .flat(true));
+//
+//        }
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         Mmap.clear();
 //        MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(
@@ -495,7 +546,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         Mmap.animateCamera(CameraUpdateFactory.zoomTo(12.5f), 2000, null);
         Mmap.setMaxZoomPreference(14.5f);
         Mmap.setMinZoomPreference(6.5f);
+
         Circle circle = Mmap.addCircle(new CircleOptions().center(laln).radius(5000).strokeColor(Color.BLUE).strokeWidth(2.0f));
+
+
     }
 
 
@@ -505,6 +559,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 //        addmap();
         Mmap.clear();
+//        for (int i = 0; i < datalist.size(); i++) {
+//
+//            marker = Mmap.addMarker(new MarkerOptions().position(new LatLng(datalist.get(i).getLat(), datalist.get(i).getLongitude()))
+//                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.bitmapfordriver))
+//                    .flat(true));
+//
+//        }
         Double lat = gps.getLatitude();
         Double lng = gps.getLongitude();
         lattitud =String.valueOf(lat);
@@ -520,13 +581,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             return;
         }
-        for (int i = 0; i < datalist.size(); i++) {
 
-            marker = Mmap.addMarker(new MarkerOptions().position(new LatLng(datalist.get(i).getLat(), datalist.get(i).getLongitude()))
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.bitmapfordriver))
-                    .flat(true));
 
-        }
 
         Mmap.setMyLocationEnabled(true);
         //   Mmap.addMarker(new MarkerOptions().position(locateme).icon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin2)));
@@ -546,13 +602,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     LatLng locateme = new LatLng(lat, lng);
                       lattitude1= String.valueOf(lat);
                     longitude1= String.valueOf(lng);
-                    for (int i = 0; i < datalist.size(); i++) {
-
-                        marker = Mmap.addMarker(new MarkerOptions().position(new LatLng(datalist.get(i).getLat(), datalist.get(i).getLongitude()))
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.bitmapfordriver))
-                                .flat(true));
-
-                    }
+//                    for (int i = 0; i < datalist.size(); i++) {
+//
+//                        marker = Mmap.addMarker(new MarkerOptions().position(new LatLng(datalist.get(i).getLat(), datalist.get(i).getLongitude()))
+//                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.bitmapfordriver))
+//                                .flat(true));
+//
+//                    }
 ////
 //                    Log.e("locateme",lattitude1);
 //
@@ -572,7 +628,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 //                Toast.makeText(MapActivity.this, "haaiohb", Toast.LENGTH_SHORT).show();
                 laln = cameraPosition.target;
                 Mmap.clear();
-
+//                for (int i = 0; i < datalist.size(); i++) {
+//
+//                    marker = Mmap.addMarker(new MarkerOptions().position(new LatLng(datalist.get(i).getLat(), datalist.get(i).getLongitude()))
+//                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.bitmapfordriver))
+//                            .flat(true));
+//
+//                }
 
                 try {
                     Location mLocation = new Location("");
@@ -604,18 +666,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                              postalCode = addresses.get(0).getPostalCode();
                              knownName = addresses.get(0).getFeatureName();
                             address1=(latvalue+","+longitude+","+address + "," + city + "," + state + "," + country + "," + postalCode);
-                            Circle circle = Mmap.addCircle(new CircleOptions()
-                                    .center(new LatLng(lat,logs))
-                                    .radius(10000)
-                                    .strokeColor(Color.BLUE)
-                                    .fillColor(getResources().getColor(R.color.transporent_clr)).strokeWidth(2.0f));
-                            for (int i = 0; i < datalist.size(); i++) {
-
-                                marker = Mmap.addMarker(new MarkerOptions().position(new LatLng(datalist.get(i).getLat(), datalist.get(i).getLongitude()))
-                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.bitmapfordriver))
-                                        .flat(true));
-
-                            }
+//                            Circle circle = Mmap.addCircle(new CircleOptions()
+//                                    .center(new LatLng(lat,logs))
+//                                    .radius(10000)
+//                                    .strokeColor(Color.BLUE)
+//                                    .fillColor(getResources().getColor(R.color.transporent_clr)).strokeWidth(2.0f));
+//                            for (int i = 0; i < datalist.size(); i++) {
+//
+//                                marker = Mmap.addMarker(new MarkerOptions().position(new LatLng(datalist.get(i).getLat(), datalist.get(i).getLongitude()))
+//                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.bitmapfordriver))
+//                                        .flat(true));
+//
+//                            }
 //                            Circle circle = Mmap.addCircle(new CircleOptions().center(laln).radius(10000).strokeColor(Color.BLUE).strokeWidth(2.0f));
 //                            LatLngBounds bounds = Mmap.getProjection().getVisibleRegion().latLngBounds;
 //                            LatLng northeast = bounds.northeast;
@@ -714,21 +776,21 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 //        LatLng position = new LatLng(50, 50);
 //        markerOptions.position(position);
 //        Marker marker = Mmap.addMarker(markerOptions);
-        Circle circle = Mmap.addCircle(new CircleOptions()
-                .center(new LatLng(latitu, longitu))
-                .radius(10000)
-                .strokeColor(Color.RED)
-                .fillColor(Color.TRANSPARENT).strokeWidth(2.0f));
+//        Circle circle = Mmap.addCircle(new CircleOptions()
+//                .center(new LatLng(latitu, longitu))
+//                .radius(10000)
+//                .strokeColor(Color.RED)
+//                .fillColor(Color.TRANSPARENT).strokeWidth(2.0f));
 
 
 
-        for (int i = 0; i < datalist.size(); i++) {
-
-            marker = Mmap.addMarker(new MarkerOptions().position(new LatLng(datalist.get(0).getLat(), datalist.get(0).getLongitude()))
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.circledd))
-                    .flat(true));
-
-        }
+//        for (int i = 0; i < datalist.size(); i++) {
+//
+//            marker = Mmap.addMarker(new MarkerOptions().position(new LatLng(datalist.get(0).getLat(), datalist.get(0).getLongitude()))
+//                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.bitmapfordriver))
+//                    .flat(true));
+//
+//        }
 //        Circle circle = Mmap.addCircle(
 //                new CircleOptions()
 //                        .center(position)
@@ -742,12 +804,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
+
     public void Distance() {
 
+
+//        Collections.reverse(datalist);
         final ProgressDialog dialog = ProgressDialog.show(this,"Fetching data","Please wait...",false,false);
         StringBuilder googlePlacesUrl = new StringBuilder("api/distancematrix/json?");
-        googlePlacesUrl.append("origins=" + datalist.get(i).getLat() + "," +datalist.get(i).getLongitude());
-        googlePlacesUrl.append("&destinations=" +latvalue + "," +longitude);
+        googlePlacesUrl.append("origins=" +datalist.get(i).getLat() + "," +datalist.get(i).getLongitude());
+        googlePlacesUrl.append("&destinations=" +latvalue  + "," +longitude);
         googlePlacesUrl.append("&key=" + "AIzaSyDv2rBW15Rnox8k13gIrgr5ksSerLqf2T0");
 
 
@@ -824,7 +889,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                         /******************Adding appointments**********************/
 
-                        addappointment(0);
+//                        addappointment(0);
                         documentReference=db.collection("UsersBookingRequest").document(UIAVALUE);
                         Map<String, Object> updateval1 = new HashMap<>();
                         updateval1.put("date",bookDate);
@@ -1013,6 +1078,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 //        db.child("AppointmentList").push().setValue(apointmentlist);
 
     }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+//        for (int i = 0; i < datalist.size(); i++) {
+//
+//            marker = Mmap.addMarker(new MarkerOptions().position(new LatLng(datalist.get(i).getLat(), datalist.get(i).getLongitude()))
+//                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.bitmapfordriver))
+//                    .flat(true));
+//
+//        }
+        return false;
+    }
+
 
 //    @Override
 //    public void onMapClick(LatLng point) {
