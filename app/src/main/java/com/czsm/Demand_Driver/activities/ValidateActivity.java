@@ -62,6 +62,8 @@ TextView mResendotpTxt,mPhonenumbetEdt,mResendtxt;
     String uid,uidvalue;
     private android.support.v7.app.AlertDialog dialog;
     String refer;
+     FirebaseFirestore db;
+     String name="poojitha";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +93,9 @@ TextView mResendotpTxt,mPhonenumbetEdt,mResendtxt;
 //            Toast.makeText(this, mVerificationId, Toast.LENGTH_SHORT).show();
 //         }
      }
+        db = FirebaseFirestore.getInstance();
+        refer=FirebaseInstanceId.getInstance().getToken();
+        PreferencesHelper.setPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_TOKEN,refer);
 //     else {
 //
 //             phonrnum = bundle.getString("phonenumber1");
@@ -239,8 +244,8 @@ TextView mResendotpTxt,mPhonenumbetEdt,mResendtxt;
     }
 
     private void AddDatabase(String phoneNumber, final String uid){
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        refer=FirebaseInstanceId.getInstance().getToken();
+
+
 ////                            Toast.makeText(ValidateActivity.this, refer, Toast.LENGTH_SHORT).show();
 //        Log.e("Tok",refer);
         Map<String, Object> data = new HashMap<>();
@@ -248,12 +253,14 @@ TextView mResendotpTxt,mPhonenumbetEdt,mResendtxt;
         data.put("UsersUID", uid);
         data.put("token", refer);
 
+        data.put("Name", name);
+
 //
 //        Toast.makeText(ValidateActivity.this, uid, Toast.LENGTH_SHORT).show();
 //        Users users1 = new Users(phoneNumber,uid);
 
 
-        db.collection("UsersCurrentBookings").document(uid).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+        db.collection("UsersCurrentBooking").document(uid).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Log.e("uid",uid);

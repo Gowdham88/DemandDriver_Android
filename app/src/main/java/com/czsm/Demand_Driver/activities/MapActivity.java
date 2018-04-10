@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -18,7 +19,10 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -125,7 +129,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     String serviceName = "Driver";
     String bookDate, bookTime, bookNow;
     int markerIcon;
-    String UIAVALUE,PHNO;
+    String UIAVALUE,PHNO,Uid;
     String distance,time;
     List<Address> addresses;
     String lattitude,longitude,address,city,state,country,postalCode,knownName;
@@ -151,6 +155,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     List<Data> datalist1 = new ArrayList<Data>();
     ArrayList<LatLng> list=new ArrayList();
     private Handler mHandler;
+    String driverphonenumber;
+    String Token;
 
 
     @Override
@@ -170,7 +176,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         LocTxt=(TextView)findViewById(R.id.location_txt);
         refer= FirebaseInstanceId.getInstance().getToken();
          UIAVALUE= PreferencesHelper.getPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_FIREBASE_UUID);
+
+         Uid=PreferencesHelper.getPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_FIREBASE_UUID);
         PHNO= PreferencesHelper.getPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_PHONENUMBER);
+//        Token=PreferencesHelper.getPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_TOKEN);
           db= FirebaseFirestore.getInstance();
         toolbar.setTitle("Current Booking");
         setSupportActionBar(toolbar);
@@ -243,9 +252,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                                                   Data data = document.toObject(Data.class);
                                                   datalist.add(data);
-                                                  String driverphonenumber= String.valueOf(datalist.get(0).getPhonenumber());
+                                                   driverphonenumber= String.valueOf(datalist.get(0).getPhonenumber());
 //                                                  String latt= String.valueOf(datalist.get(0).getLat());
-                                                  Toast.makeText(MapActivity.this, driverphonenumber, Toast.LENGTH_SHORT).show();
+//                                                  Toast.makeText(MapActivity.this, latt, Toast.LENGTH_SHORT).show();
 
 //                                                  Log.e("datalist",datalist.get(0).getLat());
 //                                hideProgressDialog();
@@ -286,70 +295,70 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 //                    }
 //                });
 
-        com.google.firebase.firestore.Query driverthird = db.collection("Driverthree");
-
-        driverthird.get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot documentSnapshots) {
-
-                        if (documentSnapshots.getDocuments().size() < 1) {
-
-                            return;
-
-                        }
-
-                        for (DocumentSnapshot document : documentSnapshots.getDocuments()) {
-
-                            Data data2 = document.toObject(Data.class);
-                            datalist.add(data2);
-//                            String latt= String.valueOf(datalist.get(2).getLat());
-//                            Toast.makeText(MapActivity.this, latt, Toast.LENGTH_SHORT).show();
-//                                                  Log.e("datalist",datalist.get(0).getLat());
-//                                hideProgressDialog();
-
-                        }
-//                            hideProgressDialog();
-
-
-                    }
-                });
-        com.google.firebase.firestore.Query driverfour = db.collection("Driverfour");
-
-        driverfour.get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot documentSnapshots) {
-
-                        if (documentSnapshots.getDocuments().size() < 1) {
-
-                            return;
-
-                        }
-
-                        for (DocumentSnapshot document : documentSnapshots.getDocuments()) {
-
-                            Data data3 = document.toObject(Data.class);
-                            datalist.add(data3);
-//                            String latt= String.valueOf(datalist.get(2).getLat());
-//                            Toast.makeText(MapActivity.this, latt, Toast.LENGTH_SHORT).show();
-//                                                  Log.e("datalist",datalist.get(0).getLat());
-//                                hideProgressDialog();
-
-                        }
-//                            hideProgressDialog();
-
-
-                    }
-                });
-
-        Collections.sort(datalist, new Comparator<Data>() {
-            @Override
-            public int compare(Data ltd, Data ltds) {
-                return String.valueOf(ltd.getLat()).compareTo(String.valueOf(ltds.getLat()));
-            }
-
-        });
+//        com.google.firebase.firestore.Query driverthird = db.collection("Driverthree");
+//
+//        driverthird.get()
+//                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onSuccess(QuerySnapshot documentSnapshots) {
+//
+//                        if (documentSnapshots.getDocuments().size() < 1) {
+//
+//                            return;
+//
+//                        }
+//
+//                        for (DocumentSnapshot document : documentSnapshots.getDocuments()) {
+//
+//                            Data data2 = document.toObject(Data.class);
+//                            datalist.add(data2);
+////                            String latt= String.valueOf(datalist.get(2).getLat());
+////                            Toast.makeText(MapActivity.this, latt, Toast.LENGTH_SHORT).show();
+////                                                  Log.e("datalist",datalist.get(0).getLat());
+////                                hideProgressDialog();
+//
+//                        }
+////                            hideProgressDialog();
+//
+//
+//                    }
+//                });
+//        com.google.firebase.firestore.Query driverfour = db.collection("Driverfour");
+//
+//        driverfour.get()
+//                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onSuccess(QuerySnapshot documentSnapshots) {
+//
+//                        if (documentSnapshots.getDocuments().size() < 1) {
+//
+//                            return;
+//
+//                        }
+//
+//                        for (DocumentSnapshot document : documentSnapshots.getDocuments()) {
+//
+//                            Data data3 = document.toObject(Data.class);
+//                            datalist.add(data3);
+////                            String latt= String.valueOf(datalist.get(2).getLat());
+////                            Toast.makeText(MapActivity.this, latt, Toast.LENGTH_SHORT).show();
+////                                                  Log.e("datalist",datalist.get(0).getLat());
+////                                hideProgressDialog();
+//
+//                        }
+////                            hideProgressDialog();
+//
+//
+//                    }
+//                });
+//
+//        Collections.sort(datalist, new Comparator<Data>() {
+//            @Override
+//            public int compare(Data ltd, Data ltds) {
+//                return String.valueOf(ltd.getLat()).compareTo(String.valueOf(ltds.getLat()));
+//            }
+//
+//        });
 //       Log.e("arrayval", String.valueOf(datalist.get(0).getLat()));
 
 //        Log.e("arrayval1", );
@@ -381,8 +390,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     bookDate = sdf.format(now);
                     bookTime = stf.format(now);
                     bookNow = "1";
-                    Distance();
-//                    showConfirmDialog();
+//                    Distance();
+                    showConfirmDialog();
 
                 } else
                     Toast.makeText(getApplicationContext(), "Must select car type and options", Toast.LENGTH_LONG).show();
@@ -502,7 +511,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             bookDate = sdf.format(calendarSelected.getTime());
                             bookTime = stf.format(calendarSelected.getTime());
                             bookNow = "0";
-                            Distance();
+//                            Distance();
+                            showConfirmDialog();
                         } else
                             Toast.makeText(MapActivity.this, "Must select car type and options", Toast.LENGTH_LONG).show();
                     }
@@ -811,7 +821,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 //        Collections.reverse(datalist);
         final ProgressDialog dialog = ProgressDialog.show(this,"Fetching data","Please wait...",false,false);
         StringBuilder googlePlacesUrl = new StringBuilder("api/distancematrix/json?");
-        googlePlacesUrl.append("origins=" +datalist.get(i).getLat() + "," +datalist.get(i).getLongitude());
+        googlePlacesUrl.append("origins=" +datalist.get(0).getLat() + "," +datalist.get(0).getLongitude());
         googlePlacesUrl.append("&destinations=" +latvalue  + "," +longitude);
         googlePlacesUrl.append("&key=" + "AIzaSyDv2rBW15Rnox8k13gIrgr5ksSerLqf2T0");
 
@@ -886,34 +896,33 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
+            popup();
 
-                        /******************Adding appointments**********************/
-
-//                        addappointment(0);
-                        documentReference=db.collection("UsersBookingRequest").document(UIAVALUE);
-                        Map<String, Object> updateval1 = new HashMap<>();
-                        updateval1.put("date",bookDate);
-                        updateval1.put("time", bookTime);
-                        updateval1.put("UsersUID",UIAVALUE);
-                        updateval1.put("phoneNumber",PHNO);
-                        updateval1.put("Pickuplat",latvalue);
-                        updateval1.put("Pickuplong",longitude);
-                        updateval1.put("Currentlat",lattitud);
-                        updateval1.put("Currentlong",longtude);
-                        updateval1.put("address",address);
-                        updateval1.put("city",city);
-                        updateval1.put("state",state);
-                        updateval1.put("country",country);
-                        updateval1.put("Status",true);
-                        updateval1.put("token",refer);
-                        updateval1.put("cartype",cartypeStr);
-//                        updateval1.put("radius",text);
-
-
-                        documentReference.set(updateval1).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        documentReference=db.collection("UsersCurrentBooking").document(UIAVALUE);
+                        HashMap<String,Object> updatesvalues1=new HashMap<>();
+                        updatesvalues1.put("date",bookDate);
+                        updatesvalues1.put("time", bookTime);
+                        updatesvalues1.put("UsersUID",UIAVALUE);
+                        updatesvalues1.put("phoneNumber",PHNO);
+                        updatesvalues1.put("Pickuplat",latvalue);
+                        updatesvalues1.put("Pickuplong",longitude);
+                        updatesvalues1.put("Currentlat",lattitud);
+                        updatesvalues1.put("Currentlong",longtude);
+                        updatesvalues1.put("address",address);
+                        updatesvalues1.put("city",city);
+                        updatesvalues1.put("state",state);
+                        updatesvalues1.put("country",country);
+                        updatesvalues1.put("Status",true);
+                        updatesvalues1.put("token",refer);
+                        updatesvalues1.put("cartype",cartypeStr);
+//                            updates1.put("token",refer);
+//                            updates1.put("radius",text);
+                        documentReference.set(updatesvalues1)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
-                                Toast.makeText(MapActivity.this, "successfull", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MapActivity.this, "successfull", Toast.LENGTH_SHORT).show();
+//
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -922,6 +931,42 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                             }
                         });
+                        /******************Adding appointments**********************/
+//                        addappointment(0);
+//                        Map<String, Object> updateval1 = new HashMap<>();
+//                        updateval1.put("date",bookDate);
+//                        updateval1.put("time", bookTime);
+//                        updateval1.put("UsersUID",UIAVALUE);
+//                        updateval1.put("phoneNumber",PHNO);
+//                        updateval1.put("Pickuplat",latvalue);
+//                        updateval1.put("Pickuplong",longitude);
+//                        updateval1.put("Currentlat",lattitud);
+//                        updateval1.put("Currentlong",longtude);
+//                        updateval1.put("address",address);
+//                        updateval1.put("city",city);
+//                        updateval1.put("state",state);
+//                        updateval1.put("country",country);
+//                        updateval1.put("Status",true);
+//                        updateval1.put("token",refer);
+//                        updateval1.put("cartype",cartypeStr);
+////                        updateval1.put("radius",text);
+//
+//
+//
+//                        db.collection("UsersBookingRequest").document(UIAVALUE)
+//                                .set(updateval1)
+//                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                    @Override
+//                                    public void onSuccess(Void aVoid) {
+//                                        Toast.makeText(MapActivity.this, "successfull", Toast.LENGTH_SHORT).show();
+//                                    }
+//                                })
+//                                .addOnFailureListener(new OnFailureListener() {
+//                                    @Override
+//                                    public void onFailure(@NonNull Exception e) {
+//                                        Log.w("failure", "Error writing document", e);
+//                                    }
+//                                });
 //                        documentReference=db.collection("UsersCurrentBookings").document(UIAVALUE);
 //                        Map<String, Object> updateval = new HashMap<>();
 //                        updateval.put("date",bookDate);
@@ -1045,6 +1090,40 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                     }
                 }).show();
+    }
+    private void popup() {
+
+
+        LayoutInflater factory = LayoutInflater.from(this);
+        final View deleteDialogView = factory.inflate(R.layout.userreqalert, null);
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setView(deleteDialogView);
+        TextView Acce = (TextView)deleteDialogView.findViewById(R.id.accept_button);
+//        TextView DriverNumber = (TextView)deleteDialogView.findViewById(R.id.divernumber);
+//        DriverNumber.setText(driverphonenumber);
+        final AlertDialog alertDialog1 = alertDialog.create();
+        Acce.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog1.dismiss();
+            }
+        });
+
+        alertDialog1.setCanceledOnTouchOutside(false);
+        try {
+            alertDialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        alertDialog1.show();
+//        alertDialog1.getWindow().setLayout((int) Utils.convertDpToPixel(228,getActivity()),(int)Utils.convertDpToPixel(220,getActivity()));
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(alertDialog1.getWindow().getAttributes());
+//        lp.height=200dp;
+//        lp.width=228;
+        lp.gravity = Gravity.CENTER;
+//        lp.windowAnimations = R.style.DialogAnimation;
+        alertDialog1.getWindow().setAttributes(lp);
     }
 
     public void addappointment(int position){
