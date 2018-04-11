@@ -31,7 +31,7 @@
         android:supportsRtl="true"
         android:theme="@style/AllinAllMaterialTheme">
         <activity
-            android:name=".activities.MapActivity"
+            android:name=".activities.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AllinAllMaterialTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan|adjustResize">
@@ -98,9 +98,9 @@
         <activity
             android:name=".activities.BookmapActivity"
             android:screenOrientation="portrait" />
-        <!--<activity-->
-            <!--android:name=".activities.MapActivity"-->
-            <!--android:screenOrientation="portrait" />-->
+        <activity
+            android:name=".activities.MapActivity"
+            android:screenOrientation="portrait" />
 
         <service android:name=".MyFirebaseMessagingService">
             <intent-filter>

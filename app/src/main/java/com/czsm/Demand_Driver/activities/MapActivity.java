@@ -103,7 +103,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     ImageButton book;
 
     LatLng laln;
-    String name,email,mobile_number, Current_Location, Service_type, namee, mob_num, map_loc;
+    String name="Poojitha",email,mobile_number, Current_Location, Service_type, namee, mob_num, map_loc;
     EditText changelocation;
     String newloc;
 
@@ -381,11 +381,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     Log.e("cartype",carTypeSpinner.getText().toString());
                     cartypeStr=carTypeSpinner.getText().toString().trim();
                     Date now = new Date();
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                    SimpleDateFormat stf = new SimpleDateFormat("HH:mm:ss");
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/M/yyyy");
+                    SimpleDateFormat stf = new SimpleDateFormat("hh:mm:ss a");
 
-//                    sdf.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
-//                    stf.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
+                    sdf.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
+                    stf.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
 
                     bookDate = sdf.format(now);
                     bookTime = stf.format(now);
@@ -506,8 +506,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     @Override
                     public void onClick(View v) {
                         if (!serviceId.equalsIgnoreCase("1") || !carTypeSpinner.getText().toString().isEmpty()) {
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                            SimpleDateFormat stf = new SimpleDateFormat("HH:mm:ss");
+                            SimpleDateFormat sdf = new SimpleDateFormat("dd/M/yyyy");
+                            SimpleDateFormat stf = new SimpleDateFormat("hh:mm:ss");
                             bookDate = sdf.format(calendarSelected.getTime());
                             bookTime = stf.format(calendarSelected.getTime());
                             bookNow = "0";
@@ -901,7 +901,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         documentReference=db.collection("UsersCurrentBooking").document(UIAVALUE);
                         HashMap<String,Object> updatesvalues1=new HashMap<>();
                         updatesvalues1.put("date",bookDate);
-                        updatesvalues1.put("time", bookTime);
+                        updatesvalues1.put("time",bookTime);
                         updatesvalues1.put("UsersUID",UIAVALUE);
                         updatesvalues1.put("phoneNumber",PHNO);
                         updatesvalues1.put("Pickuplat",latvalue);
@@ -915,6 +915,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         updatesvalues1.put("Status",true);
                         updatesvalues1.put("token",refer);
                         updatesvalues1.put("cartype",cartypeStr);
+                        updatesvalues1.put("Name", name);
 //                            updates1.put("token",refer);
 //                            updates1.put("radius",text);
                         documentReference.set(updatesvalues1)

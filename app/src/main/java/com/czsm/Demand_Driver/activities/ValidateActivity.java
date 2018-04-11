@@ -253,7 +253,6 @@ TextView mResendotpTxt,mPhonenumbetEdt,mResendtxt;
         data.put("UsersUID", uid);
         data.put("token", refer);
 
-        data.put("Name", name);
 
 //
 //        Toast.makeText(ValidateActivity.this, uid, Toast.LENGTH_SHORT).show();
