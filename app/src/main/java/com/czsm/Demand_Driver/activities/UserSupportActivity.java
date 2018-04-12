@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.czsm.Demand_Driver.PreferencesHelper;
 import com.czsm.Demand_Driver.R;
@@ -29,6 +30,7 @@ public class UserSupportActivity extends AppCompatActivity  implements RESTClien
     private SharedPreferences allinallSharedPref;
     private AllinAllController allinAllController;
     private FirebaseAuth mAuth;
+    ImageView image;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,7 +50,7 @@ public class UserSupportActivity extends AppCompatActivity  implements RESTClien
                 startActivity(in);
             }
         });
-
+        image=(ImageView)findViewById(R.id.img_call);
 //        allinAllController = new AllinAllController(UserSupportActivity.this, this);
 //        allinallSharedPref = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         signoutButton      = (Button) findViewById(R.id.fragment_user_support_signout_button);
