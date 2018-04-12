@@ -19,7 +19,7 @@
         android:layout_height="match_parent"
         android:layout_margin="10dp">
 
-        <ListView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/fragment_ongoing_appointments_listview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

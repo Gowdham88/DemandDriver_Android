@@ -83,7 +83,7 @@
                 android:layout_marginLeft="30dp"
                 android:layout_toRightOf="@+id/img_mail"
                 android:layout_below="@+id/fragment_mail_textview"
-                android:text="info@demanddriver.com"
+                android:text="gowdhaman@czsm.co.in"
                 android:textColor="#fff"
                 android:textSize="18dp" />
 
@@ -123,7 +123,7 @@
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/Img_web"
                 android:layout_below="@+id/fragment_website_textview"
-                android:text="www.demanddriver.com"
+                android:text="www.czsm.co.in"
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="10dp"
                 android:textColor="#fff"

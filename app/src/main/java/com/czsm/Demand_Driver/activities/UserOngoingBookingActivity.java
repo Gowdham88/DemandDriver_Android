@@ -2,6 +2,7 @@ package com.czsm.Demand_Driver.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -69,6 +70,16 @@ public class UserOngoingBookingActivity extends AppCompatActivity implements RES
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent in=new Intent(UserOngoingBookingActivity.this,OngoingAppointmentActivity.class);
+                startActivity(in);
+            }
+        });
+
         setTitle(R.string.app_details);
 
         db = FirebaseDatabase.getInstance().getReference();
@@ -79,10 +90,10 @@ public class UserOngoingBookingActivity extends AppCompatActivity implements RES
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
 
-            drivername    = extras.getString("drivername","");
+            drivername    = extras.getString("name","");
             status        = extras.getString("status","");
-            driveraddress = extras.getString("driveraddress","");
-            date          = extras.getString("date","");
+            driveraddress = extras.getString("address","");
+            date          = extras.getString("datatime","");
             appointmentid = extras.getString("userid","");
             id            = extras.getString("providerid","");
 

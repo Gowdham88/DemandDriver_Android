@@ -223,6 +223,7 @@ TextView mResendotpTxt,mPhonenumbetEdt,mResendtxt;
                             PreferencesHelper.setPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_FIREBASE_UUID,uid);
                             PreferencesHelper.setPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_PHONENUMBER,Phno);
                             uidvalue = PreferencesHelper.getPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_FIREBASE_UUID);
+                            PreferencesHelper.setPreferenceBoolean(getApplicationContext(), PreferencesHelper.PREFERENCE_LOGGED_IN,true);
 //                            DatabaseReference refe= FirebaseDatabase.getInstance().getReference("userNotifications");
 //                            refe.child("token").setValue(FirebaseInstanceId.getInstance().getToken());
 //                            Toast.makeText(ValidateActivity.this, uid, Toast.LENGTH_SHORT).show();
@@ -265,6 +266,7 @@ TextView mResendotpTxt,mPhonenumbetEdt,mResendtxt;
                 Log.e("uid",uid);
 
                 Intent intent=new Intent(ValidateActivity.this,DashBoardActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 finish();
             }

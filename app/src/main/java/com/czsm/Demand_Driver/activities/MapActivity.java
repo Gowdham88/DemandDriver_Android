@@ -12,9 +12,12 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -86,6 +89,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.CAMERA;
 import static com.czsm.Demand_Driver.activities.BookServiceMapActivity.BaseUrl;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback,LocationListener,GoogleMap.OnMarkerClickListener {
@@ -144,6 +149,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     Circle myCircle;
     String cartypeStr;
     Marker marker;
+    private static final int PERMISSION_REQUEST_CODE = 200;
+    View view;
 
 //    double laat=12.9010;
 //    double longg=80.2279;
@@ -176,7 +183,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         LocTxt=(TextView)findViewById(R.id.location_txt);
         refer= FirebaseInstanceId.getInstance().getToken();
          UIAVALUE= PreferencesHelper.getPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_FIREBASE_UUID);
-
          Uid=PreferencesHelper.getPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_FIREBASE_UUID);
         PHNO= PreferencesHelper.getPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_PHONENUMBER);
 //        Token=PreferencesHelper.getPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_TOKEN);
@@ -189,9 +195,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
 
-                onBackPressed();
+               Intent in=new Intent(MapActivity.this,DashBoardActivity.class);
+               startActivity(in);
             }
         });
+
+//        POPup();
 //        this.mHandler = new Handler();
 //
 //        this.mHandler.postDelayed(m_Runnable,5000);
@@ -265,6 +274,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                                           }
                                       });
+
+
 //
 //        com.google.firebase.firestore.Query driversecond = db.collection("Drivertwo");
 //
@@ -476,7 +487,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
-//    private final Runnable m_Runnable = new Runnable()
+
+
+    //    private final Runnable m_Runnable = new Runnable()
 //    {
 //        public void run()
 //
@@ -1172,37 +1185,125 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
 
+//    private boolean checkPermission() {
+//        int result = ContextCompat.checkSelfPermission(getApplicationContext(), ACCESS_FINE_LOCATION);
+//        int result1 = ContextCompat.checkSelfPermission(getApplicationContext(), CAMERA);
+//
+//        return result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED;
+//    }
+//
+//    private void requestPermission() {
+//
+//        ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION, CAMERA}, PERMISSION_REQUEST_CODE);
+//
+//    }
+//    private void POPup() {
+//        LayoutInflater factory = LayoutInflater.from(this);
+//        final View deleteDialogView = factory.inflate(R.layout.userreqalertpermission, null);
+//        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+//        alertDialog.setView(deleteDialogView);
+//        Button check = (Button)deleteDialogView.findViewById(R.id.check_permission);
+//        Button req = (Button)deleteDialogView.findViewById(R.id.request_permission);
+////        TextView DriverNumber = (TextView)deleteDialogView.findViewById(R.id.divernumber);
+////        DriverNumber.setText(driverphonenumber);
+//        final AlertDialog alertDialog1 = alertDialog.create();
+//
+//        check.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (checkPermission()) {
+//
+//                    Snackbar.make(view, "Permission already granted.", Snackbar.LENGTH_LONG).show();
+//
+//                } else {
+//
+//                    Snackbar.make(view, "Please request permission.", Snackbar.LENGTH_LONG).show();
+//                }
+//            }
+//        });
+//
+//        req.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (!checkPermission()) {
+//
+//                    requestPermission();
+//
+//                } else {
+//
+//                    Snackbar.make(view, "Permission already granted.", Snackbar.LENGTH_LONG).show();
+//
+//                }
+//            }
+//        });
+//
+//        alertDialog1.setCanceledOnTouchOutside(false);
+//        try {
+//            alertDialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        alertDialog1.show();
+////        alertDialog1.getWindow().setLayout((int) Utils.convertDpToPixel(228,getActivity()),(int)Utils.convertDpToPixel(220,getActivity()));
+//        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+//        lp.copyFrom(alertDialog1.getWindow().getAttributes());
+////        lp.height=200dp;
+////        lp.width=228;
+//        lp.gravity = Gravity.CENTER;
+////        lp.windowAnimations = R.style.DialogAnimation;
+//        alertDialog1.getWindow().setAttributes(lp);
+//
+//    }
+//
 //    @Override
-//    public void onMapClick(LatLng point) {
-//        CircleOptions circleOptions = new CircleOptions()
-//                .center(point)   //set center
-//                .radius(500)   //set radius in meters
-//                .fillColor(Color.TRANSPARENT)  //default
-//                .strokeColor(Color.BLUE)
-//                .strokeWidth(5);
+//    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+//        switch (requestCode) {
+//            case PERMISSION_REQUEST_CODE:
+//                if (grantResults.length > 0) {
 //
-//        myCircle = Mmap.addCircle(circleOptions);
-//    }
-//    @Override
-//    public void onMapLongClick(LatLng latLng) {
-//        CircleOptions circleOptions = new CircleOptions()
-//                .center(point)   //set center
-//                .radius(500)   //set radius in meters
-//                .fillColor(0x40ff0000)  //semi-transparent
-//                .strokeColor(Color.BLUE)
-//                .strokeWidth(5);
+//                    boolean locationAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+//                    boolean cameraAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
 //
-//        myCircle = Mmap.addCircle(circleOptions);
-//    }
-//} @Override
-//    public void onMapLongClick(LatLng latLng) {
-//        CircleOptions circleOptions = new CircleOptions()
-//                .center(point)   //set center
-//                .radius(500)   //set radius in meters
-//                .fillColor(0x40ff0000)  //semi-transparent
-//                .strokeColor(Color.BLUE)
-//                .strokeWidth(5);
+//                    if (locationAccepted && cameraAccepted)
+//                        Toast.makeText(MapActivity.this, "Permission Granted, Now you can access location data and camera.", Toast.LENGTH_SHORT).show();
+////                        Snackbar.make(findViewById(android.R.id.content), "Permission Granted, Now you can access location data and camera.", Snackbar.LENGTH_LONG).show();
+//                    else {
 //
-//        myCircle = Mmap.addCircle(circleOptions);
+////                        Snackbar.make(findViewById(android.R.id.content), "Permission Denied, You cannot access location data and camera.", Snackbar.LENGTH_LONG).show();
+//
+//
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                            if (shouldShowRequestPermissionRationale(ACCESS_FINE_LOCATION)) {
+//                                showMessageOKCancel("You need to allow access to both the permissions",
+//                                        new DialogInterface.OnClickListener() {
+//                                            @Override
+//                                            public void onClick(DialogInterface dialog, int which) {
+//                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                                                    requestPermissions(new String[]{ACCESS_FINE_LOCATION, CAMERA},
+//                                                            PERMISSION_REQUEST_CODE);
+//                                                }
+//                                            }
+//                                        });
+//                                return;
+//                            }
+//                        }
+//
+//                    }
+//                }
+//
+//
+//                break;
+//        }
 //    }
+//
+//    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+//        new AlertDialog.Builder(MapActivity.this)
+//                .setMessage(message)
+//                .setPositiveButton("OK", okListener)
+//                .setNegativeButton("Cancel", null)
+//                .create()
+//                .show();
+//    }
+
+
 }

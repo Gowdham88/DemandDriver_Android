@@ -44,12 +44,13 @@ public class UserSupportActivity extends AppCompatActivity  implements RESTClien
             @Override
             public void onClick(View v) {
 
-                onBackPressed();
+                Intent in=new Intent(UserSupportActivity.this,DashBoardActivity.class);
+                startActivity(in);
             }
         });
 
-        allinAllController = new AllinAllController(UserSupportActivity.this, this);
-        allinallSharedPref = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+//        allinAllController = new AllinAllController(UserSupportActivity.this, this);
+//        allinallSharedPref = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         signoutButton      = (Button) findViewById(R.id.fragment_user_support_signout_button);
         signoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,17 +72,17 @@ public class UserSupportActivity extends AppCompatActivity  implements RESTClien
                 .setIcon(R.drawable.logo01)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        allinAllController.userSignOut(RESTClient.ID);
-                        SharedPreferences.Editor editor = allinallSharedPref.edit();
-                        editor.putBoolean("firstLaunch", true);
-                        editor.remove("userId");
-                        editor.apply();
-                        Intent service = new Intent(getApplicationContext(), CapPhoto.class);
-                        stopService(service);
+//                        allinAllController.userSignOut(RESTClient.ID);
+//                        SharedPreferences.Editor editor = PreferencesHelper.edit();
+//                        editor.putBoolean("firstLaunch", true);
+//                        editor.remove("userId");
+//                        editor.apply();
+//                        Intent service = new Intent(getApplicationContext(), CapPhoto.class);
+//                        stopService(service);
 //                        FirebaseAuth.getInstance().signOut();
                         PreferencesHelper.signOut(UserSupportActivity.this);
                         mAuth.signOut();
-                        RESTClient.ID = null;
+//                        RESTClient.ID = null;
                         Intent loginIntent = new Intent(getApplicationContext(), LoginScreenActivity.class);
                         loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(loginIntent);

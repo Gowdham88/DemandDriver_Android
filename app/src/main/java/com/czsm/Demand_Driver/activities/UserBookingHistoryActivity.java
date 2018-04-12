@@ -1,9 +1,11 @@
 package com.czsm.Demand_Driver.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -49,6 +51,16 @@ public class UserBookingHistoryActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent in=new Intent(UserBookingHistoryActivity.this,UserHistoryActivity.class);
+                startActivity(in);
+            }
+        });
+
         setTitle(R.string.app_details);
 
 
@@ -57,9 +69,9 @@ public class UserBookingHistoryActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
 
-            drivername    = extras.getString("drivername","");
-            driveraddress = extras.getString("driveraddress","");
-            date          = extras.getString("date","");
+            drivername    = extras.getString("name","");
+            driveraddress = extras.getString("address","");
+            date          = extras.getString("datatime","");
             appointmentid = extras.getString("id","");
             review        = extras.getString("review","");
 
@@ -72,12 +84,12 @@ public class UserBookingHistoryActivity extends AppCompatActivity {
             drNameTextView.setText(drivername);
             addressTextView.setText(driveraddress);
 
-            int reviewstar = Integer.parseInt(review);
-                String reviewstr = "";
-                for (int i = 0; i < reviewstar; i++) {
-                    reviewstr += "*";
-                }
-            reviewTextView.setText(reviewstr);
+//            int reviewstar = Integer.parseInt(review);
+//                String reviewstr = "";
+//                for (int i = 0; i < reviewstar; i++) {
+//                    reviewstr += "*";
+//                }
+//            reviewTextView.setText(reviewstr);
 
         } catch (NullPointerException e){
 

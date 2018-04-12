@@ -16,6 +16,13 @@
         android:layout_gravity="center"
         android:theme="@style/AllinAllMaterialTheme.AppBarOverlay"
         android:titleTextAppearance="@color/textColorPrimary" />
+
+    <!--<android.support.v4.widget.SwipeRefreshLayout-->
+        <!--android:id="@+id/swipeContainer"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_margin="5dp"-->
+        <!--android:layout_height="match_parent">-->
+
     <RelativeLayout
         android:id="@+id/map_relay"
         android:layout_width="match_parent"
@@ -61,6 +68,7 @@
         <!--</FrameLayout>-->
         <!---->
     </RelativeLayout>
+    <!--</android.support.v4.widget.SwipeRefreshLayout>-->
 
     <!--<fragment-->
     <!--android:id="@+id/map"-->
