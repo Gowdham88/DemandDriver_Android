@@ -29,6 +29,8 @@ import com.czsm.Demand_Driver.adapters.UserOngoingAdapter;
 import com.czsm.Demand_Driver.helper.RESTClient;
 import com.czsm.Demand_Driver.helper.Util;
 import com.czsm.Demand_Driver.model.Datauser;
+import com.czsm.Demand_Driver.model.User_Details;
+import com.czsm.Demand_Driver.model.User_completeDetails;
 import com.czsm.Demand_Driver.receiver.NotificationBroadcastReceiver;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -66,7 +68,7 @@ public class OngoingAppointmentActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     String userid;
     RecyclerView recyclerView;
-    List<Datauser> datalist = new ArrayList<Datauser>();
+    List<User_Details> datalist = new ArrayList<User_Details>();
 
 
     @Override
@@ -117,7 +119,7 @@ public class OngoingAppointmentActivity extends AppCompatActivity {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        Query first = db.collection("UsersCurrentBooking");
+        Query first = db.collection("Current_booking");
 
         first.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -132,7 +134,7 @@ public class OngoingAppointmentActivity extends AppCompatActivity {
 
                         for (DocumentSnapshot document : documentSnapshots.getDocuments()) {
 
-                            Datauser data = document.toObject(Datauser.class);
+                            User_Details data = document.toObject(User_Details.class);
                             datalist.add(data);
 
                         }

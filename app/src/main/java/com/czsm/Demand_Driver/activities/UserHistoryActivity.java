@@ -29,6 +29,8 @@ import com.czsm.Demand_Driver.helper.RESTClient;
 import com.czsm.Demand_Driver.helper.Util;
 import com.czsm.Demand_Driver.model.Data;
 import com.czsm.Demand_Driver.model.Datauser;
+import com.czsm.Demand_Driver.model.User_Details;
+import com.czsm.Demand_Driver.model.User_completeDetails;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -55,12 +57,11 @@ public class UserHistoryActivity extends AppCompatActivity{
     private ListView listView;
     RecyclerView recyclerview;
     FirebaseFirestore db;
-    List<Datauser> datalist = new ArrayList<Datauser>();
+    List<User_completeDetails> datalist = new ArrayList<User_completeDetails>();
     SharedPreferences preferences;
     ArrayList<AppointmentList> Bookinglist = new ArrayList<AppointmentList>();
     String id;
     UserHistoryAdapter userHistoryAdapter ;
-    String contact="1234567890";
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,15 +74,15 @@ public class UserHistoryActivity extends AppCompatActivity{
 
 //        preferences       = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
 //        id                = preferences.getString("userId","");
-        TextView caltx=(TextView)findViewById(R.id.calltxt);
-        caltx.setOnClickListener(new View.OnClickListener() {
-            Intent call = new Intent(Intent.ACTION_DIAL);
-            @Override
-            public void onClick(View v){
-                call.setData(Uri.parse("tel:"+ contact));
-                startActivity(call);
-            }
-        });
+//        TextView caltx=(TextView)findViewById(R.id.calltxt);
+//        caltx.setOnClickListener(new View.OnClickListener() {
+//            Intent call = new Intent(Intent.ACTION_DIAL);
+//            @Override
+//            public void onClick(View v){
+//                call.setData(Uri.parse("tel:"+ contact));
+//                startActivity(call);
+//            }
+//        });
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("My History");
         setSupportActionBar(toolbar);
@@ -103,22 +104,6 @@ public class UserHistoryActivity extends AppCompatActivity{
         userHistoryAdapter =new UserHistoryAdapter(UserHistoryActivity.this,datalist);
         recyclerview.setAdapter(userHistoryAdapter);
         recyclerview.setLayoutManager(new LinearLayoutManager(UserHistoryActivity.this, LinearLayoutManager.VERTICAL, false));
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//                Intent bookingIntent = new Intent(getApplicationContext(), UserBookingHistoryActivity.class);
-//                Bundle bookingBundle = new Bundle();
-//                bookingBundle.putString("drivername",    Bookinglist.get(position).getDrivername());
-//                bookingBundle.putString("id",            primaryidlist.get(position));
-//                bookingBundle.putString("driveraddress", Bookinglist.get(position).getDriveraddress());
-//                bookingBundle.putString("date",          Bookinglist.get(position).getDate()+" "+Bookinglist.get(position).getTime());
-//                bookingBundle.putString("review",        Bookinglist.get(position).getUserreview());
-//                bookingIntent.putExtras(bookingBundle);
-//                startActivity(bookingIntent);
-//
-//            }
-//        });
 
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -133,13 +118,6 @@ public class UserHistoryActivity extends AppCompatActivity{
             }
         });
 
-
-
-//        TextView emptyView = Util.getEmptyView(R.string.no_history, getApplicationContext());
-//        ((ViewGroup) listView.getParent().getParent()).addView(emptyView);
-//        listView.setEmptyView(emptyView);
-//
-//            Appointment();
     }
 
     private void Appointment() {
@@ -152,7 +130,7 @@ public class UserHistoryActivity extends AppCompatActivity{
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        Query first = db.collection("UsersCurrentBooking");
+        Query first = db.collection("Current_booking");
 
         first.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -167,7 +145,7 @@ public class UserHistoryActivity extends AppCompatActivity{
 
                         for(DocumentSnapshot document : documentSnapshots.getDocuments()) {
 
-                            Datauser data = document.toObject(Datauser.class);
+                            User_completeDetails data = document.toObject(User_completeDetails.class);
                             datalist.add(data);
 
                         }
@@ -178,115 +156,6 @@ public class UserHistoryActivity extends AppCompatActivity{
 
                 });
 
-
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        if (adapter != null)
-//            adapter.notifyDataSetChanged();
-//    }
-//
-//    @Override
-//    public void sendServiceResult(String serviceResult) {
-//
-//
-//    }
-
-//    public void Appointment(){
-//
-//        ValueEventListener appointmentlistner = new ValueEventListener() {
-//
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//
-//                for (DataSnapshot child : dataSnapshot.getChildren()) {
-//
-//                    AppointmentList appointment  = child.getValue(AppointmentList.class);
-//
-//                    if(appointment.getStatus().equals("Completed")) {
-//
-//                        Bookinglist.clear();
-//                        primaryidlist.clear();
-//                        Bookinglist.add(appointment);
-//                        primaryidlist.add(child.getKey());
-//
-//                        if (adapter == null) {
-//
-//                            adapter = new UserHistoryListAdapter(getApplicationContext(), R.layout.list_item_user_history);
-//                            listView.setAdapter(adapter);
-//
-//                        } else {
-//
-//                            adapter.notifyDataSetChanged();
-//                            swipeContainer.setRefreshing(false);
-//                        }
-//
-//                    }
-//
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//                Log.e("loadPost:onCancelled", databaseError.toException().toString());
-//            }
-//        };
-//
-//        db.child("AppointmentList").orderByChild("userid").equalTo(id).addValueEventListener(appointmentlistner);
-//
-//
-//
-//    }
-
-
-
-
-//    @Override
-//    public void requestFailed() {
-//        Util.requestFailed(getApplicationContext());
-//    }
-//
-//    private class UserHistoryListAdapter extends ArrayAdapter<AppointmentList> {
-//        public View mView;
-//        public TextView userNameTextview;
-//        public TextView dateTimeTextview;
-//        public TextView serviceTextview;
-//        public ImageView providerImageview;
-//        public Context context;
-//        public int resource;
-//
-//
-//        public UserHistoryListAdapter(Context context, int resource) {
-//            super(context, resource, Bookinglist);
-//            this.context = context;
-//            this.resource = resource;
-//        }
-//
-//        @Override
-//        public View getView(int position, View convertView, ViewGroup parent) {
-//            if (convertView == null) {
-//                LayoutInflater viewInflater = (LayoutInflater) context.getSystemService(
-//                        Context.LAYOUT_INFLATER_SERVICE);
-//                convertView = viewInflater.inflate(resource, null);
-//            }
-//            mView = convertView;
-//            AppointmentList booking = Bookinglist.get(position);
-//            userNameTextview  = (TextView) convertView.findViewById(R.id.list_item_booking_user_name_textview);
-//            dateTimeTextview  = (TextView) convertView.findViewById(R.id.list_item_booking_datetime_textview);
-//            serviceTextview   = (TextView) convertView.findViewById(R.id.list_item_booking_service_textview);
-//            providerImageview = (ImageView) convertView.findViewById(R.id.list_item_booking_user_imagview);
-//
-//            userNameTextview.setText(booking.drivername);
-//            dateTimeTextview.setText(booking.getDate()+" "+booking.getTime());
-//            serviceTextview.setText(booking.getDriveraddress());
-//
-//            if(booking.getDriverimage() != null)
-//                Picasso.with(context).load(booking.getDriverimage()).into(providerImageview);
-//
-//            return convertView;
-//        }
     }
 
 }

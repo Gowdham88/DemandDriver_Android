@@ -13,6 +13,8 @@ import com.czsm.Demand_Driver.R;
 import com.czsm.Demand_Driver.activities.UserBookingHistoryActivity;
 import com.czsm.Demand_Driver.activities.UserOngoingBookingActivity;
 import com.czsm.Demand_Driver.model.Datauser;
+import com.czsm.Demand_Driver.model.User_Details;
+import com.czsm.Demand_Driver.model.User_completeDetails;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,15 +26,15 @@ import java.util.List;
 public class UserOngoingAdapter extends RecyclerView.Adapter<UserOngoingAdapter.ViewHolder> {
 
     Context context;
-    List<Datauser> dataList = new ArrayList<>();
+    List<User_Details> dataList = new ArrayList<>();
 
 
-    public UserOngoingAdapter(Context context, List<Datauser> dataList) {
+    public UserOngoingAdapter(Context context, List<User_Details> dataList) {
         this.context  = context;
         this.dataList = dataList;
 //        this.cellSize = Utils.getScreenWidth(context)/3;
     }
-    public  void addData(List<Datauser> stringArrayList){
+    public  void addData(List<User_Details> stringArrayList){
         dataList.addAll(stringArrayList);
     }
     @Override
@@ -48,10 +50,10 @@ public class UserOngoingAdapter extends RecyclerView.Adapter<UserOngoingAdapter.
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
-        holder.userphonenumber.setText(dataList.get(position).getPhoneNumber());
-        final String DateTime=dataList.get(position).getDate()+" "+dataList.get(position).getTime();
+        holder.userphonenumber.setText(dataList.get(position).getUser_Phone_number());
+        final String DateTime=dataList.get(position).getDate()+" "+dataList.get(position).getUser_Booking_Time();
         holder.datetime.setText(DateTime);
-        holder.lat.setText(dataList.get(position).getName());
+        holder.lat.setText(dataList.get(position).getUser_name());
         String address=dataList.get(position).getAddress();
 
         holder.ProviderLinLay.setOnClickListener(new View.OnClickListener() {
@@ -59,14 +61,14 @@ public class UserOngoingAdapter extends RecyclerView.Adapter<UserOngoingAdapter.
             public void onClick(View view) {
                 Intent intent= new Intent(context, UserOngoingBookingActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.putExtra("phonenumber",dataList.get(position).getPhoneNumber());
-                intent.putExtra("name",dataList.get(position).getName());
+                intent.putExtra("phonenumber",dataList.get(position).getUser_Phone_number());
+                intent.putExtra("name",dataList.get(position).getUser_name());
                 intent.putExtra("datatime",DateTime);
                 intent.putExtra("address",dataList.get(position).getAddress());
 //                intent.putExtra("userlats",dataList.get(position).getCurrentlat());
 //                intent.putExtra("userlongs",dataList.get(position).getCurrentlong());
                 intent.putExtra("userdate",dataList.get(position).getDate());
-                intent.putExtra("usertime",dataList.get(position).getTime());
+                intent.putExtra("usertime",dataList.get(position).getUser_Booking_Time());
 
                 context.startActivity(intent);
             }

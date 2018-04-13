@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.czsm.Demand_Driver.PreferencesHelper;
 import com.czsm.Demand_Driver.R;
@@ -30,7 +33,10 @@ public class UserSupportActivity extends AppCompatActivity  implements RESTClien
     private SharedPreferences allinallSharedPref;
     private AllinAllController allinAllController;
     private FirebaseAuth mAuth;
-    ImageView image;
+    ImageView phoneimage,Emailimg,Webimg;
+    TextView PhoneTxt,EmailTxt,WebTxt;
+    LinearLayout PhoneLinLay,EmailLinLay,WebLinLay;
+    String contact="+919941123110";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,7 +56,101 @@ public class UserSupportActivity extends AppCompatActivity  implements RESTClien
                 startActivity(in);
             }
         });
-        image=(ImageView)findViewById(R.id.img_call);
+        phoneimage=(ImageView)findViewById(R.id.img_call);
+        PhoneTxt=(TextView)findViewById(R.id.fragment_support_phone_textview);
+        PhoneLinLay=(LinearLayout)findViewById(R.id.phonelay);
+
+        Emailimg=(ImageView)findViewById(R.id.img_mail);
+        EmailTxt=(TextView)findViewById(R.id.fragment_support_mail_textview);
+        EmailLinLay=(LinearLayout)findViewById(R.id.emaillay);
+
+        Webimg=(ImageView)findViewById(R.id.Img_web);
+        WebTxt=(TextView)findViewById(R.id.fragment_support_website_textview);
+        WebLinLay=(LinearLayout)findViewById(R.id.weblay);
+
+        phoneimage.setOnClickListener(new View.OnClickListener() {
+            Intent call = new Intent(Intent.ACTION_DIAL);
+            @Override
+            public void onClick(View v){
+                call.setData(Uri.parse("tel:"+ contact));
+                startActivity(call);
+            }
+        });
+        PhoneTxt.setOnClickListener(new View.OnClickListener() {
+            Intent call = new Intent(Intent.ACTION_DIAL);
+            @Override
+            public void onClick(View v){
+                call.setData(Uri.parse("tel:"+ contact));
+                startActivity(call);
+            }
+        });
+        PhoneLinLay.setOnClickListener(new View.OnClickListener() {
+            Intent call = new Intent(Intent.ACTION_DIAL);
+            @Override
+            public void onClick(View v){
+                call.setData(Uri.parse("tel:"+ contact));
+                startActivity(call);
+            }
+        });
+
+        Emailimg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                        "mailto","gowdhaman@czsm.co.in", null));
+                startActivity(Intent.createChooser(intent, "Choose an Email client :"));
+            }
+        });
+        EmailTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                        "mailto","gowdhaman@czsm.co.in", null));
+                startActivity(Intent.createChooser(intent, "Choose an Email client :"));
+            }
+        });
+        EmailLinLay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                        "mailto","gowdhaman@czsm.co.in", null));
+                startActivity(Intent.createChooser(intent, "Choose an Email client :"));
+            }
+        });
+
+
+        Webimg.setOnClickListener(new View.OnClickListener() {
+            Intent call = new Intent(Intent.ACTION_DIAL);
+            @Override
+            public void onClick(View v){
+                Uri uri = Uri.parse("http://www.czsm.co.in/");
+
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
+        });
+        WebTxt.setOnClickListener(new View.OnClickListener() {
+            Intent call = new Intent(Intent.ACTION_DIAL);
+            @Override
+            public void onClick(View v){
+                Uri uri = Uri.parse("http://www.czsm.co.in/");
+
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
+        });
+        WebLinLay.setOnClickListener(new View.OnClickListener() {
+            Intent call = new Intent(Intent.ACTION_DIAL);
+            @Override
+            public void onClick(View v){
+                Uri uri = Uri.parse("http://www.czsm.co.in/");
+
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
+        });
+
+
 //        allinAllController = new AllinAllController(UserSupportActivity.this, this);
 //        allinallSharedPref = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         signoutButton      = (Button) findViewById(R.id.fragment_user_support_signout_button);

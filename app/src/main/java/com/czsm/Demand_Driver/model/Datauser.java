@@ -11,16 +11,21 @@ public class Datauser {
     private String address;
     private String phoneNumber;
     private String date;
-    private String time;
-    private String Name;
 
-
-    public Datauser() {
-
-
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public Datauser(String Currentlat, String Currentlong, String phoneNumber,String address,String date,String time,String Name) {
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    private String time;
+    private String Name;
+    private String rating;
+
+
+    public Datauser(String Currentlat, String Currentlong, String phoneNumber,String address,String date,String time,String Name,String rating) {
 
         this.Currentlat=Currentlat;
         this.Currentlong=Currentlong;
@@ -29,8 +34,12 @@ public class Datauser {
         this.date=date;
         this.time=time;
         this.Name=Name;
+        this.rating=rating;
     }
+    public Datauser() {
 
+
+    }
 
     public String getCurrentlat() {
         return Currentlat;
@@ -48,14 +57,6 @@ public class Datauser {
         Currentlong = currentlong;
     }
 
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
     public String getAddress() {
         return address;
     }
@@ -88,6 +89,15 @@ public class Datauser {
     public void setName(String name) {
         Name = name;
     }
+
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
 
 
 }

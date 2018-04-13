@@ -30,6 +30,7 @@ public class PreferencesHelper {
     public static final String PREFERENCE_FIRST_TIME ="first_time";
     public static final String PREFERENCE_LOGGED_IN ="logged in";
     public static final String PREFERENCE_DASHBOARD ="dashboard";
+    public static final String PREFERENCE_USERRATING ="rating";
 
 
 

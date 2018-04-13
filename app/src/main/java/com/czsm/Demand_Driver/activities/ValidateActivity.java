@@ -250,9 +250,9 @@ TextView mResendotpTxt,mPhonenumbetEdt,mResendtxt;
 ////                            Toast.makeText(ValidateActivity.this, refer, Toast.LENGTH_SHORT).show();
 //        Log.e("Tok",refer);
         Map<String, Object> data = new HashMap<>();
-        data.put("phoneNumber",phoneNumber);
-        data.put("UsersUID", uid);
-        data.put("token", refer);
+        data.put("Phone_Number",phoneNumber);
+        data.put("User_ID", uid);
+//        data.put("token", refer);
 
 
 //
@@ -260,28 +260,28 @@ TextView mResendotpTxt,mPhonenumbetEdt,mResendtxt;
 //        Users users1 = new Users(phoneNumber,uid);
 
 
-        db.collection("UsersCurrentBooking").document(uid).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Log.e("uid",uid);
+//        db.collection("UsersCurrentBooking").document(uid).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+//            @Override
+//            public void onSuccess(Void aVoid) {
+//                Log.e("uid",uid);
+//
+//                Intent intent=new Intent(ValidateActivity.this,DashBoardActivity.class);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                startActivity(intent);
+//                finish();
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                Log.w("Error", "Error adding document", e);
+//                Toast.makeText(getApplicationContext(),"Post Failed",Toast.LENGTH_SHORT).show();
+//
+//            }
+//
+//        });
 
-                Intent intent=new Intent(ValidateActivity.this,DashBoardActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w("Error", "Error adding document", e);
-                Toast.makeText(getApplicationContext(),"Post Failed",Toast.LENGTH_SHORT).show();
 
-            }
-
-        });
-
-
-        db.collection("Userdetails").document(uid).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+        db.collection("User_details").document(uid).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Log.e("uid",uid);

@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -12,20 +13,25 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.czsm.Demand_Driver.Firebasemodel.AppointmentList;
 import com.czsm.Demand_Driver.Firebasemodel.ServiceproviderList;
+import com.czsm.Demand_Driver.PreferencesHelper;
 import com.czsm.Demand_Driver.R;
 import com.czsm.Demand_Driver.helper.RESTClient;
 import com.czsm.Demand_Driver.helper.Util;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,15 +59,17 @@ public class UserOngoingBookingActivity extends AppCompatActivity implements RES
     @BindView(R.id.user_appointment_details_stts_textview)
     TextView statusTextView;
 
-    @BindView(R.id.user_appointment_details_complete_button)
-    Button completeButton;
+//    @BindView(R.id.user_appointment_details_complete_button)
+//    Button completeButton;
 
     @BindView(R.id.user_appointment_details_cancel_button)
     Button cancelButton;
 
-    DatabaseReference db;
+
+
+    FirebaseFirestore db;
     SharedPreferences sharedPreferences;
-    String drivername,appointmentid,status,date,driveraddress,id = "";
+    String Rating,drivername,appointmentid,status,date,driveraddress,id = "",Uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,9 +90,10 @@ public class UserOngoingBookingActivity extends AppCompatActivity implements RES
 
         setTitle(R.string.app_details);
 
-        db = FirebaseDatabase.getInstance().getReference();
+        db = FirebaseFirestore.getInstance();
+        Uid=PreferencesHelper.getPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_FIREBASE_UUID);
 
-
+        Rating=PreferencesHelper.getPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_USERRATING);
 
 
         Bundle extras = getIntent().getExtras();
@@ -107,19 +116,19 @@ public class UserOngoingBookingActivity extends AppCompatActivity implements RES
             addressTextView.setText(driveraddress);
             statusTextView.setText(status);
 
-            if (status.equals("Confirmed")) {
-
-                completeButton.setVisibility(View.VISIBLE);
-                cancelButton.setVisibility(View.VISIBLE);
-
-            } else {
-
-                completeButton.setVisibility(View.INVISIBLE);
-                cancelButton.setVisibility(View.INVISIBLE);
-                completeButton.setOnClickListener(null);
-                cancelButton.setOnClickListener(null);
-
-            }
+//            if (status.equals("Confirmed")) {
+//
+//                completeButton.setVisibility(View.VISIBLE);
+//                cancelButton.setVisibility(View.VISIBLE);
+//
+//            } else {
+//
+//                completeButton.setVisibility(View.INVISIBLE);
+//                cancelButton.setVisibility(View.INVISIBLE);
+//                completeButton.setOnClickListener(null);
+//                cancelButton.setOnClickListener(null);
+//
+//            }
 
 
         } catch (NullPointerException e){
@@ -127,14 +136,14 @@ public class UserOngoingBookingActivity extends AppCompatActivity implements RES
             e.printStackTrace();
         }
 
-        completeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                showConformDialog("Completed","Are you sure you want complete this appointment.");
-
-            }
-        });
+//        completeButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                showConformDialog("Completed","Are you sure you want complete this appointment.");
+//
+//            }
+//        });
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,6 +156,7 @@ public class UserOngoingBookingActivity extends AppCompatActivity implements RES
 
 
 
+
     }
 
     private void showConformDialog(final String type,final String message) {
@@ -154,76 +164,24 @@ public class UserOngoingBookingActivity extends AppCompatActivity implements RES
                 //set message, title, and icon
                 .setTitle("Complete")
                 .setMessage(message)
-                .setIcon(R.drawable.ic_launcher)
+                .setIcon(R.drawable.logo01)
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-
-                        ValueEventListener maplistner = new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                                for (DataSnapshot child : dataSnapshot.getChildren()) {
-
-
-                                    child.getRef().child("status").setValue(type);
-
-                                    AppointmentList appointmentList = child.getValue(AppointmentList.class);
-
-                                    if(appointmentList.getStatus().equals(type)) {
-
-                                        Toast.makeText(getApplicationContext(), "Your appointment has been" + type, Toast.LENGTH_SHORT).show();
+                        db.collection("Current_booking").document(Uid)
+                                .delete()
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Toast.makeText(UserOngoingBookingActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
 
                                     }
-
-                                    if(appointmentList.getStatus().equals("Completed")){
-
-                                        showRatingDialog(child);
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
                                     }
-
-                                }
-
-
-
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                                Log.e("loadPost:onCancelled", databaseError.toException().toString());
-                            }
-                        };
-
-                        db.child("AppointmentList").orderByKey().equalTo(appointmentid).addListenerForSingleValueEvent(maplistner);
-
-                        ValueEventListener listner = new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                                for (DataSnapshot child : dataSnapshot.getChildren()) {
-
-                                    ServiceproviderList data = child.getValue(ServiceproviderList.class);
-
-                                    if(data.getStatus().equals("onduty"))
-
-                                        child.getRef().child("status").setValue("free");
-
-                                }
-
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                                Log.e("loadPost:onCancelled", databaseError.toException().toString());
-                            }
-                        };
-
-                        db.child("ServiceproviderList").orderByKey().equalTo(id).addValueEventListener(listner);
-
-
-
-
+                                });
 
 
                     }
@@ -237,7 +195,7 @@ public class UserOngoingBookingActivity extends AppCompatActivity implements RES
                 }).show();
     }
 
-    public void showRatingDialog(final DataSnapshot child) {
+    public void showRatingDialog() {
         final View dialogView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.dialog_review_booking, null);
 
         new AlertDialog.Builder(this).setIcon(android.R.drawable.btn_star_big_on).setTitle("Review")
@@ -249,7 +207,9 @@ public class UserOngoingBookingActivity extends AppCompatActivity implements RES
                             public void onClick(DialogInterface dialog, int which) {
                                 RatingBar ratingBar = (RatingBar) dialogView.findViewById(R.id.dialog_review_booking_ratingbar);
                                 String review = ratingBar.getProgress() + "";
-                                child.getRef().child("userreview").setValue(review);
+
+
+//                                child.getRef().child("userreview").setValue(review);
                                 dialog.dismiss();
                                 finish();
                             }
@@ -260,7 +220,7 @@ public class UserOngoingBookingActivity extends AppCompatActivity implements RES
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
 
-                                child.getRef().child("userreview").setValue("0");
+//                                child.getRef().child("userreview").setValue("0");
                                 finish();
                                 dialog.cancel();
                             }

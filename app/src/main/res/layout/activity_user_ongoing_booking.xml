@@ -319,16 +319,16 @@
             android:textColor="@color/black" />
 
 
-        <Button
-            android:id="@+id/user_appointment_details_complete_button"
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:background="#ffca00"
-            android:layout_marginLeft="1dp"
-            android:text="Complete"
-            android:textAllCaps="false"
-            android:textColor="@color/black" />
+        <!--<Button-->
+            <!--android:id="@+id/user_appointment_details_complete_button"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="#ffca00"-->
+            <!--android:layout_marginLeft="1dp"-->
+            <!--android:text="Complete"-->
+            <!--android:textAllCaps="false"-->
+            <!--android:textColor="@color/black" />-->
 
     </LinearLayout>
 
