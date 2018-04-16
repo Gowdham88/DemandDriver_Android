@@ -94,7 +94,7 @@ public class UserBookingHistoryActivity extends AppCompatActivity {
             driveraddress = extras.getString("address","");
             date          = extras.getString("datatime","");
             appointmentid = extras.getString("id","");
-            review        = extras.getString("review","");
+            review        = extras.getString("userreview","");
 
         }
 
@@ -104,6 +104,7 @@ public class UserBookingHistoryActivity extends AppCompatActivity {
             dateTimeTextView.setText(date);
             drNameTextView.setText(drivername);
             addressTextView.setText(driveraddress);
+            reviewTextView.setText(review);
 
 //            int reviewstar = Integer.parseInt(review);
 //                String reviewstr = "";

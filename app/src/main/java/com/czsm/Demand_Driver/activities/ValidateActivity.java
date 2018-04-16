@@ -250,7 +250,7 @@ TextView mResendotpTxt,mPhonenumbetEdt,mResendtxt;
 ////                            Toast.makeText(ValidateActivity.this, refer, Toast.LENGTH_SHORT).show();
 //        Log.e("Tok",refer);
         Map<String, Object> data = new HashMap<>();
-        data.put("Phone_Number",phoneNumber);
+        data.put("User_Phone_number",phoneNumber);
         data.put("User_ID", uid);
 //        data.put("token", refer);
 

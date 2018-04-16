@@ -71,6 +71,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -81,7 +82,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 import java.util.TimeZone;
+import java.util.UUID;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -143,7 +146,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     long timems;
      FirebaseFirestore db;
     DocumentReference documentReference;
-    String  Strlat,Strlong,latvalue,longitude1,lattitude1,lattitud,longtude,refer;
+    String  Strlat,Strlong,latvalue,longitude1,lattitude1,lattitud,longtude,refer,adds;
     LatLng northbounds,southbounds;
     CharSequence text;
     Circle myCircle;
@@ -163,7 +166,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     ArrayList<LatLng> list=new ArrayList();
     private Handler mHandler;
     String driverphonenumber;
-    String Token;
+    String Token, Rndmuid;
+    char[] chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
+    Random rnd = new Random();
+
+    int len= 8;
+    String saltStr;
+
+    private static final String CHAR_LIST = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        private static final int RANDOM_STRING_LENGTH = 10;
+    char ch;
 
 
     @Override
@@ -199,6 +211,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                startActivity(in);
             }
         });
+        String uuid = UUID.randomUUID().toString();
+        Rndmuid= uuid;
 
 //        POPup();
 //        this.mHandler = new Handler();
@@ -286,6 +300,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                     Log.e("cartype",carTypeSpinner.getText().toString());
                     cartypeStr=carTypeSpinner.getText().toString().trim();
+                     String drivertype=driverTypeSpinner.toString();
                     Date now = new Date();
                     SimpleDateFormat sdf = new SimpleDateFormat("dd/M/yyyy");
                     SimpleDateFormat stf = new SimpleDateFormat("hh:mm:ss a");
@@ -490,6 +505,22 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
           longtude= String.valueOf(lng);
         Log.e("lattitude", lattitud);
         Log.e("longtude",longtude);
+        Geocoder geo = new Geocoder(MapActivity.this.getApplicationContext(), Locale.getDefault());
+        try {
+            addresses = geo.getFromLocation(Double.parseDouble(lattitud), Double.parseDouble(longtude), 1);
+            address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+            city = addresses.get(0).getLocality();
+            state = addresses.get(0).getAdminArea();
+            country = addresses.get(0).getCountryName();
+            postalCode = addresses.get(0).getPostalCode();
+            knownName = addresses.get(0).getFeatureName();
+            adds=(latvalue+","+longitude+","+address + "," + city + "," + state + "," + country + "," + postalCode);// Here 1 represent max location result to returned, by documents it recommended 1 to 5
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
 //        Circle circle = Mmap.addCircle(new CircleOptions().center(laln).radius(5000).strokeColor(Color.BLUE).strokeWidth(2.0f));
 
         LatLng locateme = new LatLng(lat, lng);
@@ -583,7 +614,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                              country = addresses.get(0).getCountryName();
                              postalCode = addresses.get(0).getPostalCode();
                              knownName = addresses.get(0).getFeatureName();
-                            address1=(latvalue+","+longitude+","+address + "," + city + "," + state + "," + country + "," + postalCode);
+                            address1=(address + "," + city + "," + state + "," + country + "," + postalCode);
 //                            Circle circle = Mmap.addCircle(new CircleOptions()
 //                                    .center(new LatLng(lat,logs))
 //                                    .radius(10000)
@@ -632,6 +663,20 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
     }
+
+
+   protected String getSaltString() {
+String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    StringBuilder salt = new StringBuilder();
+    Random rnd = new Random();
+        while (salt.length() < 18) { // length of the random string.
+        int index = (int) (rnd.nextFloat() * SALTCHARS.length());
+        salt.append(SALTCHARS.charAt(index));
+    }
+    String saltStr = salt.toString();
+        return saltStr;
+
+}
 
 //    private void addmap() {
 //
@@ -779,9 +824,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 //                        updatesvalues1.put("UsersUID",UIAVALUE);
 //                        updatesvalues1.put("phoneNumber",PHNO);
 //
-                        updatesvalues1.put("Latitude",lattitud);
-                        updatesvalues1.put("Longitude",longtude);
-                        updatesvalues1.put("Address",address);
+                        updatesvalues1.put("Start_Lat",lattitud);
+                        updatesvalues1.put("Start_Long",longtude);
+                        updatesvalues1.put("User_Address",address1);
 //                        updatesvalues1.put("Review",city);
 //                        updatesvalues1.put("Trips_completed",state);
 
@@ -808,7 +853,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             }
                         });
 
-                        documentReference=db.collection("Current_booking").document(UIAVALUE);
+                        documentReference=db.collection("Current_booking").document(Rndmuid);
                         HashMap<String,Object> updatesvalues=new HashMap<>();
 //                        updatesvalues.put("Driver_name",);
 //                        updatesvalues.put("Driver_ID",);
@@ -819,8 +864,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         updatesvalues.put("Car_type",cartypeStr);
                         updatesvalues.put("Start_Lat",lattitud);
                         updatesvalues.put("Start_Long",longtude);
-                        updatesvalues.put("Address",address);
+                        updatesvalues.put("User_Address",address1);
                         updatesvalues.put("City",city);
+                        updatesvalues.put("Booking_ID",Rndmuid);
 //                        updatesvalues.put("Start_time",);
 //                        updatesvalues.put("End_time",);
 //                        updatesvalues.put("Cost",);
@@ -844,7 +890,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         });
 
 
-                        documentReference=db.collection("Completed_booking").document(UIAVALUE);
+                        documentReference=db.collection("Completed_booking").document(Rndmuid);
                         HashMap<String,Object> updatesvaluescomplete=new HashMap<>();
 //                        updatesvalues.put("Driver_name",);
 //                        updatesvalues.put("Driver_ID",);
@@ -855,8 +901,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         updatesvaluescomplete.put("Car_type",cartypeStr);
                         updatesvaluescomplete.put("Start_Lat",lattitud);
                         updatesvaluescomplete.put("Start_Long",longtude);
-                        updatesvaluescomplete.put("Address",address);
+                        updatesvaluescomplete.put("User_Address",address1);
                         updatesvaluescomplete.put("City",city);
+                        updatesvaluescomplete.put("Booking_ID",Rndmuid);
 //                        updatesvalues.put("Start_time",);
 //                        updatesvalues.put("End_time",);
 //                        updatesvalues.put("Cost",);
@@ -879,6 +926,29 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             }
                         });
 
+
+
+
+                        documentReference=db.collection("User_current_booking").document(UIAVALUE);
+                        HashMap<String,Object> usercurrentbookingid=new HashMap<>();
+//
+                        usercurrentbookingid.put("Booking_ID",Rndmuid);
+//
+                        documentReference.set(usercurrentbookingid)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        Toast.makeText(MapActivity.this, "successfull", Toast.LENGTH_SHORT).show();
+//
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+
+                            }
+                        });
+//
                     }
                 })
 

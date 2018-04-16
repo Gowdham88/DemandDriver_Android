@@ -8,7 +8,7 @@ public class User_Details {
 
     private String Start_Lat;
     private String Start_Long;
-    private String Address;
+    private String User_Address;
     private String User_Phone_number;
     private String Date;
     private String Start_time;
@@ -16,17 +16,19 @@ public class User_Details {
     private String End_time;
     private String Cost;
     private String Driver_review;
+
+
     private String User_review;
     private String User_Booking_Time;
     private String User_ID;
 
 
-    public User_Details(String Start_Lat, String Start_Long, String Address,String User_Phone_number,String Date,String Start_time,String User_name,String End_time,String Cost,String Driver_review,String User_review,String User_Booking_Time,String User_ID) {
+    public User_Details(String Start_Lat, String Start_Long, String User_Address,String User_Phone_number,String Date,String Start_time,String User_name,String End_time,String Cost,String Driver_review,String User_review,String User_Booking_Time,String User_ID) {
 
         this.Start_Lat=Start_Lat;
         this.Start_Long=Start_Long;
         this.User_Phone_number=User_Phone_number;
-        this.Address=Address;
+        this.User_Address=User_Address;
         this.Date=Date;
         this.User_name=User_name;
         this.Start_time=Start_time;
@@ -59,13 +61,15 @@ public class User_Details {
         Start_Long = start_Long;
     }
 
-    public String getAddress() {
-        return Address;
+
+    public String getUser_Address() {
+        return User_Address;
     }
 
-    public void setAddress(String address) {
-        Address = address;
+    public void setUser_Address(String user_Address) {
+        User_Address = user_Address;
     }
+
 
     public String getDate() {
         return Date;

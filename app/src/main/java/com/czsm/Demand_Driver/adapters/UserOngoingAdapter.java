@@ -54,7 +54,7 @@ public class UserOngoingAdapter extends RecyclerView.Adapter<UserOngoingAdapter.
         final String DateTime=dataList.get(position).getDate()+" "+dataList.get(position).getUser_Booking_Time();
         holder.datetime.setText(DateTime);
         holder.lat.setText(dataList.get(position).getUser_name());
-        String address=dataList.get(position).getAddress();
+        String address=dataList.get(position).getUser_Address();
 
         holder.ProviderLinLay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,7 +64,7 @@ public class UserOngoingAdapter extends RecyclerView.Adapter<UserOngoingAdapter.
                 intent.putExtra("phonenumber",dataList.get(position).getUser_Phone_number());
                 intent.putExtra("name",dataList.get(position).getUser_name());
                 intent.putExtra("datatime",DateTime);
-                intent.putExtra("address",dataList.get(position).getAddress());
+                intent.putExtra("address",dataList.get(position).getUser_Address());
 //                intent.putExtra("userlats",dataList.get(position).getCurrentlat());
 //                intent.putExtra("userlongs",dataList.get(position).getCurrentlong());
                 intent.putExtra("userdate",dataList.get(position).getDate());
