@@ -73,24 +73,29 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.UserBookingHistoryActivity"
+            android:noHistory="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.VerifyOTPActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.UserOngoingBookingActivity"
+            android:noHistory="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.BookServiceMapActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.UserSupportActivity"
+            android:noHistory="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.UserHistoryActivity"
+            android:noHistory="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.OngoingAppointmentActivity"
+            android:noHistory="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.DashBoardActivity"
@@ -101,6 +106,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.MapActivity"
+            android:noHistory="true"
             android:screenOrientation="portrait" />
 
         <service android:name=".MyFirebaseMessagingService">

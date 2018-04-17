@@ -73,7 +73,7 @@ public class UserHistoryAdapter extends RecyclerView.Adapter<UserHistoryAdapter.
 
         holder.userphonenumber.setText(dataList.get(position).getUser_Phone_number());
         final String DateTime=dataList.get(position).getDate()+" "+dataList.get(position).getEnd_time();
-        holder.datetime.setText(DateTime);
+        holder.datetime.setText(dataList.get(position).getEnd_time());
         holder.lat.setText(dataList.get(position).getUser_name());
         String address=dataList.get(position).getUser_Address();
 
@@ -90,8 +90,9 @@ public class UserHistoryAdapter extends RecyclerView.Adapter<UserHistoryAdapter.
 //                intent.putExtra("userlats",dataList.get(position).getCurrentlat());
 //                intent.putExtra("userlongs",dataList.get(position).getCurrentlong());
                 intent.putExtra("userdate",dataList.get(position).getDate());
-                intent.putExtra("usertime",dataList.get(position).getEnd_time());
+//                intent.putExtra("usertime",dataList.get(position).getEnd_time());
                 intent.putExtra("userreview",dataList.get(position).getUser_review());
+                intent.putExtra("Booking_id",dataList.get(position).getUser_Booking_ID());
 
                 context.startActivity(intent);
             }

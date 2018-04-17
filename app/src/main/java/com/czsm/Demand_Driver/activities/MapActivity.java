@@ -146,7 +146,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     long timems;
      FirebaseFirestore db;
     DocumentReference documentReference;
-    String  Strlat,Strlong,latvalue,longitude1,lattitude1,lattitud,longtude,refer,adds;
+    String  Strlat,Strlong,latvalue,longitude1,lattitude1,lattitud,longtude,refer,adds,StringDT;
     LatLng northbounds,southbounds;
     CharSequence text;
     Circle myCircle;
@@ -212,7 +212,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
         String uuid = UUID.randomUUID().toString();
-        Rndmuid= uuid;
+        Rndmuid=uuid;
+        PreferencesHelper.setPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_USERRANDMID,Rndmuid);
 
 //        POPup();
 //        this.mHandler = new Handler();
@@ -434,6 +435,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             bookDate = sdf.format(calendarSelected.getTime());
                             bookTime = stf.format(calendarSelected.getTime());
                             bookNow = "0";
+                            StringDT=bookDate+bookTime;
 //                            Distance();
                             showConfirmDialog();
                         } else
@@ -816,16 +818,17 @@ String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
             popup();
+            String userBDT=bookDate+" "+bookTime;
 
-                        documentReference=db.collection("User_details").document(UIAVALUE);
+                        documentReference=db.collection("User_details").document(Rndmuid);
                         HashMap<String,Object> updatesvalues1=new HashMap<>();
 //                        updatesvalues1.put("date",bookDate);
 //                        updatesvalues1.put("time",bookTime);
 //                        updatesvalues1.put("UsersUID",UIAVALUE);
 //                        updatesvalues1.put("phoneNumber",PHNO);
 //
-                        updatesvalues1.put("Start_Lat",lattitud);
-                        updatesvalues1.put("Start_Long",longtude);
+                        updatesvalues1.put("Start_Lat",latvalue);
+                        updatesvalues1.put("Start_Long",longitude);
                         updatesvalues1.put("User_Address",address1);
 //                        updatesvalues1.put("Review",city);
 //                        updatesvalues1.put("Trips_completed",state);
@@ -842,7 +845,7 @@ String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
-                            Toast.makeText(MapActivity.this, "successfull", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(MapActivity.this, "successfull", Toast.LENGTH_SHORT).show();
 //
                             }
                         }).addOnFailureListener(new OnFailureListener() {
@@ -862,23 +865,25 @@ String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 //                        updatesvalues.put("Driver_Phone_number",);
                         updatesvalues.put("User_Phone_number",PHNO);
                         updatesvalues.put("Car_type",cartypeStr);
-                        updatesvalues.put("Start_Lat",lattitud);
-                        updatesvalues.put("Start_Long",longtude);
+                        updatesvalues1.put("Start_Lat",latvalue);
+                        updatesvalues1.put("Start_Long",longitude);
                         updatesvalues.put("User_Address",address1);
                         updatesvalues.put("City",city);
-                        updatesvalues.put("Booking_ID",Rndmuid);
+                        updatesvalues.put("User_Booking_ID",Rndmuid);
+                        updatesvalues.put("Status","notCompleted");
 //                        updatesvalues.put("Start_time",);
 //                        updatesvalues.put("End_time",);
 //                        updatesvalues.put("Cost",);
 //                        updatesvalues.put("Driver_review",);
                         updatesvalues.put("Date",bookDate);
                         updatesvalues.put("User_Booking_Time",bookTime);
+                        updatesvalues.put("User_Book_Date_Time",userBDT);
 
                         documentReference.set(updatesvalues)
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
-                                        Toast.makeText(MapActivity.this, "successfull", Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(MapActivity.this, "successfull", Toast.LENGTH_SHORT).show();
 //
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
@@ -888,7 +893,46 @@ String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
                             }
                         });
-
+//                        documentReference=db.collection("Current_booking").document(Rndmuid);
+//                        HashMap<String,Object> updatesvaluesst=new HashMap<>();
+////
+//                        updatesvaluesst.put("Status","notCompleted");
+////
+//                        documentReference.update(updatesvaluesst)
+//                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                    @Override
+//                                    public void onComplete(@NonNull Task<Void> task) {
+////                                        Toast.makeText(MapActivity.this, "successfull", Toast.LENGTH_SHORT).show();
+////
+//                                    }
+//                                }).addOnFailureListener(new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception e) {
+//
+//
+//                            }
+//                        });
+//
+//                        documentReference=db.collection("Completed_booking").document(Rndmuid);
+//                        HashMap<String,Object> updatesvaluesstcm=new HashMap<>();
+////
+//                        updatesvaluesstcm.put("Status","notCompleted");
+////
+//                        documentReference.update(updatesvaluesstcm)
+//                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                    @Override
+//                                    public void onComplete(@NonNull Task<Void> task) {
+////                                        Toast.makeText(MapActivity.this, "successfull", Toast.LENGTH_SHORT).show();
+////
+//                                    }
+//                                }).addOnFailureListener(new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception e) {
+//
+//
+//                            }
+//                        });
+//
 
                         documentReference=db.collection("Completed_booking").document(Rndmuid);
                         HashMap<String,Object> updatesvaluescomplete=new HashMap<>();
@@ -899,11 +943,12 @@ String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 //                        updatesvalues.put("Driver_Phone_number",);
                         updatesvaluescomplete.put("User_Phone_number",PHNO);
                         updatesvaluescomplete.put("Car_type",cartypeStr);
-                        updatesvaluescomplete.put("Start_Lat",lattitud);
-                        updatesvaluescomplete.put("Start_Long",longtude);
+                        updatesvalues1.put("Start_Lat",latvalue);
+                        updatesvalues1.put("Start_Long",longitude);
                         updatesvaluescomplete.put("User_Address",address1);
                         updatesvaluescomplete.put("City",city);
-                        updatesvaluescomplete.put("Booking_ID",Rndmuid);
+                        updatesvaluescomplete.put("User_Booking_ID",Rndmuid);
+                        updatesvaluescomplete.put("Status","notCompleted");
 //                        updatesvalues.put("Start_time",);
 //                        updatesvalues.put("End_time",);
 //                        updatesvalues.put("Cost",);
@@ -938,7 +983,7 @@ String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
-                                        Toast.makeText(MapActivity.this, "successfull", Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(MapActivity.this, "successfull", Toast.LENGTH_SHORT).show();
 //
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {

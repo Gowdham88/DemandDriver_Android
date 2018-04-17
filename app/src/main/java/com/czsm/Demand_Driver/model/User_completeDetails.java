@@ -14,16 +14,20 @@ public class User_completeDetails {
     private String Start_time;
     private String User_name;
     private String End_time;
+
     private String Cost;
+
     private String Driver_review;
     private String User_review;
 
 
     private String Time;
     private String User_ID;
+    private String User_Booking_ID;
 
 
-    public User_completeDetails(String Start_Lat, String Start_Long, String User_Address,String User_Phone_number,String Date,String Start_time,String User_name,String End_time,String Cost,String Driver_review,String User_review,String Time,String User_ID) {
+    public User_completeDetails(String Start_Lat, String Start_Long, String User_Address,String User_Phone_number,String Date,
+                                String Start_time,String User_name,String End_time,String Cost,String Driver_review,String User_review,String Time,String User_ID,String User_Booking_ID) {
 
         this.Start_Lat=Start_Lat;
         this.Start_Long=Start_Long;
@@ -38,6 +42,7 @@ public class User_completeDetails {
         this.User_review=User_review;
         this.Time=Time;
         this.User_ID=User_ID;
+        this.User_Booking_ID=User_Booking_ID;
     }
 
     public User_completeDetails() {
@@ -147,6 +152,15 @@ public class User_completeDetails {
 
     public void setUser_ID(String user_ID) {
         User_ID = user_ID;
+    }
+
+
+    public String getUser_Booking_ID() {
+        return User_Booking_ID;
+    }
+
+    public void setUser_Booking_ID(String user_Booking_ID) {
+        User_Booking_ID = user_Booking_ID;
     }
 
 

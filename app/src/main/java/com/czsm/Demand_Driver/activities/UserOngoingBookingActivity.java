@@ -69,7 +69,7 @@ public class UserOngoingBookingActivity extends AppCompatActivity implements RES
 
     FirebaseFirestore db;
     SharedPreferences sharedPreferences;
-    String Rating,drivername,appointmentid,status,date,driveraddress,id = "",Uid;
+    String Rating,Userrdmid,drivername,appointmentid,status,date,driveraddress,id = "",Uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +92,7 @@ public class UserOngoingBookingActivity extends AppCompatActivity implements RES
 
         db = FirebaseFirestore.getInstance();
         Uid=PreferencesHelper.getPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_FIREBASE_UUID);
-
+        Userrdmid=PreferencesHelper.getPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_USERRANDMID);
         Rating=PreferencesHelper.getPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_USERRATING);
 
 
@@ -103,8 +103,9 @@ public class UserOngoingBookingActivity extends AppCompatActivity implements RES
             status        = extras.getString("status","");
             driveraddress = extras.getString("address","");
             date          = extras.getString("datatime","");
-            appointmentid = extras.getString("userid","");
+            appointmentid = extras.getString("bookingid","");
             id            = extras.getString("providerid","");
+//            Toast.makeText(UserOngoingBookingActivity.this, status, Toast.LENGTH_SHORT).show();
 
         }
 
@@ -168,12 +169,14 @@ public class UserOngoingBookingActivity extends AppCompatActivity implements RES
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        db.collection("Current_booking").document(Uid)
+                        db.collection("Current_booking").document(Userrdmid)
                                 .delete()
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        Toast.makeText(UserOngoingBookingActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(UserOngoingBookingActivity.this, "Booking Cancled", Toast.LENGTH_SHORT).show();
+                                        Intent in=new Intent(UserOngoingBookingActivity.this,OngoingAppointmentActivity.class);
+                                        startActivity(in);
 
                                     }
                                 })

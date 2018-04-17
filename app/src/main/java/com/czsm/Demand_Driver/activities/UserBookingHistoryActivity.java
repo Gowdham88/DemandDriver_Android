@@ -56,7 +56,7 @@ public class UserBookingHistoryActivity extends AppCompatActivity {
     TextView reviewTextView;
 
     private UserBooking booking;
-    String UIAVALUE,drivername,appointmentid,date,driveraddress,review = "";
+    String UIAVALUE,Userrdmid,drivername,appointmentid,date,driveraddress,review = "";
 
     @BindView(R.id.reviewlay)
     LinearLayout ReviewLinlay;
@@ -81,6 +81,7 @@ public class UserBookingHistoryActivity extends AppCompatActivity {
             }
         });
         db= FirebaseFirestore.getInstance();
+        Userrdmid=PreferencesHelper.getPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_USERRANDMID);
         UIAVALUE= PreferencesHelper.getPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_FIREBASE_UUID);
         setTitle(R.string.app_details);
 
@@ -93,7 +94,7 @@ public class UserBookingHistoryActivity extends AppCompatActivity {
             drivername    = extras.getString("name","");
             driveraddress = extras.getString("address","");
             date          = extras.getString("datatime","");
-            appointmentid = extras.getString("id","");
+            appointmentid = extras.getString("Booking_id","");
             review        = extras.getString("userreview","");
 
         }
@@ -150,7 +151,7 @@ public class UserBookingHistoryActivity extends AppCompatActivity {
                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
-                                                Toast.makeText(UserBookingHistoryActivity.this, "successfull", Toast.LENGTH_SHORT).show();
+//                                                Toast.makeText(UserBookingHistoryActivity.this, "successfull", Toast.LENGTH_SHORT).show();
 //
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {
@@ -161,7 +162,7 @@ public class UserBookingHistoryActivity extends AppCompatActivity {
                                     }
                                 });
 
-                                documentReference = db.collection("Current_booking").document(UIAVALUE);
+                                documentReference = db.collection("Current_booking").document(Userrdmid);
                                 HashMap<String,Object> updatesvalues=new HashMap<>();
                                 updatesvalues.put("User_review",review);
 
@@ -169,7 +170,7 @@ public class UserBookingHistoryActivity extends AppCompatActivity {
                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
-                                                Toast.makeText(UserBookingHistoryActivity.this, "successfull", Toast.LENGTH_SHORT).show();
+//                                                Toast.makeText(UserBookingHistoryActivity.this, "successfull", Toast.LENGTH_SHORT).show();
 //
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {
@@ -180,7 +181,7 @@ public class UserBookingHistoryActivity extends AppCompatActivity {
                                     }
                                 });
 
-                                documentReference = db.collection("Completed_booking").document(UIAVALUE);
+                                documentReference = db.collection("Completed_booking").document(Userrdmid);
                                 HashMap<String,Object> updatesvaluescomplete=new HashMap<>();
                                 updatesvaluescomplete.put("User_review",review);
 
@@ -188,7 +189,7 @@ public class UserBookingHistoryActivity extends AppCompatActivity {
                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
-                                                Toast.makeText(UserBookingHistoryActivity.this, "successfull", Toast.LENGTH_SHORT).show();
+//                                                Toast.makeText(UserBookingHistoryActivity.this, "successfull", Toast.LENGTH_SHORT).show();
 //
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {

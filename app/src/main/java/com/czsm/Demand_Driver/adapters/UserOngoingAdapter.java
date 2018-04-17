@@ -63,12 +63,14 @@ public class UserOngoingAdapter extends RecyclerView.Adapter<UserOngoingAdapter.
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.putExtra("phonenumber",dataList.get(position).getUser_Phone_number());
                 intent.putExtra("name",dataList.get(position).getUser_name());
-                intent.putExtra("datatime",DateTime);
+                intent.putExtra("datatime",dataList.get(position).getUser_Book_Date_Time());
                 intent.putExtra("address",dataList.get(position).getUser_Address());
 //                intent.putExtra("userlats",dataList.get(position).getCurrentlat());
 //                intent.putExtra("userlongs",dataList.get(position).getCurrentlong());
                 intent.putExtra("userdate",dataList.get(position).getDate());
                 intent.putExtra("usertime",dataList.get(position).getUser_Booking_Time());
+                intent.putExtra("status",dataList.get(position).getStatus());
+                intent.putExtra("bookingid",dataList.get(position).getUser_Booking_ID());
 
                 context.startActivity(intent);
             }

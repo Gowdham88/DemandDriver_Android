@@ -130,7 +130,7 @@ public class UserHistoryActivity extends AppCompatActivity{
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        Query first = db.collection("Current_booking");
+        Query first = db.collection("Completed_booking").orderBy("End_time", Query.Direction.DESCENDING);
 
         first.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
