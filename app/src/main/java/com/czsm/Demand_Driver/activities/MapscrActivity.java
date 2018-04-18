@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -18,7 +19,10 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -67,8 +71,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.UUID;
 
-public class MapscrActivity extends AppCompatActivity implements OnMapReadyCallback,LocationListener {
+public class MapscrActivity extends AppCompatActivity  implements OnMapReadyCallback,LocationListener{
     Context context;
     private TrackGPS gps;
     double lat;
@@ -122,7 +127,7 @@ public class MapscrActivity extends AppCompatActivity implements OnMapReadyCallb
     LatLng northbounds,southbounds;
     CharSequence text;
     Circle myCircle;
-    String cartypeStr;
+    String cartypeStr,Rndmuid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,10 +156,13 @@ public class MapscrActivity extends AppCompatActivity implements OnMapReadyCallb
             @Override
             public void onClick(View v) {
 
-                onBackPressed();
+                Intent in=new Intent(MapscrActivity.this,DashBoardActivity.class);
+                startActivity(in);
             }
         });
-
+        String uuid = UUID.randomUUID().toString();
+        Rndmuid=uuid;
+        PreferencesHelper.setPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_USERRANDMID,Rndmuid);
         setMarkerIcon(serviceId);
         if (!serviceId.equalsIgnoreCase("1")) {
             driverLayout.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
@@ -162,7 +170,7 @@ public class MapscrActivity extends AppCompatActivity implements OnMapReadyCallb
             carTypeSpinner.setVisibility(View.INVISIBLE);
             driverTypeSpinner.setVisibility(View.INVISIBLE);
         }
-
+        Toast.makeText(MapscrActivity.this, "haiii", Toast.LENGTH_SHORT).show();
 
         serviceImageView.setImageResource(R.drawable.services_call_driver);
         serviceTextView.setText(serviceName);
@@ -237,7 +245,6 @@ public class MapscrActivity extends AppCompatActivity implements OnMapReadyCallb
         });
         mapFrag = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFrag.getMapAsync(MapscrActivity.this);
-
         gps = new TrackGPS(MapscrActivity.this);
         try {
             if(gps.canGetLocation()){
@@ -330,13 +337,13 @@ public class MapscrActivity extends AppCompatActivity implements OnMapReadyCallb
         mLocation = location;
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         Mmap.clear();
-
         //    Mmap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_markf)));
         Mmap.moveCamera(CameraUpdateFactory.newLatLngZoom(laln,6.5f));
         Mmap.animateCamera(CameraUpdateFactory.zoomTo(12.5f), 2000, null);
         Mmap.setMaxZoomPreference(14.5f);
         Mmap.setMinZoomPreference(6.5f);
     }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -346,7 +353,6 @@ public class MapscrActivity extends AppCompatActivity implements OnMapReadyCallb
         Double lng = gps.getLongitude();
         LatLng locateme = new LatLng(lat, lng);
         Mmap.getUiSettings().isZoomControlsEnabled();
-
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             return;
@@ -393,28 +399,19 @@ public class MapscrActivity extends AppCompatActivity implements OnMapReadyCallb
                     }
                     else {
                         if (addresses.size() > 0) {
-                            double dblat=addresses.get(0).getLatitude();
-                            double dblon=addresses.get(0).getLongitude();
-                             address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                             city = addresses.get(0).getLocality();
-                             state = addresses.get(0).getAdminArea();
-                             country = addresses.get(0).getCountryName();
-                             postalCode = addresses.get(0).getPostalCode();
-                             knownName = addresses.get(0).getFeatureName();
+                            String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                            String city = addresses.get(0).getLocality();
+                            String state = addresses.get(0).getAdminArea();
+                            String country = addresses.get(0).getCountryName();
+                            String postalCode = addresses.get(0).getPostalCode();
+                            String knownName = addresses.get(0).getFeatureName();
                             address1=(address + "," + city + "," + state + "," + country + "," + postalCode);
-                            Circle circle = Mmap.addCircle(new CircleOptions()
-                                    .center(new LatLng(dblat,dblon))
-                                    .radius(10000)
-                                    .strokeColor(Color.BLUE)
-                                    .fillColor(getResources().getColor(R.color.transporent_clr)).strokeWidth(2.0f));
-                            Toast.makeText(MapscrActivity.this, address1, Toast.LENGTH_SHORT).show();
 
                             //                         Eaddress.setText(addresses.get(0).getFeatureName() + ", " + addresses.get(0).getLocality() +", " + addresses.get(0).getAdminArea() + ", " + addresses.get(0).getCountryName());
                             Toast.makeText(getApplicationContext(), "Address:- " + addresses.get(0).getFeatureName() + addresses.get(0).getAdminArea() + addresses.get(0).getLocality(), Toast.LENGTH_LONG).show();
                         }
                     }
-
-//                    changelocation.setText(address1);
+                    changelocation.setText(address1);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -425,7 +422,6 @@ public class MapscrActivity extends AppCompatActivity implements OnMapReadyCallb
     public void handlenewlocation(final LatLng laln)
     {
         Mmap.clear();
-
         //  Mmap.addMarker(new MarkerOptions().position(laln).icon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin2)));
         Mmap.moveCamera(CameraUpdateFactory.newLatLngZoom(laln,6.5f));
         // map.animateCamera(CameraUpdateFactory.zoomIn());
@@ -441,126 +437,182 @@ public class MapscrActivity extends AppCompatActivity implements OnMapReadyCallb
                 //set message, title, and icon
                 .setTitle("Booking")
                 .setMessage("Do you want to book service at " + Util.getDateTime(bookDate, bookTime) + " ?")
-                .setIcon(R.drawable.ic_launcher)
+                .setIcon(R.drawable.logo01)
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
 
                         /******************Adding appointments**********************/
-                        documentReference=db.collection("UsersBookingRequest").document(UIAVALUE);
-                        Map<String, Object> updateval1 = new HashMap<>();
-                        updateval1.put("date",bookDate);
-                        updateval1.put("time", bookTime);
-                        updateval1.put("UID",UIAVALUE);
-                        updateval1.put("phoneNumber",PHNO);
-                        updateval1.put("Pickuplat",latvalue);
-                        updateval1.put("Pickuplong",longitude);
-                        updateval1.put("Currentlat",lattitud);
-                        updateval1.put("Currentlong",longtude);
-                        updateval1.put("address",address);
-                        updateval1.put("city",city);
-                        updateval1.put("state",state);
-                        updateval1.put("country",country);
-                        updateval1.put("Status",true);
-                        updateval1.put("token",refer);
-//                        updateval1.put("radius",text);
+//                        documentReference=db.collection("UsersBookingRequest").document(UIAVALUE);
+//                        Map<String, Object> updateval1 = new HashMap<>();
+//                        updateval1.put("date",bookDate);
+//                        updateval1.put("time", bookTime);
+//                        updateval1.put("UID",UIAVALUE);
+//                        updateval1.put("phoneNumber",PHNO);
+//                        updateval1.put("Pickuplat",latvalue);
+//                        updateval1.put("Pickuplong",longitude);
+//                        updateval1.put("Currentlat",lattitud);
+//                        updateval1.put("Currentlong",longtude);
+//                        updateval1.put("address",address);
+//                        updateval1.put("city",city);
+//                        updateval1.put("state",state);
+//                        updateval1.put("country",country);
+//                        updateval1.put("Status",true);
+//                        updateval1.put("token",refer);
+////                        updateval1.put("radius",text);
+//
+//
+//                        documentReference.set(updateval1).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<Void> task) {
+//                                Toast.makeText(MapscrActivity.this, "successfull", Toast.LENGTH_SHORT).show();
+//                            }
+//                        }).addOnFailureListener(new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception e) {
+//
+//
+//                            }
+//                        });
+
+                        popup();
+                        String userBDT=bookDate+" "+bookTime;
+
+                        documentReference=db.collection("User_details").document(UIAVALUE);
+                        HashMap<String,Object> updatesvalues1=new HashMap<>();
+//                        updatesvalues1.put("date",bookDate);
+//                        updatesvalues1.put("time",bookTime);
+//                        updatesvalues1.put("UsersUID",UIAVALUE);
+//                        updatesvalues1.put("phoneNumber",PHNO);
+//
+                        updatesvalues1.put("Start_Lat",latvalue);
+                        updatesvalues1.put("Start_Long",longitude);
+                        updatesvalues1.put("User_Address",address1);
+//                        updatesvalues1.put("Review",city);
+//                        updatesvalues1.put("Trips_completed",state);
 
 
-                        documentReference.set(updateval1).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                Toast.makeText(MapscrActivity.this, "successfull", Toast.LENGTH_SHORT).show();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
+//                        updatesvalues1.put("country",country);
+//                        updatesvalues1.put("Status",true);
+//                        updatesvalues1.put("token",refer);
+//                        updatesvalues1.put("cartype",cartypeStr);
+//                        updatesvalues1.put("Name", name);
+//                            updates1.put("token",refer);
+//                            updates1.put("radius",text);
+                        documentReference.update(updatesvalues1)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+//                            Toast.makeText(MapActivity.this, "successfull", Toast.LENGTH_SHORT).show();
+//
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
 
 
                             }
                         });
-//                        addappointment(0);
 
-//                        Query myTopPostsQuery = db.child("AppointmentList").orderByChild("timems").equalTo(timems);
-//                        myTopPostsQuery.addValueEventListener(new ValueEventListener() {
-//                            @Override
-//                            public void onDataChange(DataSnapshot dataSnapshot) {
+                        documentReference=db.collection("Current_booking").document(Rndmuid);
+                        HashMap<String,Object> updatesvalues=new HashMap<>();
+//                        updatesvalues.put("Driver_name",);
+//                        updatesvalues.put("Driver_ID",);
+                        updatesvalues.put("User_name","Poojitha");
+                        updatesvalues.put("User_ID",UIAVALUE);
+//                        updatesvalues.put("Driver_Phone_number",);
+                        updatesvalues.put("User_Phone_number",PHNO);
+                        updatesvalues.put("Car_type",cartypeStr);
+                        updatesvalues.put("Start_Lat",latvalue);
+                        updatesvalues.put("Start_Long",longitude);
+                        updatesvalues.put("User_Address",address1);
+                        updatesvalues.put("City",city);
+                        updatesvalues.put("User_Booking_ID",Rndmuid);
+                        updatesvalues.put("Status","notCompleted");
+//                        updatesvalues.put("Start_time",);
+//                        updatesvalues.put("End_time",);
+//                        updatesvalues.put("Cost",);
+//                        updatesvalues.put("Driver_review",);
+                        updatesvalues.put("Date",bookDate);
+                        updatesvalues.put("User_Booking_Time",bookTime);
+                        updatesvalues.put("User_Book_Date_Time",userBDT);
+
+                        documentReference.set(updatesvalues)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+//                                        Toast.makeText(MapActivity.this, "successfull", Toast.LENGTH_SHORT).show();
 //
-//                                for (final DataSnapshot child : dataSnapshot.getChildren()) {
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+
+                            }
+                        });
+
+
+                        documentReference=db.collection("Completed_booking").document(Rndmuid);
+                        HashMap<String,Object> updatesvaluescomplete=new HashMap<>();
+//                        updatesvalues.put("Driver_name",);
+//                        updatesvalues.put("Driver_ID",);
+                        updatesvaluescomplete.put("User_name","Poojitha");
+                        updatesvaluescomplete.put("User_ID",UIAVALUE);
+//                        updatesvalues.put("Driver_Phone_number",);
+                        updatesvaluescomplete.put("User_Phone_number",PHNO);
+                        updatesvaluescomplete.put("Car_type",cartypeStr);
+                        updatesvaluescomplete.put("Start_Lat",latvalue);
+                        updatesvaluescomplete.put("Start_Long",longitude);
+                        updatesvaluescomplete.put("User_Address",address1);
+                        updatesvaluescomplete.put("City",city);
+                        updatesvaluescomplete.put("User_Booking_ID",Rndmuid);
+                        updatesvaluescomplete.put("Status","notCompleted");
+//                        updatesvalues.put("Start_time",);
+//                        updatesvalues.put("End_time",);
+//                        updatesvalues.put("Cost",);
+//                        updatesvalues.put("Driver_review",);
+                        updatesvaluescomplete.put("Date",bookDate);
+//                        updatesvaluescomplete.put("Time",bookTime);
+
+                        documentReference.set(updatesvaluescomplete)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        Toast.makeText(MapscrActivity.this, "successfull", Toast.LENGTH_SHORT).show();
 //
-//                                    final AppointmentList appointmentList = child.getValue(AppointmentList.class);
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+
+                            }
+                        });
+
+
+
+
+                        documentReference=db.collection("User_current_booking").document(UIAVALUE);
+                        HashMap<String,Object> usercurrentbookingid=new HashMap<>();
 //
-//                                    appointmentlist.clear();
+                        usercurrentbookingid.put("Booking_ID",Rndmuid);
 //
-//                                    if (appointmentList.getUserid().equals(userid)) {
+                        documentReference.set(usercurrentbookingid)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+//                                        Toast.makeText(MapActivity.this, "successfull", Toast.LENGTH_SHORT).show();
 //
-//                                        appointmentlist.add(appointmentList);
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+
+                            }
+                        });
 //
-//                                        if (appointmentlist.get(0).getStatus().equals("pending") && i == 1) {
-//
-//                                            showsuccessDialog();
-//
-//                                        }
-////
-////                                        if (i < maxproviders) {
-////
-////                                            Handler handler = new Handler();
-////                                            handler.postDelayed(new Runnable() {
-////                                                @Override
-////                                                public void run() {
-////
-////                                                    if (appointmentlist.get(0).getStatus().equals("pending")) {
-////
-////                                                        Toast.makeText(getApplicationContext(), "" + i, Toast.LENGTH_SHORT).show();
-////
-////                                                        if (i == 1) {
-////
-////                                                            Map appointmentData = new HashMap();
-////                                                            appointmentData.put("cancelid", filterserviceproviders.get(minIndex.get(0)).getProviderid());
-////                                                            appointmentData.put("providerid", filterserviceproviders.get(minIndex.get(i)).getProviderid());
-////                                                            appointmentData.put("drivername", filterserviceproviders.get(minIndex.get(i)).getName());
-////                                                            appointmentData.put("driveraddress", filterserviceproviders.get(minIndex.get(i)).getAddress());
-////                                                            child.getRef().updateChildren(appointmentData);
-////
-////                                                        } else {
-////
-////                                                            Map appointmentData = new HashMap();
-////                                                            appointmentData.put("cancelid", appointmentlist.get(0).getCancelid() + "," + filterserviceproviders.get(minIndex.get(i)).getProviderid());
-////                                                            appointmentData.put("providerid", filterserviceproviders.get(minIndex.get(i)).getProviderid());
-////                                                            appointmentData.put("drivername", filterserviceproviders.get(minIndex.get(i)).getName());
-////                                                            appointmentData.put("driveraddress", filterserviceproviders.get(minIndex.get(i)).getAddress());
-////                                                            child.getRef().updateChildren(appointmentData);
-////
-////                                                        }
-////
-////                                                        i++;
-////
-////                                                    }
-////
-////                                                }
-////                                            }, 10000);
-////
-////                                        } else {
-////
-////                                            if (appointmentlist.get(0).getStatus().equals("pending") && i == maxproviders) {
-////
-////                                                child.getRef().child("status").setValue("Cancelled");
-////                                            }
-////                                        }
-//
-//                                    }
-//
-//                                }
-//
-//
-//                            }
-//
-//                            @Override
-//                            public void onCancelled(DatabaseError databaseError) {
-//
-//                                Log.e("Databaseerror", "" + databaseError.toException().toString());
-//
-//                            }
-//                        });
 
                     }
                 })
@@ -574,6 +626,41 @@ public class MapscrActivity extends AppCompatActivity implements OnMapReadyCallb
 
                     }
                 }).show();
+    }
+
+    private void popup() {
+
+
+        LayoutInflater factory = LayoutInflater.from(this);
+        final View deleteDialogView = factory.inflate(R.layout.userreqalert, null);
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setView(deleteDialogView);
+        TextView Acce = (TextView)deleteDialogView.findViewById(R.id.accept_button);
+//        TextView DriverNumber = (TextView)deleteDialogView.findViewById(R.id.divernumber);
+//        DriverNumber.setText(driverphonenumber);
+        final AlertDialog alertDialog1 = alertDialog.create();
+        Acce.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog1.dismiss();
+            }
+        });
+
+        alertDialog1.setCanceledOnTouchOutside(false);
+        try {
+            alertDialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        alertDialog1.show();
+//        alertDialog1.getWindow().setLayout((int) Utils.convertDpToPixel(228,getActivity()),(int)Utils.convertDpToPixel(220,getActivity()));
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(alertDialog1.getWindow().getAttributes());
+//        lp.height=200dp;
+//        lp.width=228;
+        lp.gravity = Gravity.CENTER;
+//        lp.windowAnimations = R.style.DialogAnimation;
+        alertDialog1.getWindow().setAttributes(lp);
     }
 
 }

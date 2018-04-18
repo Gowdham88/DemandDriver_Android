@@ -1,5 +1,6 @@
 package com.czsm.Demand_Driver.activities;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -166,7 +167,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     ArrayList<LatLng> list=new ArrayList();
     private Handler mHandler;
     String driverphonenumber;
-    String Token, Rndmuid;
+    String Token, Rndmuid,addressval;
     char[] chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
     Random rnd = new Random();
 
@@ -372,6 +373,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             String postalCode = addresses.get(0).getPostalCode();
                             String knownName = addresses.get(0).getFeatureName();
                             address1=(address + "," + city + "," + state + "," + country + "," + postalCode);
+                            Toast.makeText(MapActivity.this, address1, Toast.LENGTH_SHORT).show();
 //                            for (int i = 0; i < datalist.size(); i++) {
 //
 //                                marker = Mmap.addMarker(new MarkerOptions().position(new LatLng(datalist.get(i).getLat(), datalist.get(i).getLongitude()))
@@ -460,81 +462,32 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 //        markerIcon = R.drawable.lmdriver;
 //
 //    }
-    @Override
-    public void onLocationChanged(Location location) {
-//        addmap();
-        mLocation = location;
-//        for (int i = 0; i < datalist.size(); i++) {
-//
-//            marker = Mmap.addMarker(new MarkerOptions().position(new LatLng(datalist.get(i).getLat(), datalist.get(i).getLongitude()))
-//                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.bitmapfordriver))
-//                    .flat(true));
-//
-//        }
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        Mmap.clear();
-//        MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(
-//                SosMap.this, R.raw.style_json);
-//        Mmap.setMapStyle(style);
-        //    Mmap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_markf)));
-        Mmap.moveCamera(CameraUpdateFactory.newLatLngZoom(laln,6.5f));
-        Mmap.animateCamera(CameraUpdateFactory.zoomTo(12.5f), 2000, null);
-        Mmap.setMaxZoomPreference(14.5f);
-        Mmap.setMinZoomPreference(6.5f);
+@Override
+public void onLocationChanged(Location location) {
+    mLocation = location;
+    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+    Mmap.clear();
 
-        Circle circle = Mmap.addCircle(new CircleOptions().center(laln).radius(5000).strokeColor(Color.BLUE).strokeWidth(2.0f));
-
-
-    }
-
+    //    Mmap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_markf)));
+    Mmap.moveCamera(CameraUpdateFactory.newLatLngZoom(laln,6.5f));
+    Mmap.animateCamera(CameraUpdateFactory.zoomTo(12.5f), 2000, null);
+    Mmap.setMaxZoomPreference(14.5f);
+    Mmap.setMinZoomPreference(6.5f);
+}
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Mmap=googleMap;
-
-//        addmap();
         Mmap.clear();
-//        for (int i = 0; i < datalist.size(); i++) {
-//
-//            marker = Mmap.addMarker(new MarkerOptions().position(new LatLng(datalist.get(i).getLat(), datalist.get(i).getLongitude()))
-//                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.bitmapfordriver))
-//                    .flat(true));
-//
-//        }
         Double lat = gps.getLatitude();
         Double lng = gps.getLongitude();
-        lattitud =String.valueOf(lat);
-          longtude= String.valueOf(lng);
-        Log.e("lattitude", lattitud);
-        Log.e("longtude",longtude);
-        Geocoder geo = new Geocoder(MapActivity.this.getApplicationContext(), Locale.getDefault());
-        try {
-            addresses = geo.getFromLocation(Double.parseDouble(lattitud), Double.parseDouble(longtude), 1);
-            address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-            city = addresses.get(0).getLocality();
-            state = addresses.get(0).getAdminArea();
-            country = addresses.get(0).getCountryName();
-            postalCode = addresses.get(0).getPostalCode();
-            knownName = addresses.get(0).getFeatureName();
-            adds=(latvalue+","+longitude+","+address + "," + city + "," + state + "," + country + "," + postalCode);// Here 1 represent max location result to returned, by documents it recommended 1 to 5
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-
-//        Circle circle = Mmap.addCircle(new CircleOptions().center(laln).radius(5000).strokeColor(Color.BLUE).strokeWidth(2.0f));
-
         LatLng locateme = new LatLng(lat, lng);
-//        MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(this, R.raw.style_json);
-//        Mmap.setMapStyle(style);
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        Mmap.getUiSettings().isZoomControlsEnabled();
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             return;
         }
-
-
-
         Mmap.setMyLocationEnabled(true);
         //   Mmap.addMarker(new MarkerOptions().position(locateme).icon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin2)));
         Mmap.moveCamera(CameraUpdateFactory.newLatLngZoom(locateme,6.5f));
@@ -549,20 +502,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 if(gps.canGetLocation()) {
                     Double lat = gps.getLatitude();
                     Double lng = gps.getLongitude();
-
                     LatLng locateme = new LatLng(lat, lng);
-                      lattitude1= String.valueOf(lat);
-                    longitude1= String.valueOf(lng);
-//                    for (int i = 0; i < datalist.size(); i++) {
-//
-//                        marker = Mmap.addMarker(new MarkerOptions().position(new LatLng(datalist.get(i).getLat(), datalist.get(i).getLongitude()))
-//                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.bitmapfordriver))
-//                                .flat(true));
-//
-//                    }
-////
-//                    Log.e("locateme",lattitude1);
-//
                     handlenewlocation(locateme);
 
                 }
@@ -576,89 +516,46 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         Mmap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
             @Override
             public void onCameraChange(CameraPosition cameraPosition) {
-//                Toast.makeText(MapActivity.this, "haaiohb", Toast.LENGTH_SHORT).show();
                 laln = cameraPosition.target;
                 Mmap.clear();
-//                for (int i = 0; i < datalist.size(); i++) {
-//
-//                    marker = Mmap.addMarker(new MarkerOptions().position(new LatLng(datalist.get(i).getLat(), datalist.get(i).getLongitude()))
-//                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.bitmapfordriver))
-//                            .flat(true));
-//
-//                }
 
                 try {
                     Location mLocation = new Location("");
                     mLocation.setLatitude(laln.latitude);
                     mLocation.setLongitude(laln.longitude);
-
-
-
-
-
+                    List<Address> addresses = null;
                     Geocoder geo = new Geocoder(MapActivity.this.getApplicationContext(), Locale.getDefault());
                     addresses = geo.getFromLocation(laln.latitude, laln.longitude, 1);
                     if (addresses.isEmpty()) {
-
-
                     }
                     else {
                         if (addresses.size() > 0) {
                             String latti= String.valueOf(addresses.get(0).getLatitude());
                             latvalue=latti;
 
-                             longitude= String.valueOf(addresses.get(0).getLongitude());
-                             double lat= Double.parseDouble(String.valueOf(addresses.get(0).getLatitude()));
-                             double logs=Double.parseDouble(String.valueOf(addresses.get(0).getLongitude()));
-                             address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                             city = addresses.get(0).getLocality();
+                            longitude= String.valueOf(addresses.get(0).getLongitude());
+                            double lat= Double.parseDouble(String.valueOf(addresses.get(0).getLatitude()));
+                            double logs=Double.parseDouble(String.valueOf(addresses.get(0).getLongitude()));
+                            address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                            city = addresses.get(0).getLocality();
                             state = addresses.get(0).getAdminArea();
-                             country = addresses.get(0).getCountryName();
-                             postalCode = addresses.get(0).getPostalCode();
-                             knownName = addresses.get(0).getFeatureName();
+                            country = addresses.get(0).getCountryName();
+                            postalCode = addresses.get(0).getPostalCode();
+                            knownName = addresses.get(0).getFeatureName();
                             address1=(address + "," + city + "," + state + "," + country + "," + postalCode);
 //                            Circle circle = Mmap.addCircle(new CircleOptions()
-//                                    .center(new LatLng(lat,logs))
+//                                    .center(new LatLng(dblat,dblon))
 //                                    .radius(10000)
 //                                    .strokeColor(Color.BLUE)
 //                                    .fillColor(getResources().getColor(R.color.transporent_clr)).strokeWidth(2.0f));
-//                            for (int i = 0; i < datalist.size(); i++) {
-//
-//                                marker = Mmap.addMarker(new MarkerOptions().position(new LatLng(datalist.get(i).getLat(), datalist.get(i).getLongitude()))
-//                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.bitmapfordriver))
-//                                        .flat(true));
-//
-//                            }
-//
-//                            documentReference=db.collection("Userdetails").document(UIAVALUE);
-//                            HashMap<String,Object> updates1=new HashMap<>();
-//                            updates1.put("lat", latvalue);
-//                            updates1.put("long",longitude);
-////                            updates1.put("token",refer);
-////                            updates1.put("radius",text);
-//                            documentReference.update(updates1).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                @Override
-//                                public void onComplete(@NonNull Task<Void> task) {
-////
-////                                    Log.e("lat",latvalue);
-////                                    Log.e("long",longitude);
-//                                }
-//                            }).addOnFailureListener(new OnFailureListener() {
-//                                @Override
-//                                public void onFailure(@NonNull Exception e) {
-//
-//
-//                                }
-//                            });
-
+                            Toast.makeText(MapActivity.this, address1, Toast.LENGTH_SHORT).show();
 
                             //                         Eaddress.setText(addresses.get(0).getFeatureName() + ", " + addresses.get(0).getLocality() +", " + addresses.get(0).getAdminArea() + ", " + addresses.get(0).getCountryName());
 //                            Toast.makeText(getApplicationContext(), "Address:- " + addresses.get(0).getFeatureName() + addresses.get(0).getAdminArea() + addresses.get(0).getLocality(), Toast.LENGTH_LONG).show();
                         }
                     }
-                    Toast.makeText(MapActivity.this, address1, Toast.LENGTH_SHORT).show();
-                    changelocation.setText(address1);
-//                    map_loc = "http://maps.google.com/maps?q=loc:" + laln.latitude + "," + laln.longitude + "1";
+
+//                    changelocation.setText(address1);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -666,72 +563,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         });
     }
 
-
-   protected String getSaltString() {
-String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-    StringBuilder salt = new StringBuilder();
-    Random rnd = new Random();
-        while (salt.length() < 18) { // length of the random string.
-        int index = (int) (rnd.nextFloat() * SALTCHARS.length());
-        salt.append(SALTCHARS.charAt(index));
-    }
-    String saltStr = salt.toString();
-        return saltStr;
-
-}
-
-//    private void addmap() {
-//
-//
-//
-//        //set zoom to level to current so that you won't be able to zoom out viz. move outside bounds
-////        Mmap.setMinZoomPreference(mMap.getCameraPosition().zoom);
-//    }
-
     public void handlenewlocation(final LatLng laln)
     {
         Mmap.clear();
-//        addmap();
-//        MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(SosMap.this, R.raw.style_json);
-//        Mmap.setMapStyle(style);
+
         //  Mmap.addMarker(new MarkerOptions().position(laln).icon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin2)));
         Mmap.moveCamera(CameraUpdateFactory.newLatLngZoom(laln,6.5f));
         // map.animateCamera(CameraUpdateFactory.zoomIn());
         Mmap.animateCamera(CameraUpdateFactory.zoomTo(12.5f), 2000, null);
-        Mmap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                new LatLng(laln.latitude,laln.longitude), 13));
         latitu=laln.latitude;
         longitu=laln.longitude;
-//        Circle circle = Mmap.addCircle(new CircleOptions().center(laln).radius(5000).strokeColor(Color.BLUE).strokeWidth(2.0f));
-//        MarkerOptions markerOptions = new MarkerOptions();
-//        LatLng position = new LatLng(50, 50);
-//        markerOptions.position(position);
-//        Marker marker = Mmap.addMarker(markerOptions);
-//        Circle circle = Mmap.addCircle(new CircleOptions()
-//                .center(new LatLng(latitu, longitu))
-//                .radius(10000)
-//                .strokeColor(Color.RED)
-//                .fillColor(Color.TRANSPARENT).strokeWidth(2.0f));
 
 
-
-//        for (int i = 0; i < datalist.size(); i++) {
-//
-//            marker = Mmap.addMarker(new MarkerOptions().position(new LatLng(datalist.get(0).getLat(), datalist.get(0).getLongitude()))
-//                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.bitmapfordriver))
-//                    .flat(true));
-//
-//        }
-//        Circle circle = Mmap.addCircle(
-//                new CircleOptions()
-//                        .center(position)
-//                        .radius(1000)
-//                        .strokeWidth(2.0f)
-//                        .fillColor(getApplicationContext().getResources().getColor(R.color.textmain_clr ))
-//        );
-
-//        Log.e("newlat", String.valueOf(latitu));
-//        Log.e("newlong", String.valueOf(longitu));
 
     }
 
@@ -820,28 +663,13 @@ String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
             popup();
             String userBDT=bookDate+" "+bookTime;
 
-                        documentReference=db.collection("User_details").document(Rndmuid);
-                        HashMap<String,Object> updatesvalues1=new HashMap<>();
-//                        updatesvalues1.put("date",bookDate);
-//                        updatesvalues1.put("time",bookTime);
-//                        updatesvalues1.put("UsersUID",UIAVALUE);
-//                        updatesvalues1.put("phoneNumber",PHNO);
-//
-                        updatesvalues1.put("Start_Lat",latvalue);
-                        updatesvalues1.put("Start_Long",longitude);
-                        updatesvalues1.put("User_Address",address1);
-//                        updatesvalues1.put("Review",city);
-//                        updatesvalues1.put("Trips_completed",state);
+                        documentReference=db.collection("User_details").document(UIAVALUE);
+                        HashMap<String,Object> updatesval=new HashMap<>();
 
-
-//                        updatesvalues1.put("country",country);
-//                        updatesvalues1.put("Status",true);
-//                        updatesvalues1.put("token",refer);
-//                        updatesvalues1.put("cartype",cartypeStr);
-//                        updatesvalues1.put("Name", name);
-//                            updates1.put("token",refer);
-//                            updates1.put("radius",text);
-                        documentReference.update(updatesvalues1)
+                        updatesval.put("Start_Lat",latvalue);
+                        updatesval.put("Start_Long",longitude);
+                        updatesval.put("User_Address",address1);
+                        documentReference.update(updatesval)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
@@ -858,23 +686,17 @@ String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
                         documentReference=db.collection("Current_booking").document(Rndmuid);
                         HashMap<String,Object> updatesvalues=new HashMap<>();
-//                        updatesvalues.put("Driver_name",);
-//                        updatesvalues.put("Driver_ID",);
+
                         updatesvalues.put("User_name","Poojitha");
                         updatesvalues.put("User_ID",UIAVALUE);
-//                        updatesvalues.put("Driver_Phone_number",);
                         updatesvalues.put("User_Phone_number",PHNO);
                         updatesvalues.put("Car_type",cartypeStr);
-                        updatesvalues1.put("Start_Lat",latvalue);
-                        updatesvalues1.put("Start_Long",longitude);
+                        updatesvalues.put("Start_Lat",latvalue);
+                        updatesvalues.put("Start_Long",longitude);
                         updatesvalues.put("User_Address",address1);
                         updatesvalues.put("City",city);
                         updatesvalues.put("User_Booking_ID",Rndmuid);
                         updatesvalues.put("Status","notCompleted");
-//                        updatesvalues.put("Start_time",);
-//                        updatesvalues.put("End_time",);
-//                        updatesvalues.put("Cost",);
-//                        updatesvalues.put("Driver_review",);
                         updatesvalues.put("Date",bookDate);
                         updatesvalues.put("User_Booking_Time",bookTime);
                         updatesvalues.put("User_Book_Date_Time",userBDT);
@@ -893,47 +715,6 @@ String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
                             }
                         });
-//                        documentReference=db.collection("Current_booking").document(Rndmuid);
-//                        HashMap<String,Object> updatesvaluesst=new HashMap<>();
-////
-//                        updatesvaluesst.put("Status","notCompleted");
-////
-//                        documentReference.update(updatesvaluesst)
-//                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                    @Override
-//                                    public void onComplete(@NonNull Task<Void> task) {
-////                                        Toast.makeText(MapActivity.this, "successfull", Toast.LENGTH_SHORT).show();
-////
-//                                    }
-//                                }).addOnFailureListener(new OnFailureListener() {
-//                            @Override
-//                            public void onFailure(@NonNull Exception e) {
-//
-//
-//                            }
-//                        });
-//
-//                        documentReference=db.collection("Completed_booking").document(Rndmuid);
-//                        HashMap<String,Object> updatesvaluesstcm=new HashMap<>();
-////
-//                        updatesvaluesstcm.put("Status","notCompleted");
-////
-//                        documentReference.update(updatesvaluesstcm)
-//                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                    @Override
-//                                    public void onComplete(@NonNull Task<Void> task) {
-////                                        Toast.makeText(MapActivity.this, "successfull", Toast.LENGTH_SHORT).show();
-////
-//                                    }
-//                                }).addOnFailureListener(new OnFailureListener() {
-//                            @Override
-//                            public void onFailure(@NonNull Exception e) {
-//
-//
-//                            }
-//                        });
-//
-
                         documentReference=db.collection("Completed_booking").document(Rndmuid);
                         HashMap<String,Object> updatesvaluescomplete=new HashMap<>();
 //                        updatesvalues.put("Driver_name",);
@@ -943,18 +724,13 @@ String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 //                        updatesvalues.put("Driver_Phone_number",);
                         updatesvaluescomplete.put("User_Phone_number",PHNO);
                         updatesvaluescomplete.put("Car_type",cartypeStr);
-                        updatesvalues1.put("Start_Lat",latvalue);
-                        updatesvalues1.put("Start_Long",longitude);
+                        updatesvaluescomplete.put("Start_Lat",latvalue);
+                        updatesvaluescomplete.put("Start_Long",longitude);
                         updatesvaluescomplete.put("User_Address",address1);
                         updatesvaluescomplete.put("City",city);
                         updatesvaluescomplete.put("User_Booking_ID",Rndmuid);
                         updatesvaluescomplete.put("Status","notCompleted");
-//                        updatesvalues.put("Start_time",);
-//                        updatesvalues.put("End_time",);
-//                        updatesvalues.put("Cost",);
-//                        updatesvalues.put("Driver_review",);
                         updatesvaluescomplete.put("Date",bookDate);
-//                        updatesvaluescomplete.put("Time",bookTime);
 
                         documentReference.set(updatesvaluescomplete)
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {

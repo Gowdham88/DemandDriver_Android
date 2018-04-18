@@ -1,6 +1,7 @@
 package com.czsm.Demand_Driver.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -70,17 +71,25 @@ public class TariffPlanActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(getString(R.string.tariff_plan));
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent in=new Intent(TariffPlanActivity.this,MapActivity.class);
+                startActivity(in);
+            }
+        });
 
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        } else
-            return super.onOptionsItemSelected(item);
-    }
+//   @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        if (item.getItemId() == android.R.id.home) {
+//            finish();
+//            return true;
+//        } else
+//            return super.onOptionsItemSelected(item);
+//    }
 
     public static class TarrifAdapter extends ArrayAdapter<String> {
         Context context;

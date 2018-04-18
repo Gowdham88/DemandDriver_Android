@@ -265,11 +265,11 @@ public class DashBoardActivity extends AppCompatActivity {
         }
         super.onDestroy();
     }
-    @Override
-    public void onBackPressed() {
-        finish();
-
-    }
+//    @Override
+//    public void onBackPressed() {
+//        finish();
+//
+//    }
 
 
     public boolean checkLocationPermission() {
@@ -287,7 +287,7 @@ public class DashBoardActivity extends AppCompatActivity {
                 new AlertDialog.Builder(this)
                         .setTitle("Hi")
                         .setMessage("Hello")
-                        .setPositiveButton("Ho", new DialogInterface.OnClickListener() {
+                        .setPositiveButton("Ho",new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 //Prompt the user once explanation has been shown

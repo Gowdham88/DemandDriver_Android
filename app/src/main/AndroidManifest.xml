@@ -20,7 +20,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <!-- This app has permission to register and receive dataf message. -->
     <application
@@ -147,6 +147,7 @@
         <!-- android:screenOrientation="portrait" /> -->
         <activity
             android:name=".activities.TariffPlanActivity"
+            android:noHistory="true"
             android:screenOrientation="portrait" />
 
         <!-- <receiver -->
@@ -166,7 +167,10 @@
 
         <!-- <receiver android:name=".Service.MyBroadcastReceiver" /> -->
 
-        <activity android:name=".activities.MapscrActivity"></activity>
+        <activity
+            android:name=".activities.MapscrActivity"
+            android:noHistory="true"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
