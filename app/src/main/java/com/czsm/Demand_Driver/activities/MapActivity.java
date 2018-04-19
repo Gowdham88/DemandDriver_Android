@@ -167,7 +167,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     ArrayList<LatLng> list=new ArrayList();
     private Handler mHandler;
     String driverphonenumber;
-    String Token, Rndmuid,addressval;
+    String Token, Rndmuid,addressval,TokenVal;
     char[] chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
     Random rnd = new Random();
 
@@ -215,6 +215,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         String uuid = UUID.randomUUID().toString();
         Rndmuid=uuid;
         PreferencesHelper.setPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_USERRANDMID,Rndmuid);
+        TokenVal = PreferencesHelper.getPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_TOKEN);
 
 //        POPup();
 //        this.mHandler = new Handler();
@@ -700,6 +701,8 @@ public void onLocationChanged(Location location) {
                         updatesvalues.put("Date",bookDate);
                         updatesvalues.put("User_Booking_Time",bookTime);
                         updatesvalues.put("User_Book_Date_Time",userBDT);
+                        updatesvalues.put("User_Token",TokenVal);
+                        updatesvalues.put("Request","NotAssigned");
 
                         documentReference.set(updatesvalues)
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -715,37 +718,38 @@ public void onLocationChanged(Location location) {
 
                             }
                         });
-                        documentReference=db.collection("Completed_booking").document(Rndmuid);
-                        HashMap<String,Object> updatesvaluescomplete=new HashMap<>();
-//                        updatesvalues.put("Driver_name",);
-//                        updatesvalues.put("Driver_ID",);
-                        updatesvaluescomplete.put("User_name","Poojitha");
-                        updatesvaluescomplete.put("User_ID",UIAVALUE);
-//                        updatesvalues.put("Driver_Phone_number",);
-                        updatesvaluescomplete.put("User_Phone_number",PHNO);
-                        updatesvaluescomplete.put("Car_type",cartypeStr);
-                        updatesvaluescomplete.put("Start_Lat",latvalue);
-                        updatesvaluescomplete.put("Start_Long",longitude);
-                        updatesvaluescomplete.put("User_Address",address1);
-                        updatesvaluescomplete.put("City",city);
-                        updatesvaluescomplete.put("User_Booking_ID",Rndmuid);
-                        updatesvaluescomplete.put("Status","notCompleted");
-                        updatesvaluescomplete.put("Date",bookDate);
-
-                        documentReference.set(updatesvaluescomplete)
-                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        Toast.makeText(MapActivity.this, "successfull", Toast.LENGTH_SHORT).show();
+//                        documentReference=db.collection("Completed_booking").document(Rndmuid);
+//                        HashMap<String,Object> updatesvaluescomplete=new HashMap<>();
+////                        updatesvalues.put("Driver_name",);
+////                        updatesvalues.put("Driver_ID",);
+//                        updatesvaluescomplete.put("User_name","Poojitha");
+//                        updatesvaluescomplete.put("User_ID",UIAVALUE);
+////                        updatesvalues.put("Driver_Phone_number",);
+//                        updatesvaluescomplete.put("User_Phone_number",PHNO);
+//                        updatesvaluescomplete.put("Car_type",cartypeStr);
+//                        updatesvaluescomplete.put("Start_Lat",latvalue);
+//                        updatesvaluescomplete.put("Start_Long",longitude);
+//                        updatesvaluescomplete.put("User_Address",address1);
+//                        updatesvaluescomplete.put("City",city);
+//                        updatesvaluescomplete.put("User_Booking_ID",Rndmuid);
+//                        updatesvaluescomplete.put("Status","notCompleted");
+//                        updatesvaluescomplete.put("Date",bookDate);
+////                        updatesvaluescomplete.put("User_Token",TokenVal);
 //
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-
-
-                            }
-                        });
+//                        documentReference.set(updatesvaluescomplete)
+//                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                    @Override
+//                                    public void onComplete(@NonNull Task<Void> task) {
+//                                        Toast.makeText(MapActivity.this, "successfull", Toast.LENGTH_SHORT).show();
+////
+//                                    }
+//                                }).addOnFailureListener(new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception e) {
+//
+//
+//                            }
+//                        });
 
 
 

@@ -252,7 +252,7 @@ TextView mResendotpTxt,mPhonenumbetEdt,mResendtxt;
         Map<String, Object> data = new HashMap<>();
         data.put("User_Phone_number",phoneNumber);
         data.put("User_ID", uid);
-//        data.put("token", refer);
+        data.put("token", refer);
 
 
 //
