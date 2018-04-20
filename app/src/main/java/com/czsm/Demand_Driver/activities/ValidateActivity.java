@@ -47,7 +47,7 @@ public class ValidateActivity extends AppCompatActivity {
 EditText mOtpEdt;
 TextView mResendotpTxt,mPhonenumbetEdt,mResendtxt;
     Bundle bundle;
-    String phonrnum;
+    String phonrnum,UsrName;
     ImageView FrdRelLay;
     ImageView RelImg;
     String otpNumber;
@@ -70,7 +70,6 @@ TextView mResendotpTxt,mPhonenumbetEdt,mResendtxt;
         setContentView(R.layout.activity_validate);
         mOtpEdt = (EditText) findViewById(R.id.otp_edt);
         mPhonenumbetEdt = (TextView) findViewById(R.id.phone_edt);
-        mResendotpTxt = (TextView) findViewById(R.id.resend_txt);
         FrdRelLay = (ImageView) findViewById(R.id.rel_lay);
         RelImg = (ImageView) findViewById(R.id.rel_img);
         mResendtxt=(TextView)findViewById(R.id.resend_txt);
@@ -89,6 +88,7 @@ TextView mResendotpTxt,mPhonenumbetEdt,mResendtxt;
          if (bundle != null) {
              phonrnum = bundle.getString("phonenumber");
              mVerificationId=bundle.getString("vericode");
+             UsrName = bundle.getString("username");
 //            mResendToken= (PhoneAuthProvider.ForceResendingToken) bundle.get("mtoken");
 //            Toast.makeText(this, mVerificationId, Toast.LENGTH_SHORT).show();
 //         }
@@ -251,6 +251,7 @@ TextView mResendotpTxt,mPhonenumbetEdt,mResendtxt;
 //        Log.e("Tok",refer);
         Map<String, Object> data = new HashMap<>();
         data.put("User_Phone_number",phoneNumber);
+        data.put("User_Name",UsrName);
         data.put("User_ID", uid);
         data.put("token", refer);
 
