@@ -10,7 +10,6 @@ import android.content.SharedPreferences;
 public class PreferencesHelper {
     // region Constants
     private static final String USER_PREFERENCES = "userPreferences";
-    public static final String PREFERENCE_USER_NAME = USER_PREFERENCES + ".user_name";
     public static final String PREFERENCE_EMAIL = USER_PREFERENCES + ".email";
     public static final String PREFERENCE_ID = USER_PREFERENCES + ".id";
     public static final String PREFERENCE_PROFILE_PIC = ".profilePic";
@@ -32,6 +31,7 @@ public class PreferencesHelper {
     public static final String PREFERENCE_DASHBOARD ="dashboard";
     public static final String PREFERENCE_USERRATING ="rating";
     public static final String PREFERENCE_USERRANDMID ="rating";
+    public static final String PREFERENCE_USERNAME ="username";
 
 
 
@@ -47,7 +47,7 @@ public class PreferencesHelper {
     public static void signOut(Context context) {
         SharedPreferences.Editor editor = getEditor(context);
         editor.remove(USER_PREFERENCES);
-        editor.remove(PREFERENCE_USER_NAME);
+        editor.remove(PREFERENCE_USERNAME);
         editor.remove(PREFERENCE_EMAIL);
         editor.remove(PREFERENCE_FIREBASE_UUID);
         editor.remove(PREFERENCE_PROFILE_PIC);

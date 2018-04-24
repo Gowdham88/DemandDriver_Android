@@ -167,7 +167,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     ArrayList<LatLng> list=new ArrayList();
     private Handler mHandler;
     String driverphonenumber;
-    String Token, Rndmuid,addressval,TokenVal;
+    String Token, Rndmuid,addressval,TokenVal,Username;
     char[] chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
     Random rnd = new Random();
 
@@ -198,6 +198,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
          UIAVALUE= PreferencesHelper.getPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_FIREBASE_UUID);
          Uid=PreferencesHelper.getPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_FIREBASE_UUID);
         PHNO= PreferencesHelper.getPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_PHONENUMBER);
+        Username=PreferencesHelper.getPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_USERNAME);
 //        Token=PreferencesHelper.getPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_TOKEN);
           db= FirebaseFirestore.getInstance();
         toolbar.setTitle("Current Booking");
@@ -688,7 +689,7 @@ public void onLocationChanged(Location location) {
                         documentReference=db.collection("Current_booking").document(Rndmuid);
                         HashMap<String,Object> updatesvalues=new HashMap<>();
 
-                        updatesvalues.put("User_name","Poojitha");
+                        updatesvalues.put("User_name",Username);
                         updatesvalues.put("User_ID",UIAVALUE);
                         updatesvalues.put("User_Phone_number",PHNO);
                         updatesvalues.put("Car_type",cartypeStr);

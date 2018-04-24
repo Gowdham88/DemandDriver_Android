@@ -63,7 +63,7 @@ TextView mResendotpTxt,mPhonenumbetEdt,mResendtxt;
     private android.support.v7.app.AlertDialog dialog;
     String refer;
      FirebaseFirestore db;
-     String name="poojitha";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +89,7 @@ TextView mResendotpTxt,mPhonenumbetEdt,mResendtxt;
              phonrnum = bundle.getString("phonenumber");
              mVerificationId=bundle.getString("vericode");
              UsrName = bundle.getString("username");
+             PreferencesHelper.setPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_USERNAME,UsrName);
 //            mResendToken= (PhoneAuthProvider.ForceResendingToken) bundle.get("mtoken");
 //            Toast.makeText(this, mVerificationId, Toast.LENGTH_SHORT).show();
 //         }
@@ -254,6 +255,7 @@ TextView mResendotpTxt,mPhonenumbetEdt,mResendtxt;
         data.put("User_Name",UsrName);
         data.put("User_ID", uid);
         data.put("token", refer);
+
 
 
 //
