@@ -58,8 +58,8 @@ public class UserBookingHistoryActivity extends AppCompatActivity {
     private UserBooking booking;
     String UIAVALUE,Userrdmid,drivername,appointmentid,date,driveraddress,review = "";
 
-    @BindView(R.id.reviewlay)
-    LinearLayout ReviewLinlay;
+//    @BindView(R.id.reviewlay)
+//    LinearLayout ReviewLinlay;
     FirebaseFirestore db;
     DocumentReference documentReference;
 
@@ -75,9 +75,10 @@ public class UserBookingHistoryActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                onBackPressed();
 
-                Intent in=new Intent(UserBookingHistoryActivity.this,UserHistoryActivity.class);
-                startActivity(in);
+//                Intent in=new Intent(UserBookingHistoryActivity.this,UserHistoryActivity.class);
+//                startActivity(in);
             }
         });
         db= FirebaseFirestore.getInstance();
@@ -118,7 +119,7 @@ public class UserBookingHistoryActivity extends AppCompatActivity {
 
             e.printStackTrace();
         }
-        ReviewLinlay.setOnClickListener(new View.OnClickListener() {
+        reviewLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showRatingDialog();
@@ -217,15 +218,13 @@ public class UserBookingHistoryActivity extends AppCompatActivity {
                         }).setCancelable(false).show();
     }
 
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-
-            finish();
-            return true;
-
-        } else
-            return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        if (item.getItemId() == android.R.id.home) {
+//            onBackPressed();
+//            return true;
+//
+//        } else
+//            return super.onOptionsItemSelected(item);
+//    }
 }

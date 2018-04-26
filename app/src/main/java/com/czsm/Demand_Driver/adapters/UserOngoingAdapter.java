@@ -60,7 +60,6 @@ public class UserOngoingAdapter extends RecyclerView.Adapter<UserOngoingAdapter.
             @Override
             public void onClick(View view) {
                 Intent intent= new Intent(context, UserOngoingBookingActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.putExtra("phonenumber",dataList.get(position).getUser_Phone_number());
                 intent.putExtra("name",dataList.get(position).getUser_name());
                 intent.putExtra("datatime",dataList.get(position).getUser_Book_Date_Time());

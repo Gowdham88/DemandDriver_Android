@@ -81,7 +81,6 @@ public class UserHistoryAdapter extends RecyclerView.Adapter<UserHistoryAdapter.
             @Override
             public void onClick(View view) {
                 Intent intent= new Intent(context, UserBookingHistoryActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.putExtra("phonenumber",dataList.get(position).getUser_Phone_number());
                 intent.putExtra("name",dataList.get(position).getUser_name());
                 intent.putExtra("datatime",dataList.get(position).getEnd_time());
@@ -93,7 +92,6 @@ public class UserHistoryAdapter extends RecyclerView.Adapter<UserHistoryAdapter.
 //                intent.putExtra("usertime",dataList.get(position).getEnd_time());
                 intent.putExtra("userreview",dataList.get(position).getUser_review());
                 intent.putExtra("Booking_id",dataList.get(position).getUser_Booking_ID());
-
                 context.startActivity(intent);
             }
         });

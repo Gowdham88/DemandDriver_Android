@@ -84,13 +84,15 @@ public class OngoingAppointmentActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent in=new Intent(OngoingAppointmentActivity.this,DashBoardActivity.class);
-                startActivity(in);
+            onBackPressed();
+//                Intent in=new Intent(OngoingAppointmentActivity.this,DashBoardActivity.class);
+//                startActivity(in);
             }
         });
 
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        swipeContainer.setColorSchemeResources(
+                R.color.colorPrimary);
         recyclerView = (RecyclerView) findViewById(R.id.fragment_ongoing_appointments_listview);
 
         dataload();

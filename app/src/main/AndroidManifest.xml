@@ -32,7 +32,7 @@
         android:supportsRtl="true"
         android:theme="@style/AllinAllMaterialTheme">
         <activity
-            android:name=".activities.SplashActivity"
+            android:name=".activities.DashBoardActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AllinAllMaterialTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan|adjustResize">
@@ -73,40 +73,36 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.UserBookingHistoryActivity"
-            android:noHistory="true"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.VerifyOTPActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.UserOngoingBookingActivity"
-            android:noHistory="true"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.BookServiceMapActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.UserSupportActivity"
-            android:noHistory="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.UserHistoryActivity"
-            android:noHistory="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.OngoingAppointmentActivity"
-            android:noHistory="true"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".activities.DashBoardActivity"
-            android:noHistory="true"
-            android:screenOrientation="portrait" />
+        <!--<activity-->
+            <!--android:name=".activities.DashBoardActivity"-->
+            <!--android:noHistory="true"-->
+            <!--android:screenOrientation="portrait" />-->
         <activity
             android:name=".activities.BookmapActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.MapActivity"
-            android:noHistory="true"
             android:screenOrientation="portrait" />
 
         <service android:name=".MyFirebaseMessagingService">
@@ -147,7 +143,6 @@
         <!-- android:screenOrientation="portrait" /> -->
         <activity
             android:name=".activities.TariffPlanActivity"
-            android:noHistory="true"
             android:screenOrientation="portrait" />
 
         <!-- <receiver -->
@@ -169,7 +164,6 @@
 
         <activity
             android:name=".activities.MapscrActivity"
-            android:noHistory="true"
             android:screenOrientation="portrait" />
     </application>
 

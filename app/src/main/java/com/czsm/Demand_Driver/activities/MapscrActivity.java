@@ -155,9 +155,10 @@ public class MapscrActivity extends AppCompatActivity  implements OnMapReadyCall
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent in=new Intent(MapscrActivity.this,DashBoardActivity.class);
-                startActivity(in);
+                onBackPressed();
+//                Intent in=new Intent(MapscrActivity.this,DashBoardActivity.class);
+//                overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_righ);
+//                startActivity(in);
             }
         });
         String uuid = UUID.randomUUID().toString();
@@ -170,7 +171,7 @@ public class MapscrActivity extends AppCompatActivity  implements OnMapReadyCall
             carTypeSpinner.setVisibility(View.INVISIBLE);
             driverTypeSpinner.setVisibility(View.INVISIBLE);
         }
-        Toast.makeText(MapscrActivity.this, "haiii", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(MapscrActivity.this, "haiii", Toast.LENGTH_SHORT).show();
 
         serviceImageView.setImageResource(R.drawable.services_call_driver);
         serviceTextView.setText(serviceName);

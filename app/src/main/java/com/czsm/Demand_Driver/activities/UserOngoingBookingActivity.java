@@ -37,7 +37,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class UserOngoingBookingActivity extends AppCompatActivity implements RESTClient.ServiceResponseInterface {
+public class UserOngoingBookingActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
@@ -78,13 +78,13 @@ public class UserOngoingBookingActivity extends AppCompatActivity implements RES
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Intent in=new Intent(UserOngoingBookingActivity.this,OngoingAppointmentActivity.class);
-                startActivity(in);
+                onBackPressed();
             }
         });
 
@@ -198,55 +198,60 @@ public class UserOngoingBookingActivity extends AppCompatActivity implements RES
                 }).show();
     }
 
-    public void showRatingDialog() {
-        final View dialogView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.dialog_review_booking, null);
+//    public void showRatingDialog() {
+//        final View dialogView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.dialog_review_booking, null);
+//
+//        new AlertDialog.Builder(this).setIcon(android.R.drawable.btn_star_big_on).setTitle("Review")
+//                .setView(dialogView)
+//                .setMessage("Appreciate giving feedback about this Appointment")
+//                .setCancelable(false)
+//                .setPositiveButton("Rate",
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                RatingBar ratingBar = (RatingBar) dialogView.findViewById(R.id.dialog_review_booking_ratingbar);
+//                                String review = ratingBar.getProgress() + "";
+//
+//
+////                                child.getRef().child("userreview").setValue(review);
+//                                dialog.dismiss();
+//                                finish();
+//                            }
+//                        })
+//
+//                        // Button Cancel
+//                .setNegativeButton("Cancel",
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//
+////                                child.getRef().child("userreview").setValue("0");
+//                                finish();
+//                                dialog.cancel();
+//                            }
+//                        }).setCancelable(false).show();
+//    }
 
-        new AlertDialog.Builder(this).setIcon(android.R.drawable.btn_star_big_on).setTitle("Review")
-                .setView(dialogView)
-                .setMessage("Appreciate giving feedback about this Appointment")
-                .setCancelable(false)
-                .setPositiveButton("Rate",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                RatingBar ratingBar = (RatingBar) dialogView.findViewById(R.id.dialog_review_booking_ratingbar);
-                                String review = ratingBar.getProgress() + "";
 
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        if (item.getItemId() == android.R.id.home) {
+//            finish();
+//            return true;
+//        } else
+//            return super.onOptionsItemSelected(item);
+//    }
 
-//                                child.getRef().child("userreview").setValue(review);
-                                dialog.dismiss();
-                                finish();
-                            }
-                        })
-
-                        // Button Cancel
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-
-//                                child.getRef().child("userreview").setValue("0");
-                                finish();
-                                dialog.cancel();
-                            }
-                        }).setCancelable(false).show();
-    }
-
+//    @Override
+//    public void sendServiceResult(String serviceResult) {
+//
+//    }
+//
+//    @Override
+//    public void requestFailed() {
+//        Util.requestFailed(this);
+//    }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        } else
-            return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void sendServiceResult(String serviceResult) {
-
-    }
-
-    @Override
-    public void requestFailed() {
-        Util.requestFailed(this);
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

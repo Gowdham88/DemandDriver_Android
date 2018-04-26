@@ -32,31 +32,34 @@
         android:orientation="vertical">
 
         <TextView
+            style="@style/FontAvenirBook"
             android:id="@+id/list_item_booking_user_name_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/small_margin"
-            android:textColor="#0490db"
+            android:textColor="@color/colorPrimary"
             android:textSize="18dp"
             android:textStyle="bold"
             android:textAppearance="?attr/textAppearanceListItem" />
 
         <TextView
+            style="@style/FontAvenirBook"
             android:id="@+id/list_item_booking_service_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/small_margin"
             android:textSize="18dp"
-            android:textColor="#0490db"
+            android:textColor="@color/colorPrimary"
             android:textAppearance="?attr/textAppearanceListItem" />
 
         <TextView
+            style="@style/FontAvenirBook"
             android:id="@+id/list_item_booking_datetime_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/small_margin"
             android:textSize="18dp"
-            android:textColor="#0490db"
+            android:textColor="@color/colorPrimary"
             android:textAppearance="?attr/textAppearanceListItem" />
 
     </LinearLayout>

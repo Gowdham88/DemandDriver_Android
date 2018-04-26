@@ -91,14 +91,16 @@ public class UserHistoryActivity extends AppCompatActivity{
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent in=new Intent(UserHistoryActivity.this,DashBoardActivity.class);
-                startActivity(in);
+                onBackPressed();
+//                Intent in=new Intent(UserHistoryActivity.this,DashBoardActivity.class);
+//                startActivity(in);
             }
         });
 
 
         swipeContainer  = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        swipeContainer.setColorSchemeResources(
+                R.color.colorPrimary);
 //        listView        = (ListView) findViewById(R.id.fragment_user_history_listview);
         dataload();
         userHistoryAdapter =new UserHistoryAdapter(UserHistoryActivity.this,datalist);

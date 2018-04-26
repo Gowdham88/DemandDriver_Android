@@ -51,9 +51,9 @@ public class UserSupportActivity extends AppCompatActivity  implements RESTClien
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent in=new Intent(UserSupportActivity.this,DashBoardActivity.class);
-                startActivity(in);
+                onBackPressed();
+//                Intent in=new Intent(UserSupportActivity.this,DashBoardActivity.class);
+//                startActivity(in);
             }
         });
         phoneimage=(ImageView)findViewById(R.id.img_call);

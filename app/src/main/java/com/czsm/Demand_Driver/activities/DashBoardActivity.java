@@ -110,7 +110,7 @@ public class DashBoardActivity extends AppCompatActivity {
                 }
             }
         };
-        registerReceiver(mReceiver, new IntentFilter(NotificationBroadcastReceiver.NOTIFICATION_RECEIVED));
+//        registerReceiver(mReceiver, new IntentFilter(NotificationBroadcastReceiver.NOTIFICATION_RECEIVED));
 
 
         Img_map     = (ImageView) findViewById(R.id.Img_book_driver);
@@ -124,6 +124,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
 
                 Intent map = new Intent(getApplicationContext(),MapActivity.class);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
                 startActivity(map);
 
 
@@ -255,16 +256,6 @@ public class DashBoardActivity extends AppCompatActivity {
                 .show();
     }
 
-
-    @Override
-    public void onDestroy() {
-        try {
-            unregisterReceiver(mReceiver);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-        super.onDestroy();
-    }
 //    @Override
 //    public void onBackPressed() {
 //        finish();
@@ -469,6 +460,10 @@ public class DashBoardActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
 //    @Override
 //    public boolean onOptionsItemSelected(MenuItem item) {
 //        if (item.getItemId() == android.R.id.home) {
