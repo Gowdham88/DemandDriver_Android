@@ -112,7 +112,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     ImageButton book;
 
     LatLng laln;
-    String name="Poojitha",email,mobile_number, Current_Location, Service_type, namee, mob_num, map_loc;
     EditText changelocation;
     String newloc;
 

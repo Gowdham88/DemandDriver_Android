@@ -162,30 +162,11 @@ public class UserBookingHistoryActivity extends AppCompatActivity {
                                     }
                                 });
 
-                                documentReference = db.collection("Current_booking").document(Userrdmid);
-                                HashMap<String,Object> updatesvalues=new HashMap<>();
-                                updatesvalues.put("User_review",review);
-
-                                documentReference.update(updatesvalues)
-                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-//                                                Toast.makeText(UserBookingHistoryActivity.this, "successfull", Toast.LENGTH_SHORT).show();
+//                                documentReference = db.collection("Current_booking").document(Userrdmid);
+//                                HashMap<String,Object> updatesvalues=new HashMap<>();
+//                                updatesvalues.put("User_review",review);
 //
-                                            }
-                                        }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-
-
-                                    }
-                                });
-
-//                                documentReference = db.collection("Completed_booking").document(Userrdmid);
-//                                HashMap<String,Object> updatesvaluescomplete=new HashMap<>();
-//                                updatesvaluescomplete.put("User_review",review);
-//
-//                                documentReference.update(updatesvaluescomplete)
+//                                documentReference.update(updatesvalues)
 //                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
 //                                            @Override
 //                                            public void onComplete(@NonNull Task<Void> task) {
@@ -199,6 +180,25 @@ public class UserBookingHistoryActivity extends AppCompatActivity {
 //
 //                                    }
 //                                });
+
+                                documentReference = db.collection("Completed_booking").document(Userrdmid);
+                                HashMap<String,Object> updatesvaluescomplete=new HashMap<>();
+                                updatesvaluescomplete.put("User_review",review);
+
+                                documentReference.update(updatesvaluescomplete)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+//                                                Toast.makeText(UserBookingHistoryActivity.this, "successfull", Toast.LENGTH_SHORT).show();
+//
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+
+
+                                    }
+                                });
 //                                child.getRef().child("userreview").setValue(review);
                                 dialog.dismiss();
 //                                finish();
