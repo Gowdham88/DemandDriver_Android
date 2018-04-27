@@ -1,5 +1,6 @@
 package com.czsm.Demand_Driver.adapters;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -32,12 +33,13 @@ import java.util.List;
 public class UserHistoryAdapter extends RecyclerView.Adapter<UserHistoryAdapter.ViewHolder> {
 
     Context context;
-    List<User_completeDetails> dataList = new ArrayList<>();
+   private List<User_completeDetails> dataList = new ArrayList<>();
 
 
     public UserHistoryAdapter(Context context, List<User_completeDetails> dataList) {
         this.context  = context;
         this.dataList = dataList;
+//        this.datalistreview = datalistreview;
 //        this.cellSize = Utils.getScreenWidth(context)/3;
     }
     public  void addData(List<User_completeDetails> stringArrayList){
@@ -85,7 +87,7 @@ public class UserHistoryAdapter extends RecyclerView.Adapter<UserHistoryAdapter.
                 intent.putExtra("name",dataList.get(position).getUser_name());
                 intent.putExtra("datatime",dataList.get(position).getEnd_time());
                 intent.putExtra("address",dataList.get(position).getUser_Address());
-//                intent.putExtra("rating",dataList.get(position).getRating());
+                intent.putExtra("userreview",dataList.get(position).getUser_review());
 //                intent.putExtra("userlats",dataList.get(position).getCurrentlat());
 //                intent.putExtra("userlongs",dataList.get(position).getCurrentlong());
                 intent.putExtra("userdate",dataList.get(position).getDate());
@@ -93,6 +95,7 @@ public class UserHistoryAdapter extends RecyclerView.Adapter<UserHistoryAdapter.
                 intent.putExtra("userreview",dataList.get(position).getUser_review());
                 intent.putExtra("Booking_id",dataList.get(position).getUser_Booking_ID());
                 context.startActivity(intent);
+                ((Activity) context).overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
             }
         });
 

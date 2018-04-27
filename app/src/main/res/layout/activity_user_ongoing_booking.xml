@@ -6,6 +6,7 @@
     android:background="#06ffffff">
 
     <android.support.v7.widget.Toolbar
+        style="@style/FontAvenirLight"
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -33,7 +34,7 @@
             android:weightSum="1">`
 
             <ImageView
-                android:layout_width="40dp"
+                android:layout_width="30dp"
                 android:layout_height="0dp"
                 android:layout_gravity="center"
                 android:layout_weight="0.5"
@@ -47,14 +48,18 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/FontAvenirLight"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/small_margin"
                 android:text="@string/app_id"
+                android:textSize="14dp"
                 android:textColor="@color/colorPrimary"
-                android:textStyle="bold" />
+                 />
 
             <TextView
+                android:textSize="14dp"
+                style="@style/FontAvenirLight"
                 android:id="@+id/user_appointment_details_id_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -90,7 +95,7 @@
             android:weightSum="1">
 
             <ImageView
-                android:layout_width="40dp"
+                android:layout_width="30dp"
                 android:layout_height="0dp"
                 android:layout_gravity="center"
                 android:layout_weight="0.5"
@@ -104,14 +109,17 @@
             android:orientation="vertical">
 
             <TextView
+                android:textSize="14dp"
+                style="@style/FontAvenirLight"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/small_margin"
                 android:text="@string/app_date_time"
-                android:textColor="@color/colorPrimary"
-                android:textStyle="bold" />
+                android:textColor="@color/colorPrimary" />
 
             <TextView
+                android:textSize="14dp"
+                style="@style/FontAvenirLight"
                 android:id="@+id/user_appointment_details_datetime_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -146,7 +154,7 @@
             android:weightSum="1">
 
             <ImageView
-                android:layout_width="40dp"
+                android:layout_width="30dp"
                 android:layout_height="0dp"
                 android:layout_gravity="center"
                 android:layout_weight="0.5"
@@ -161,15 +169,18 @@
             android:orientation="vertical">
 
             <TextView
+                android:textSize="14dp"
                 android:id="@+id/user_booking_history_name_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/small_margin"
                 android:textColor="@color/colorPrimary"
                 android:text="@string/name"
-                android:textStyle="bold" />
+                style="@style/FontAvenirLight" />
 
             <TextView
+                android:textSize="14dp"
+                style="@style/FontAvenirLight"
                 android:id="@+id/user_appointment_details_drname_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -219,14 +230,17 @@
             android:orientation="vertical">
 
             <TextView
+                android:textSize="14dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/small_margin"
                 android:text="@string/address"
                 android:textColor="@color/colorPrimary"
-                android:textStyle="bold" />
+                style="@style/FontAvenirLight" />
 
             <TextView
+                android:textSize="14dp"
+                style="@style/FontAvenirLight"
                 android:id="@+id/user_appointment_details_address_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -261,10 +275,9 @@
             android:weightSum="1">
 
             <ImageView
-                android:layout_width="45dp"
-                android:layout_height="0dp"
+                android:layout_width="40dp"
+                android:layout_height="35dp"
                 android:layout_gravity="center"
-                android:layout_weight="0.6"
                 android:background="@drawable/booking_status" />
         </LinearLayout>
 
@@ -275,14 +288,17 @@
             android:orientation="vertical">
 
             <TextView
+                android:textSize="14dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/small_margin"
                 android:text="@string/book_stts"
                 android:textColor="@color/colorPrimary"
-                android:textStyle="bold" />
+                style="@style/FontAvenirLight" />
 
             <TextView
+                android:textSize="14dp"
+                style="@style/FontAvenirLight"
                 android:id="@+id/user_appointment_details_stts_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -308,6 +324,8 @@
         android:orientation="horizontal">
 
         <Button
+            android:textSize="14dp"
+            style="@style/FontAvenirLight"
             android:id="@+id/user_appointment_details_cancel_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

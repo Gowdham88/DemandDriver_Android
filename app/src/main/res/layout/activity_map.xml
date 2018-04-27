@@ -8,6 +8,7 @@
     android:weightSum="4">
 
     <android.support.v7.widget.Toolbar
+        style="@style/FontAvenirLight"
         android:id="@+id/user_service_details_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -98,6 +99,7 @@
                 android:weightSum="3">
 
                 <Spinner
+                    style="@style/FontAvenirLightfont"
                     android:id="@+id/service_details_driver_type_spinner"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -111,6 +113,7 @@
                     android:background="@color/darkGray" />
 
                 <AutoCompleteTextView
+                    style="@style/FontAvenirLight"
                     android:id="@+id/service_details_car_type_spinner"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -118,7 +121,7 @@
                     android:hint=" Enter or select car name."
                     android:background="@drawable/border"
                     android:textColorHint="#000"
-                    android:textSize="15dp"
+                    android:textSize="14dp"
                     android:entries="@array/car_type_array" />
             </LinearLayout>
 
@@ -143,13 +146,14 @@
                         android:layout_weight="1" />
 
                     <TextView
+                        style="@style/FontAvenirLight"
                         android:id="@+id/service_details_service_textview"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="2"
                         android:gravity="center"
                         android:text="Driver"
-                        android:textSize="@dimen/text_size_large" />
+                        android:textSize="14dp" />
 
 
                     <ImageView
@@ -182,13 +186,14 @@
                         android:layout_weight="1" />
 
                     <TextView
+                        style="@style/FontAvenirLight"
                         android:id="@+id/service_details_tariff_textview"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="2"
                         android:gravity="center"
                         android:text="Tariff"
-                        android:textSize="@dimen/text_size_large" />
+                        android:textSize="14dp" />
 
 
                     <ImageView
@@ -213,6 +218,8 @@
                     android:weightSum="2.1">
 
                     <TextView
+                        android:textSize="14dp"
+                        style="@style/FontAvenirLight"
                         android:id="@+id/service_details_book_now_textview"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
@@ -227,6 +234,8 @@
                         android:background="@color/darkGray" />
 
                     <TextView
+                        android:textSize="14dp"
+                        style="@style/FontAvenirLight"
                         android:id="@+id/service_details_book_later_textview"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
@@ -240,13 +249,15 @@
     </ScrollView>
 
     <Button
+        android:textSize="14dp"
+        style="@style/FontAvenirLight"
     android:id="@+id/service_details_book_button"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#ffca00"
+    android:background="@color/colorPrimary"
     android:text="@string/book"
         android:layout_alignParentBottom="true"
-    android:textColor="@color/black"/>
+    android:textColor="@color/white"/>
 
 
 </RelativeLayout>

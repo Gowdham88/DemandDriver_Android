@@ -85,6 +85,7 @@ public class OngoingAppointmentActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
             onBackPressed();
+                overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_righ);
 //                Intent in=new Intent(OngoingAppointmentActivity.this,DashBoardActivity.class);
 //                startActivity(in);
             }
@@ -147,6 +148,11 @@ public class OngoingAppointmentActivity extends AppCompatActivity {
                 });
 
 
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_righ);
     }
 }
 

@@ -207,9 +207,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-               Intent in=new Intent(MapActivity.this,DashBoardActivity.class);
-               startActivity(in);
+            onBackPressed();
+//               Intent in=new Intent(MapActivity.this,DashBoardActivity.class);
+                overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_righ);
+//               startActivity(in);
             }
         });
         String uuid = UUID.randomUUID().toString();
@@ -257,6 +258,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 Intent tariffIntent = new Intent(getApplicationContext(), TariffPlanActivity.class);
                 tariffIntent.putExtra("serviceId", serviceId);
                 startActivity(tariffIntent);
+                overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
 
             }
         });
@@ -865,7 +867,11 @@ public void onLocationChanged(Location location) {
         return false;
     }
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_righ);
+    }
 
 
 }

@@ -85,6 +85,7 @@ public class UserOngoingBookingActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 onBackPressed();
+                overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_righ);
             }
         });
 
@@ -253,5 +254,6 @@ public class UserOngoingBookingActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_righ);
     }
 }

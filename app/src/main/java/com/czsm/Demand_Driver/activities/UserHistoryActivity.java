@@ -58,6 +58,7 @@ public class UserHistoryActivity extends AppCompatActivity{
     RecyclerView recyclerview;
     FirebaseFirestore db;
     List<User_completeDetails> datalist = new ArrayList<User_completeDetails>();
+//    List<User_completeDetails> datalistreview = new ArrayList<User_completeDetails>();
     SharedPreferences preferences;
     ArrayList<AppointmentList> Bookinglist = new ArrayList<AppointmentList>();
     String id;
@@ -92,6 +93,7 @@ public class UserHistoryActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 onBackPressed();
+                overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_righ);
 //                Intent in=new Intent(UserHistoryActivity.this,DashBoardActivity.class);
 //                startActivity(in);
             }
@@ -158,6 +160,38 @@ public class UserHistoryActivity extends AppCompatActivity{
 
                 });
 
+
+//        Query first1 = db.collection("Completed_booking").orderBy("End_time", Query.Direction.DESCENDING);
+//
+//        first1.get()
+//                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onSuccess(QuerySnapshot documentSnapshots) {
+//
+//                        if (documentSnapshots.getDocuments().size() < 1) {
+//
+//                            return;
+//
+//                        }
+//
+//                        for(DocumentSnapshot document : documentSnapshots.getDocuments()) {
+//
+//                            User_completeDetails data = document.toObject(User_completeDetails.class);
+//                            datalistreview.add(data);
+//
+//                        }
+//                        userHistoryAdapter.notifyDataSetChanged();
+//                    }
+//
+//
+//
+//                });
+
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_righ);
     }
 
 }

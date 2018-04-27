@@ -17,6 +17,7 @@
     </style>
     <style name="AllinAllMaterialTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
+
     <style name="AllinAllMaterialTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
     <style name="RatingBar" parent="Theme.AppCompat">
         <item name="colorControlNormal">@color/colorPrimaryDark</item>
@@ -44,6 +45,10 @@
 
     <style name="FontAvenirLight">
         <item name="fontPath">fonts/Avenir-Light.ttf</item>
+    </style>
+    <style name="FontAvenirLightfont">
+        <item name="fontPath">fonts/Avenir-Light.ttf</item>
+        <item name="android:textSize">14dp</item>
     </style>
 
 </resources>

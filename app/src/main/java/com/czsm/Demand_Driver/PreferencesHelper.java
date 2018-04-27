@@ -32,6 +32,7 @@ public class PreferencesHelper {
     public static final String PREFERENCE_USERRATING ="rating";
     public static final String PREFERENCE_USERRANDMID ="rating";
     public static final String PREFERENCE_USERNAME ="username";
+    public static final String PREFERENCE_RATING ="review";
 
 
 

@@ -18,6 +18,8 @@ public class User_completeDetails {
     private String Cost;
 
     private String Driver_review;
+
+
     private String User_review;
 
 
@@ -43,6 +45,7 @@ public class User_completeDetails {
         this.Time=Time;
         this.User_ID=User_ID;
         this.User_Booking_ID=User_Booking_ID;
+
     }
 
     public User_completeDetails() {

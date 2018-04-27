@@ -74,9 +74,11 @@ public class TariffPlanActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent in=new Intent(TariffPlanActivity.this,MapActivity.class);
-                startActivity(in);
+                onBackPressed();
+                overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_righ);
+//
+//                Intent in=new Intent(TariffPlanActivity.this,MapActivity.class);
+//                startActivity(in);
             }
         });
 
@@ -149,5 +151,10 @@ public class TariffPlanActivity extends AppCompatActivity {
             text23.setText("RS. 0.00");
             return convertView;
         }
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_righ);
     }
 }

@@ -56,7 +56,7 @@ public class UserBookingHistoryActivity extends AppCompatActivity {
     TextView reviewTextView;
 
     private UserBooking booking;
-    String UIAVALUE,Userrdmid,drivername,appointmentid,date,driveraddress,review = "";
+    String UIAVALUE,Userrdmid,drivername,appointmentid,date,driveraddress,review,rating;
 
 //    @BindView(R.id.reviewlay)
 //    LinearLayout ReviewLinlay;
@@ -76,6 +76,7 @@ public class UserBookingHistoryActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+                overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_righ);
 
 //                Intent in=new Intent(UserBookingHistoryActivity.this,UserHistoryActivity.class);
 //                startActivity(in);
@@ -83,6 +84,8 @@ public class UserBookingHistoryActivity extends AppCompatActivity {
         });
         db= FirebaseFirestore.getInstance();
         Userrdmid=PreferencesHelper.getPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_USERRANDMID);
+        rating=PreferencesHelper.getPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_RATING);
+//        Toast.makeText(UserBookingHistoryActivity.this, rating, Toast.LENGTH_SHORT).show();
         UIAVALUE= PreferencesHelper.getPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_FIREBASE_UUID);
         setTitle(R.string.app_details);
 
@@ -106,7 +109,7 @@ public class UserBookingHistoryActivity extends AppCompatActivity {
             dateTimeTextView.setText(date);
             drNameTextView.setText(drivername);
             addressTextView.setText(driveraddress);
-            reviewTextView.setText(review);
+            reviewTextView.setText(rating);
 
 //            int reviewstar = Integer.parseInt(review);
 //                String reviewstr = "";
@@ -141,6 +144,7 @@ public class UserBookingHistoryActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 RatingBar ratingBar = (RatingBar) dialogView.findViewById(R.id.dialog_review_booking_ratingbar);
                                 String review = ratingBar.getProgress() + "";
+                                PreferencesHelper.setPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_RATING,review);
                                 Toast.makeText(UserBookingHistoryActivity.this, review, Toast.LENGTH_SHORT).show();
 //                                PreferencesHelper.setPreference(getApplicationContext(), PreferencesHelper.PREFERENCE_USERRATING,review);
                                 reviewTextView.setText(review);
@@ -183,10 +187,10 @@ public class UserBookingHistoryActivity extends AppCompatActivity {
 //                                });
 
                                 documentReference = db.collection("Completed_booking").document(Userrdmid);
-                                HashMap<String,Object> updatesvaluescomplete=new HashMap<>();
-                                updatesvaluescomplete.put("User_review",review);
+                                HashMap<String,Object> updatesvaluescompletevals=new HashMap<>();
+                                updatesvaluescompletevals.put("User_review",review);
 
-                                documentReference.update(updatesvaluescomplete)
+                                documentReference.update(updatesvaluescompletevals)
                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
@@ -216,6 +220,12 @@ public class UserBookingHistoryActivity extends AppCompatActivity {
                                 dialog.cancel();
                             }
                         }).setCancelable(false).show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_righ);
     }
 
 //    @Override

@@ -1,5 +1,6 @@
 package com.czsm.Demand_Driver.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -70,8 +71,8 @@ public class UserOngoingAdapter extends RecyclerView.Adapter<UserOngoingAdapter.
                 intent.putExtra("usertime",dataList.get(position).getUser_Booking_Time());
                 intent.putExtra("status",dataList.get(position).getStatus());
                 intent.putExtra("bookingid",dataList.get(position).getUser_Booking_ID());
-
                 context.startActivity(intent);
+                ((Activity) context).overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
             }
         });
 

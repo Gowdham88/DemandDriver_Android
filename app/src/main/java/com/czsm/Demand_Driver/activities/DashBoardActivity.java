@@ -16,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
@@ -53,7 +54,8 @@ public class DashBoardActivity extends AppCompatActivity {
         Bundle extras     = getIntent().getExtras();
         String fromPush   = null;
         String message    = null;
-
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Dash Board");
 //        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
 //            @Override
 //            public void onReceive(Context context, Intent intent) {
@@ -124,8 +126,8 @@ public class DashBoardActivity extends AppCompatActivity {
 
 
                 Intent map = new Intent(getApplicationContext(),MapActivity.class);
-                overridePendingTransition(R.anim.enter, R.anim.exit);
                 startActivity(map);
+                overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
 
 
             }
@@ -138,6 +140,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
                 Intent support = new Intent(getApplicationContext(),UserSupportActivity.class);
                 startActivity(support);
+                overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
 
 
             }
@@ -149,6 +152,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
                 Intent ongoing = new Intent(getApplicationContext(),OngoingAppointmentActivity.class);
                 startActivity(ongoing);
+                overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
             }
         });
 
@@ -158,6 +162,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
                 Intent history = new Intent(getApplicationContext(),UserHistoryActivity.class);
                 startActivity(history);
+                overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
             }
         });
 
@@ -462,6 +467,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_righ);
         finish();
     }
 //    @Override

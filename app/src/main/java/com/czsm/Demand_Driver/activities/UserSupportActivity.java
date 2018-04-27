@@ -52,6 +52,7 @@ public class UserSupportActivity extends AppCompatActivity  implements RESTClien
             @Override
             public void onClick(View v) {
                 onBackPressed();
+                overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_righ);
 //                Intent in=new Intent(UserSupportActivity.this,DashBoardActivity.class);
 //                startActivity(in);
             }
@@ -208,5 +209,10 @@ public class UserSupportActivity extends AppCompatActivity  implements RESTClien
     @Override
     public void requestFailed() {
 
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_righ);
     }
 }
