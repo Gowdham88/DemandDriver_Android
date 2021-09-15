@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,38 +24,51 @@ import android.widget.TextView;
 
 import com.czsm.Demand_Driver.Firebasemodel.AppointmentList;
 import com.czsm.Demand_Driver.R;
+import com.czsm.Demand_Driver.adapters.UserHistoryAdapter;
+import com.czsm.Demand_Driver.adapters.UserOngoingAdapter;
 import com.czsm.Demand_Driver.helper.RESTClient;
 import com.czsm.Demand_Driver.helper.Util;
+import com.czsm.Demand_Driver.model.Datauser;
+import com.czsm.Demand_Driver.model.User_Details;
+import com.czsm.Demand_Driver.model.User_completeDetails;
 import com.czsm.Demand_Driver.receiver.NotificationBroadcastReceiver;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by macbook on 02/08/16.
  */
-public class OngoingAppointmentActivity extends AppCompatActivity implements RESTClient.ServiceResponseInterface {
+public class OngoingAppointmentActivity extends AppCompatActivity {
 
 
     private SwipeRefreshLayout swipeContainer;
 
-    private OngoingListAdapter adapter;
+    private UserOngoingAdapter adapter;
     private ListView listView;
     private NotificationBroadcastReceiver mReceiver;
 
     AppointmentList appointment;
     ArrayList<AppointmentList> Bookinglist = new ArrayList<AppointmentList>();
-    ArrayList<String> primaryidlist        = new ArrayList<String>();
+    ArrayList<String> primaryidlist = new ArrayList<String>();
 
 
     DatabaseReference db;
     SharedPreferences sharedPreferences;
     String userid;
+    RecyclerView recyclerView;
+    List<User_Details> datalist = new ArrayList<User_Details>();
 
 
     @Override
@@ -69,37 +84,22 @@ public class OngoingAppointmentActivity extends AppCompatActivity implements RES
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                onBackPressed();
+            onBackPressed();
+                overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_righ);
+//                Intent in=new Intent(OngoingAppointmentActivity.this,DashBoardActivity.class);
+//                startActivity(in);
             }
         });
 
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
-        listView       = (ListView) findViewById(R.id.fragment_ongoing_appointments_listview);
+        swipeContainer.setColorSchemeResources(
+                R.color.colorPrimary);
+        recyclerView = (RecyclerView) findViewById(R.id.fragment_ongoing_appointments_listview);
 
-        sharedPreferences = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
-        userid            = sharedPreferences.getString("userId","");
-        db                 = FirebaseDatabase.getInstance().getReference();
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                Intent bookingIntent = new Intent(getApplicationContext(), UserOngoingBookingActivity.class);
-                Bundle bookingBundle = new Bundle();
-                bookingBundle.putString("drivername", Bookinglist.get(position).getDrivername());
-                bookingBundle.putString("status", Bookinglist.get(position).getStatus());
-                bookingBundle.putString("driveraddress", Bookinglist.get(position).getDriveraddress());
-                bookingBundle.putString("date",     Bookinglist.get(position).getDate()+" "+Bookinglist.get(position).getTime());
-                bookingBundle.putString("userid", primaryidlist.get(position));
-                bookingBundle.putString("providerid", Bookinglist.get(position).getProviderid());
-                bookingIntent.putExtras(bookingBundle);
-                startActivity(bookingIntent);
-
-
-            }
-        });
-
+        dataload();
+        adapter = new UserOngoingAdapter(OngoingAppointmentActivity.this, datalist);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(OngoingAppointmentActivity.this, LinearLayoutManager.VERTICAL, false));
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -110,141 +110,50 @@ public class OngoingAppointmentActivity extends AppCompatActivity implements RES
             }
         });
 
-        TextView emptyView = Util.getEmptyView(R.string.no_bookings, getApplicationContext());
-        ((ViewGroup) listView.getParent().getParent()).addView(emptyView);
-        listView.setEmptyView(emptyView);
-
-        Appointment();
-
     }
 
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (adapter != null)
-            adapter.notifyDataSetChanged();
+    private void Appointment() {
+        dataload();
+        swipeContainer.setRefreshing(false);
     }
 
-    @Override
-    public void sendServiceResult(String serviceResult) {
+    private void dataload() {
+        datalist.clear();
 
-    }
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    @Override
-    public void requestFailed() {
+        Query first = db.collection("Current_booking").orderBy("User_Book_Date_Time", Query.Direction.DESCENDING);
 
-        Util.requestFailed(getApplicationContext());
-    }
+        first.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot documentSnapshots) {
 
-    @Override
-    public void onDestroy() {
-        try {
-            unregisterReceiver(mReceiver);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-        super.onDestroy();
-    }
+                        if (documentSnapshots.getDocuments().size() < 1) {
 
+                            return;
 
-    public void Appointment(){
+                        }
 
-        ValueEventListener appointmentlistner = new ValueEventListener() {
-            @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DocumentSnapshot document : documentSnapshots.getDocuments()) {
 
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                            User_Details data = document.toObject(User_Details.class);
+                            datalist.add(data);
 
-                    appointment  = child.getValue(AppointmentList.class);
-                    Bookinglist.clear();
-                    primaryidlist.clear();
-
-                    if(appointment.getStatus().equals("pending") || appointment.getStatus().equals("Confirmed")) {
-
-                        Bookinglist.add(appointment);
-                        primaryidlist.add(child.getKey());
-
-                    }
-
-                    if (adapter == null) {
-
-                        adapter = new OngoingListAdapter(getApplicationContext(), R.layout.list_item_ongoing_bookings);
-                        listView.setAdapter(adapter);
-
-                    } else {
-
+                        }
                         adapter.notifyDataSetChanged();
-                        swipeContainer.setRefreshing(false);
-
                     }
 
-                }
 
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-                Log.e("loadPost:onCancelled", databaseError.toException().toString());
-            }
-        };
-
-        db.child("AppointmentList").orderByChild("userid").equalTo(userid).addValueEventListener(appointmentlistner);
-
+                });
 
 
     }
-
-
-
-
-
-    private class OngoingListAdapter extends ArrayAdapter<AppointmentList> {
-        public View mView;
-        public TextView userNameTextview;
-        public TextView dateTimeTextview;
-        public TextView serviceTextview;
-        public ImageView providerImageview;
-        public Context context;
-        public int resource;
-
-
-        public OngoingListAdapter(Context context, int resource) {
-            super(context, resource, Bookinglist);
-            this.context = context;
-            this.resource = resource;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if (convertView == null) {
-
-                LayoutInflater viewInflater = (LayoutInflater) context.getSystemService(
-                        Context.LAYOUT_INFLATER_SERVICE);
-                convertView = viewInflater.inflate(resource, null);
-
-            }
-            mView = convertView;
-            AppointmentList booking = Bookinglist.get(position);
-            userNameTextview        = (TextView) convertView.findViewById(R.id.list_item_booking_user_name_textview);
-            dateTimeTextview        = (TextView) convertView.findViewById(R.id.list_item_booking_datetime_textview);
-            serviceTextview         = (TextView) convertView.findViewById(R.id.list_item_booking_service_textview);
-            providerImageview       = (ImageView) convertView.findViewById(R.id.list_item_booking_user_imagview);
-
-            userNameTextview.setText(booking.getDrivername());
-            dateTimeTextview.setText(booking.getDate()+""+booking.getTime());
-            serviceTextview.setText(booking.getProviderid());
-
-            if(booking.getDriverimage() != null)
-                Picasso.with(context).load(booking.getDriverimage()).into(providerImageview);
-
-            return convertView;
-        }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_righ);
     }
-
 }
 
 

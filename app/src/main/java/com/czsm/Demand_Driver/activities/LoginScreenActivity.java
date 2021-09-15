@@ -1,22 +1,35 @@
 package com.czsm.Demand_Driver.activities;
 
+import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.czsm.Demand_Driver.PreferencesHelper;
 import com.czsm.Demand_Driver.R;
 import com.czsm.Demand_Driver.Utils;
+import com.czsm.Demand_Driver.model.Users;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
@@ -26,13 +39,18 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class LoginScreenActivity extends AppCompatActivity {
-EditText PhoneEdt;
+EditText PhoneEdt,Username;
     ImageView FrdRelLay;
 ImageView RelImg;
+RelativeLayout parentLayout;
     CheckBox isProvider;
     private FirebaseAuth mAuth;
     String phoneNumber;
@@ -41,21 +59,38 @@ ImageView RelImg;
     String mVerificationId;
     RadioButton mRadioBtn;
     PhoneAuthCredential credential;
+    TextView countrycode;
+    String uidvalue,uid;
     private android.support.v7.app.AlertDialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_screenlogin);
         PhoneEdt=(EditText)findViewById(R.id.phone_edt);
+        Username=(EditText)findViewById(R.id.username_edt);
    FrdRelLay=(ImageView) findViewById(R.id.rel_lay);
+        parentLayout=(RelativeLayout)findViewById(R.id.parentlay);
+        parentLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Utils.hideKeyboard(LoginScreenActivity.this);
+            }
+        });
+        countrycode=(TextView)findViewById(R.id.code_txt);
+        countrycode.setText("India(+91)");
+        String getcountrycode=countrycode.getText().toString();
         RelImg=(ImageView)findViewById(R.id.rel_img);
         mAuth = FirebaseAuth.getInstance();
-        isProvider=(CheckBox) findViewById(R.id.login_isprovider_checkbox);
+
+//        isProvider=(CheckBox) findViewById(R.id.login_isprovider_checkbox);
         RelImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Utils.hideKeyboard(LoginScreenActivity.this);
-                if(PhoneEdt.getText().toString().isEmpty()||PhoneEdt.getText().toString().equals(null)){
+                if(Username.getText().toString().isEmpty()||Username.getText().toString().equals(null)){
+                    Toast.makeText(getApplicationContext(), "Please enter the Name", Toast.LENGTH_SHORT).show();
+                }
+                else if(PhoneEdt.getText().toString().isEmpty()||PhoneEdt.getText().toString().equals(null)){
                     Toast.makeText(getApplicationContext(), "Please enter the phone number", Toast.LENGTH_SHORT).show();
                 }
                 else{
@@ -81,7 +116,10 @@ ImageView RelImg;
             @Override
             public void onClick(View v) {
                 Utils.hideKeyboard(LoginScreenActivity.this);
-                if(PhoneEdt.getText().toString().isEmpty()||PhoneEdt.getText().toString().equals(null)){
+                if(Username.getText().toString().isEmpty()||Username.getText().toString().equals(null)){
+                    Toast.makeText(getApplicationContext(), "Please enter the Name", Toast.LENGTH_SHORT).show();
+                }
+                else if(PhoneEdt.getText().toString().isEmpty()||PhoneEdt.getText().toString().equals(null)){
                     Toast.makeText(getApplicationContext(), "Please enter the phone number", Toast.LENGTH_SHORT).show();
                 }
                 else
@@ -108,7 +146,7 @@ ImageView RelImg;
         mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(PhoneAuthCredential credential) {
-//                Log.d(TAG, "onVerificationCompleted:" + credential);
+                Log.e("okiok", "onVerificationCompleted:" + credential);
                 signInWithPhoneAuthCredential(credential);
             }
 
@@ -135,35 +173,28 @@ ImageView RelImg;
                 mVerificationId = verificationId;
 
                 mResendToken = token;
-
-                if (isProvider.isChecked()){
-                    Intent intent=new Intent(LoginScreenActivity.this,ValidateActivity.class);
-                    intent.putExtra("value","dashboard");
-                    intent.putExtra("string",true);
-                    intent.putExtra("phonenumber",PhoneEdt.getText().toString());
-                    intent.putExtra("vericode",mVerificationId.toString());
+                final FirebaseUser user = mAuth.getCurrentUser();
+                Intent intent = new Intent(LoginScreenActivity.this, ValidateActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                    intent.putExtra("value", "dashboard");
+//                    intent.putExtra("string", true);
+                intent.putExtra("phonenumber", PhoneEdt.getText().toString());
+                intent.putExtra("vericode", mVerificationId.toString());
+                intent.putExtra("username", Username.getText().toString());
 
 //                    intent.putExtra("mtoken",mResendToken);
-                    startActivity(intent);
-                isProvider.setChecked(false);
+                startActivity(intent);
+//                    isProvider.setChecked(false);
                 PhoneEdt.setText("");
-                }
-                else{
-                    Intent intent=new Intent(LoginScreenActivity.this,ValidateActivity.class);
-//                    intent.putExtra("value","service");
-                    intent.putExtra("phonenumber1",PhoneEdt.getText().toString());
-                    intent.putExtra("vericode1",mVerificationId.toString());
-                    startActivity(intent);
-                    PhoneEdt.setText("");
-                    isProvider.setChecked(false);
-//                    finish();
-                }
+
 
             }
         };
 
 
     }
+
+
 
     private void startPhoneNumberVerification(String phoneNumber) {
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
@@ -180,14 +211,10 @@ ImageView RelImg;
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+
 //                            Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = task.getResult().getUser();
-//                            hideProgressDialog();
-//                            Toast.makeText(LoginScreenActivity.this, (CharSequence) user, Toast.LENGTH_SHORT).show();
-//                            Intent intent=new Intent(LoginScreenActivity.this,ValidateActivity.class);
-//                                 startActivity(intent);
-//                            Toast.makeText(LoginScreenActivity.this, "success", Toast.LENGTH_SHORT).show();
-//                            finish();
+//
                         } else {
 //                            Log.w(TAG, "signInWithCredential:failure", task.getException());
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
@@ -216,4 +243,5 @@ ImageView RelImg;
         if(dialog!=null)
             dialog.dismiss();
     }
+
 }
