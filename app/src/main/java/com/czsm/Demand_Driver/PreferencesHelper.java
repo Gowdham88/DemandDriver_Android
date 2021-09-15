@@ -10,7 +10,6 @@ import android.content.SharedPreferences;
 public class PreferencesHelper {
     // region Constants
     private static final String USER_PREFERENCES = "userPreferences";
-    public static final String PREFERENCE_USER_NAME = USER_PREFERENCES + ".user_name";
     public static final String PREFERENCE_EMAIL = USER_PREFERENCES + ".email";
     public static final String PREFERENCE_ID = USER_PREFERENCES + ".id";
     public static final String PREFERENCE_PROFILE_PIC = ".profilePic";
@@ -22,12 +21,18 @@ public class PreferencesHelper {
     public static final String PREFERENCE_GENDER ="gender";
     public static final String PREFERENCE_FIREBASE_TOKEN ="firebase_token";
     public static final String PREFERENCE_FIREBASE_UUID ="firebase_uuid";
+    public static final String PREFERENCE_PHONENUMBER ="phonenumber";
+    public static final String PREFERENCE_TOKEN ="tokenvalue";
     public static final String PREFERENCE_USER_DESCRIPTION ="user_desc";
     public static final String PREFERENCE_TAGS ="tags";
     public static final String PREFERENCE_TAG_IDS ="tag_ids";
     public static final String PREFERENCE_FIRST_TIME ="first_time";
     public static final String PREFERENCE_LOGGED_IN ="logged in";
     public static final String PREFERENCE_DASHBOARD ="dashboard";
+    public static final String PREFERENCE_USERRATING ="rating";
+    public static final String PREFERENCE_USERRANDMID ="rating";
+    public static final String PREFERENCE_USERNAME ="username";
+    public static final String PREFERENCE_RATING ="review";
 
 
 
@@ -43,7 +48,7 @@ public class PreferencesHelper {
     public static void signOut(Context context) {
         SharedPreferences.Editor editor = getEditor(context);
         editor.remove(USER_PREFERENCES);
-        editor.remove(PREFERENCE_USER_NAME);
+        editor.remove(PREFERENCE_USERNAME);
         editor.remove(PREFERENCE_EMAIL);
         editor.remove(PREFERENCE_FIREBASE_UUID);
         editor.remove(PREFERENCE_PROFILE_PIC);
@@ -72,7 +77,7 @@ public class PreferencesHelper {
         return preferences.getBoolean(name, false);
     }
 
-    public static void setPreferenceInt(Context context, String preference_name, int details) {
+    public static void setPreferenceInt(Context context, String preference_name,int details) {
         SharedPreferences.Editor editor = getEditor(context);
         editor.putInt(preference_name, details);
         editor.apply();

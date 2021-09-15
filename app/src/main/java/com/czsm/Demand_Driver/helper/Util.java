@@ -171,11 +171,11 @@ public class Util {
     public static String getDateTime(String date, String time) {
         String reformatedDateString = "";
         try {
-            String oldFormat = "yyyy-MM-dd HH:mm:ss";
+            String oldFormat = "dd/M/yyyy hh:mm:ss";
             SimpleDateFormat oldSDF = new SimpleDateFormat(oldFormat);
             int day = oldSDF.parse(date + " " + time).getDate();
             String dayNumberSuffix = getDayNumberSuffix(day);
-            String newFormat = "d'" + dayNumberSuffix + "' MMM yyyy & hh:mm aa";
+            String newFormat = "d'" + dayNumberSuffix + "' M yyyy & hh:mm aa";
             SimpleDateFormat newSDF = new SimpleDateFormat(newFormat);
 //            sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
             reformatedDateString = newSDF.format(oldSDF.parse(date + " " + time));

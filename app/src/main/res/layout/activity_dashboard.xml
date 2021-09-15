@@ -3,24 +3,30 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <android.support.v7.widget.Toolbar
+        style="@style/FontAvenirLight"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/AllinAllMaterialTheme.AppBarOverlay"
+        android:titleTextAppearance="@color/textColorPrimary" />
+
     <FrameLayout
         android:id="@+id/frm_lay"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/top_img"
-            android:layout_width="290dp"
-            android:layout_height="130dp"
-            android:src="@drawable/upsidecopy"/>
+        android:layout_height="200dp"
+        android:layout_below="@+id/toolbar">
 
         <ImageView
 
             android:id="@+id/logo_img"
-            android:layout_width="220dp"
-            android:layout_height="140dp"
+            android:layout_width="120dp"
+            android:layout_height="75dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="100dp"
-            android:background="@drawable/logocopy201" />
+            android:layout_marginTop="123dp"
+            android:background="@drawable/logocopy" />
+
     </FrameLayout>
     <FrameLayout
         android:id="@+id/frm_lay1"
@@ -32,37 +38,37 @@
             android:id="@+id/Img_book_driver"
             android:layout_width="100dp"
             android:layout_height="100dp"
-           android:layout_marginLeft="60dp"
-            android:layout_marginTop="45dp"
+           android:layout_marginLeft="56dp"
+            android:layout_marginTop="35dp"
             android:background="@drawable/btnone" />
         <TextView
-            style="@style/FontAvenirBook"
+            style="@style/FontAvenirLight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="90dp"
-            android:layout_marginTop="75dp"
+            android:layout_marginTop="65dp"
             android:gravity="center"
             android:text="@string/calldriver"
             android:textColor="@color/textmain_clr"
-            android:textSize="16dp" />
+            android:textSize="14dp" />
 
 
         <ImageView
             android:id="@+id/Img_support"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginLeft="210dp"
-            android:layout_marginTop="45dp"
-            android:background="@drawable/buttontwo" />
+            android:layout_marginLeft="202dp"
+            android:layout_marginTop="35dp"
+            android:background="@drawable/btntwo" />
         <TextView
-            style="@style/FontAvenirBook"
+            style="@style/FontAvenirLight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/supporthome"
-            android:textSize="16dp"
+            android:textSize="14dp"
             android:gravity="center"
-            android:layout_marginTop="80dp"
-            android:layout_marginLeft="237dp"
+            android:layout_marginTop="70dp"
+            android:layout_marginLeft="233dp"
             android:textColor="@color/textmain_clr"/>
 
 
@@ -71,47 +77,66 @@
             android:id="@+id/Img_current_book"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginLeft="60dp"
-            android:layout_marginTop="185dp"
+            android:layout_marginLeft="56dp"
+            android:layout_marginTop="175dp"
             android:background="@drawable/btnthree" />
 
+        <!--<TextView-->
+            <!--style="@style/FontAvenirLight"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/currentbooking"-->
+            <!--android:textSize="14dp"-->
+            <!--android:gravity="center"-->
+            <!--android:layout_marginTop="205dp"-->
+            <!--android:layout_marginLeft="88dp"-->
+            <!--android:textColor="@color/textmain_clr"/>-->
         <TextView
-            style="@style/FontAvenirBook"
+            style="@style/FontAvenirLight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="85dp"
+            android:layout_marginTop="202dp"
             android:text="@string/currentbooking"
-            android:textSize="16dp"
-            android:gravity="center"
-            android:layout_marginTop="215dp"
-            android:layout_marginLeft="80dp"
-            android:textColor="@color/textmain_clr"/>
+            android:textColor="@color/textmain_clr"
+            android:textSize="14dp" />
 
 
         <ImageView
             android:id="@+id/Img_history"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginLeft="210dp"
-            android:layout_marginTop="185dp"
-            android:background="@drawable/btnforxx" />
+            android:layout_marginLeft="202dp"
+            android:layout_marginTop="175dp"
+            android:background="@drawable/btnfour" />
 
         <ImageView
             android:id="@+id/oval"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
-            android:layout_marginTop="20dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="15dp"
             android:layout_gravity="center"
-            android:background="@drawable/ovalx" />
+            android:background="@drawable/oval" />
 
         <TextView
-            style="@style/FontAvenirBook"
+            style="@style/FontAvenirLight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="237dp"
-            android:layout_marginTop="215dp"
+            android:layout_marginLeft="233dp"
+            android:layout_marginTop="205dp"
             android:gravity="center"
             android:text="@string/historyhm"
             android:textColor="@color/textmain_clr"
-            android:textSize="16dp" />
+            android:textSize="14dp" />
     </FrameLayout>
+
+    <ImageView
+        android:id="@+id/top_img"
+        android:layout_width="290dp"
+        android:layout_height="130dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="106dp"
+        android:layout_marginTop="45dp"
+        android:src="@drawable/upsidecopy" />
 </RelativeLayout>

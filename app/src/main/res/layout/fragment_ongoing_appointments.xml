@@ -2,9 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0066ff">
+    android:background="#06ffffff">
 
     <android.support.v7.widget.Toolbar
+        style="@style/FontAvenirLight"
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -19,7 +20,7 @@
         android:layout_height="match_parent"
         android:layout_margin="10dp">
 
-        <ListView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/fragment_ongoing_appointments_listview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

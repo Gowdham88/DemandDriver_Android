@@ -133,7 +133,7 @@ public class UserHistoryFragment extends Fragment implements RESTClient.ServiceR
             userNameTextview = (TextView) convertView.findViewById(R.id.list_item_booking_user_name_textview);
             dateTimeTextview = (TextView) convertView.findViewById(R.id.list_item_booking_datetime_textview);
             serviceTextview = (TextView) convertView.findViewById(R.id.list_item_booking_service_textview);
-            providerImageview = (ImageView) convertView.findViewById(R.id.list_item_booking_user_imagview);
+//            providerImageview = (ImageView) convertView.findViewById(R.id.list_item_booking_user_imagview);
 
             userNameTextview.setText(booking.getProviderName());
             dateTimeTextview.setText(booking.getDateTime());
@@ -142,7 +142,7 @@ public class UserHistoryFragment extends Fragment implements RESTClient.ServiceR
                 providerImageview.setImageResource(R.drawable.profile_circle);
             } else {
                 byte[] decodedImage = booking.getDecodedPic();
-                providerImageview.setImageBitmap(BitmapFactory.decodeByteArray(decodedImage, 0, decodedImage.length));
+//                providerImageview.setImageBitmap(BitmapFactory.decodeByteArray(decodedImage, 0, decodedImage.length));
             }
             return convertView;
         }

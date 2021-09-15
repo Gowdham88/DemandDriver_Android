@@ -22,7 +22,7 @@ import com.czsm.Demand_Driver.R;
 import com.czsm.Demand_Driver.controller.AllinAllController;
 import com.czsm.Demand_Driver.helper.RESTClient;
 import com.czsm.Demand_Driver.helper.Util;
-import com.czsm.Demand_Driver.receiver.PushNotificationReceiver;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;

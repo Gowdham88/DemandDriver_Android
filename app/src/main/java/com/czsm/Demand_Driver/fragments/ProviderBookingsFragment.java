@@ -290,7 +290,7 @@ public class ProviderBookingsFragment extends Fragment  {
             userNameTextview        = (TextView) convertView.findViewById(R.id.list_item_booking_user_name_textview);
             dateTimeTextview        = (TextView) convertView.findViewById(R.id.list_item_booking_datetime_textview);
             serviceTextview         = (TextView) convertView.findViewById(R.id.list_item_booking_service_textview);
-            userImageview           = (ImageView) convertView.findViewById(R.id.list_item_booking_user_imagview);
+//            userImageview           = (ImageView) convertView.findViewById(R.id.list_item_booking_user_imagview);
 
             userNameTextview.setText(booking.getUsername());
             dateTimeTextview.setText(booking.getDate()+"-"+booking.getTime());

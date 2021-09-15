@@ -2,15 +2,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0066ff">
+    android:background="#06ffffff">
 
     <android.support.v7.widget.Toolbar
+        style="@style/FontAvenirLight"
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:theme="@style/AllinAllMaterialTheme.AppBarOverlay"
-        android:titleTextAppearance="@color/textColorPrimary" />
+        android:titleTextAppearance="@color/textColorPrimary" >
+    </android.support.v7.widget.Toolbar>
 
 
 
@@ -21,13 +23,12 @@
         android:layout_height="match_parent"
         android:layout_margin="10dp">
 
-        <ListView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/fragment_user_history_listview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:divider="#00000000"
             android:dividerHeight="5dp"
-
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp" />
     </android.support.v4.widget.SwipeRefreshLayout>
